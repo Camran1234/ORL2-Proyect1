@@ -145,7 +145,7 @@ Si = [sS][i]
     "!="    {return new Symbol(DIFFERENTIATION, yyline+1, yycolumn+1, yytext());}
     ">="    {return new Symbol(GREATER_THAN, yyline+1, yycolumn+1, yytext());}
     "<="    {return new Symbol(LESSER_THAN, yyline+1, yycolumn+1, yytext());}
-    "!!"    {return new Symbol(NULL, yyline+1, yycolumn+1, yytext());}
+    "!!"    {return new Symbol(NULL_, yyline+1, yycolumn+1, yytext());}
     ">" {return new Symbol(GREATER, yyline+1, yycolumn+1, yytext());}
     "<" {return new Symbol(LESSER, yyline+1, yycolumn+1, yytext());}
 
@@ -168,6 +168,8 @@ Si = [sS][i]
     /*Signos*/
     "[" {return new Symbol(OPEN_BRACKET, yyline+1, yycolumn+1, yytext());}
     "]" {return new Symbol (CLOSE_BRACKET, yyline+1, yycolumn+1, yytext());}
+    "{" {return new Symbol (OPEN_CURLY, yyline+1, yycolumn+1, yytext());}
+    "}" {return new Symbol (CLOSE_CURLY, yyline+1, yycolumn+1, yytext());}
     "(" {return new Symbol(OPEN_PARENTHESIS, yyline+1, yycolumn+1, yytext());}
     ")" {return new Symbol(CLOSE_PARENTHESIS, yyline+1, yycolumn+1, yytext());}
     ";" {return new Symbol(COLON, yyline+1, yycolumn+1, yytext());}
@@ -184,8 +186,10 @@ Si = [sS][i]
     
     /*Especiales*/
     "\t"    {return new Symbol(TAB, yyline+1, yycolumn+1, yytext());}
+    "\n"    {return new Symbol(SPACE, yyline+1, yycolumn+1, yytext());}
 
     {WhiteSpace}    {/*Ignore*/}
+
     /*Comentarios*/
     {Commentary}  {/*empty*/}
     {BlockCommentary}  {/*empty*/}

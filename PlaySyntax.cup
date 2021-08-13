@@ -1,0 +1,10 @@
+import java_cup.runtime.XMLElement;
+import java_cup.runtime.Symbol;
+
+parser code {:
+:}
+
+terminal LISTA, NOMBRE, RANDOM, CIRCULAR, PISTA, TRUE, FALSE, STRING, SIMBOLO, OPEN_BRACKET, CLOSE_BRACKET,
+PIPE, OPEN_CURLY, CLOSE_CURLY, SEMI_COLON, COMA; 
+
+non terminal ;

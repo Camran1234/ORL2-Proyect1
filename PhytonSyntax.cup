@@ -1,0 +1,273 @@
+import java_cup.runtime.XMLElement;
+import java_cup.runtime.Symbol;
+
+parser code {:
+:}
+
+terminal DECIMAL, NUMBER, PISTA, EXTIENDE, REPRODUCIR, ESPERAR, ORDENAR, ASCENDENTE, DESCENDENTE, PARES, IMPARES, 
+PRIMOS, SUMARIZAR, LONGITUD, MENSAJE, PRINCIPAL, KEEP, VAR, ENTERO, DOBLE, BOOLEAN, CARACTER, CADENA, ARREGLO, SIMBOLO,
+STRING, CHAR, IF, ELSE, SWITCH, CASE, EXIT, DEFAULT, FOR, WHILE, HACER, CONTINUE, DOR, RER, DO, RE, MI, FA, SOL, LA, SI,
+EQUAL, EQUALIZATION, DIFFERENTIATION, GREATER_THAN, LESSER_THAN, NULL_, GREATER, LESSER, EQUAL_MORE, INCREASE, DECREASE,
+ADD, MINUS, MULTIPLY, DIV, MODULE, POW, OPEN_BRACKET, CLOSE_BRACKET, OPEN_PARENTHESIS, CLOSE_PARENTHESIS, COLON, COMA,
+NAND, AND, NOR, OR, XOR, NOT, TAB, SPACE, OPEN_CURLY, CLOSE_CURLY ; 
+
+non terminal tab, function, type_function, ;
+
+start with ;
+
+
+
+/*TAB*/
+tab ::= TAB tab
+        |/*empty*/
+        ;
+        
+/*FUNCTION*/
+
+function ::= k type_function OPEN_PARENTHESIS OPEN_BRACKET multiple_v CLOSE_PARENTHESIS SPACE function_instruction
+            ;
+
+type_function ::= k class
+            ;
+
+multiple_v ::= function_variables multiple_v_re
+            |CLOSE_BRACKET
+            ;
+
+function_variables ::= class SIMBOLO
+                    ;
+
+/*PISTA*/
+pista ::= PISTA SIMBOLO d instruccion
+    |PISTA error d instruccion
+    |PISTA SIMBOLO error instruccion
+    ;
+
+d ::= extiende SIMBOLO d#
+    |/*empty*/
+    ;
+
+d_ ::= COMA SIMBOLO d_
+    |error SIMBOLO d_
+    |COMA error d_
+    |/*empty*/
+    ;
+
+/*INCREMENTACION DE VARIABLES*/
+special_variables ::= SIMBOLO increm SPACE
+                    ;
+
+increm ::= INCREASE
+            |DECREASE
+            |error;
+
+/*VARIABLES*/
+
+v ::= type variables assign
+    |variables assign
+    ;
+
+class ::= NUMBER array
+        |DECIMAL array
+        |BOOLEAN array
+        |CADENA array
+        |CARACTER array
+        |error
+        ;
+
+variables ::= SIMBOLO variables_re
+            |error variables_re
+            ;
+
+variables_re ::= COMA SIMBOLO variables_re
+            |error SIMBOLO variables_re
+            |COMA error variables_re
+            |/*empty*/
+            ;
+
+k ::= KEEP
+    |/*empty*/
+
+type ::= k VAR class
+        |k error class
+        ;
+
+/*ASIGNAR VALORES*/
+assign ::= EQUAL value SPACE
+    |equal array_assign SPACE
+    ;
+
+equal ::= EQUAL
+        |EQUAL_MORE
+        |error
+        ;
+
+array ::= ARRAY dimension
+        |/*empty*/
+        ;
+
+dimension ::= OPEN_BRACKET value CLOSE_BRACKET dimension
+        |/*empty*/
+        ;
+
+array_assign ::= OPEN_CURLY value CLOSE_CURLY
+                ;
+
+assign_arr ::= OPEN_CURLY mult_values CLOSE_CURLY assign_arr_re
+                ;
+
+assign_arr_re ::= COMA OPEN_CURLY mult_values CLOSE_CURLY assign_arr_re
+                |/*empty*/
+                ;
+
+mult_values ::= value mult_values_re
+            ;
+
+mult_values_re ::= COMA value mult_values_re
+                |/*empty*/
+                ;
+
+    /*VALORES*/
+value ::= NUMBER
+        |DECIMAL
+        |STRING
+        |CHAR
+        |value ADD value
+        |value MINUS value
+        |value MULTIPLY value
+        |value DIV value
+        |OPEN_PARENTHESIS value CLOSE_PARENTHESIS
+        |SIMBOLO
+        |TRUE
+        |FALSE
+        |error
+        ;
+/*NOTAS MUSICALES*/
+notas ::= DO
+        |RE
+        |MI
+        |FA
+        |SOL
+        |LA
+        |SI
+        |DOR
+        |RER
+        ;
+
+/*FUNCIONES ESPECIALES*/
+
+reproducir_syntax ::= notas COMA valor COMA valor COMA valor CLOSE_PARENTHESIS
+                    ;
+
+esperar_syntax ::= valor COMA valor CLOSE_PARENTHESIS
+                    ;
+
+sumarizar_syntax ::= SIMBOLO CLOSE_PARENTHESIS
+                    ;
+
+longitud_syntax ::= SIMBOLO CLOSE_PARENTHESIS
+                    ;
+
+mensaje_syntax ::= SIMBOLO CLOSE_PARENTHESIS
+                    ;
+
+func_especiales ::= REPRODUCIR OPEN_PARENTHESIS reproducir_syntax
+/*No devuelve nada*/|ESPERAR OPEN_PARENTHESIS esperar_syntax
+                    |SUMARIZAR OPEN_PARENTHESIS sumarizar_syntax
+                    |LONGITUD OPEN_PARENTHESIS longitud_syntax
+/*No devuelve nada*/|MENSAJE OPEN_PARENTHESIS mensaje_syntax  
+                    ;
+
+/*SI*/
+
+if ::= block_if else_if else
+        ;
+
+block_if ::= IF OPEN_PARENTHESIS condition SPACE instruction
+        ;
+
+else_if ::= else_if block_elseif
+        ;
+
+block_elseif ::= ELSE IF OPEN_PARENTHESIS condition SPACE instruction
+                |error IF OPEN_PARENTHESIS condition SPACE instruction
+                |ELSE error OPEN_PARENTHESIS condition SPACE instruction
+                |ELSE IF error condition SPACE instruction
+                |ELSE IF OPEN_PARENTHESIS condition error instruction
+                ;
+
+else ::= ELSE SPACE instruction
+        |error SPACE instruction
+        |ELSE error instruction
+        ;
+
+/*CONDICION*/
+/*this production end in close_parenthesis*/
+
+condition ::= comparation condition_re
+            ;
+
+condition_re ::= AND comparation condition_re       
+                |NAND comparation condition_re
+                |OR comparation condition_re
+                |NOR comparation condition_re
+                |XOR comparation condition_re
+                |CLOSE_PARENTHESIS
+                |error comparation condition_re
+                ;
+
+comparation ::= comparation EQUALIZATION comparation
+                |comparation DIFFERENTIATION comparation    
+                |comparation GREATER comparation
+                |comparation GREATER_THAN comparation
+                |comparation LESSER comparation
+                |comparation LESSER_THAN comparation
+                |NULL_ comparation
+                |NOT comparation
+                |OPEN_PARENTHESIS comparation CLOSE_PARENTHESIS
+                |value
+                ;
+
+/*SWITCH*/
+
+switch ::= SWITCH OPEN_PARENTHESIS SIMBOLO CLOSE_PARENTHESIS SPACE cases
+            | SWITCH error SIMBOLO CLOSE_PARENTHESIS SPACE cases
+            | SWITCH OPEN_PARENTHESIS error CLOSE_PARENTHESIS SPACE cases
+            | SWITCH OPEN_PARENTHESIS SIMBOLO error SPACE cases
+            | SWITCH OPEN_PARENTHESIS SIMBOLO CLOSE_PARENTHESIS error cases
+            ;
+
+cases ::= tab CASO value SPACE instruction SALIR cases
+        | tab error value SPACE instruction SALIR cases
+        | tab CASO value error instruction SALIR cases
+        | tab CASO value SPACE instruction error cases
+        | SPACE
+        ;
+
+/*PARA*/
+
+for ::= PARA OPEN_PARENTHESIS for_instructions SPACE instruction_ciclo
+        ;
+
+for_instructions ::= v COLON for_condition
+                ;
+
+for_condition ::= condition COLON for_increm
+                ;
+
+for_increm ::= increm CLOSE_PARENTHESIS
+                ;
+
+/*WHILE*/
+
+while ::= MIENTRAS OPEN_PARENTHESIS condition SPACE instruction_ciclo
+        ;
+
+/*DO WHILE*/
+
+do_while ::= HACER SPACE instruction_ciclo while_do
+        ;
+
+while_do ::= tab MIENTRAS OPEN_PARENTHESIS condition SPACE
+        ;
+
