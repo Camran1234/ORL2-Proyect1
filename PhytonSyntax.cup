@@ -9,12 +9,99 @@ PRIMOS, SUMARIZAR, LONGITUD, MENSAJE, PRINCIPAL, KEEP, VAR, ENTERO, DOBLE, BOOLE
 STRING, CHAR, IF, ELSE, SWITCH, CASE, EXIT, DEFAULT, FOR, WHILE, HACER, CONTINUE, DOR, RER, DO, RE, MI, FA, SOL, LA, SI,
 EQUAL, EQUALIZATION, DIFFERENTIATION, GREATER_THAN, LESSER_THAN, NULL_, GREATER, LESSER, EQUAL_MORE, INCREASE, DECREASE,
 ADD, MINUS, MULTIPLY, DIV, MODULE, POW, OPEN_BRACKET, CLOSE_BRACKET, OPEN_PARENTHESIS, CLOSE_PARENTHESIS, COLON, COMA,
-NAND, AND, NOR, OR, XOR, NOT, TAB, SPACE, OPEN_CURLY, CLOSE_CURLY ; 
+NAND, AND, NOR, OR, XOR, NOT, TAB, SPACE, OPEN_CURLY, CLOSE_CURLY, RETORNA ; 
 
-non terminal tab, function, type_function, ;
+non terminal tab, function, type_function, type_function, multiple_v, function_variables, pista, d, d_, increm_variables,
+increm, v, data_type, variables, variables_re, k, type, assign, equal, array, dimension, array_assign, assign_arr,
+assign_arr_re, mult_values, mult_values_re, value, notas, func_especiales, reproducir_syntax, esperar_syntax,
+sumarizar_syntax, longitud_syntax, mensaje_syntax, if, block_if, block_elseif, else_if, else, condition,
+condition_re, comparation, switch, cases, for, for_condition, for_increm, for_instructions, while,
+do_while, while_do;
 
-start with ;
+/*precedences*/
 
+precedence left ADD, MINUS;
+precedence left DIV, MULT, MODULE;
+precedence left POW;
+precedence left NULL_, 
+precedence left EQUALIZATION, DIFFERENTIATION, LESSER, LESSER_THAN, GREATER, GREATER_THAN;
+precedence left NOT;
+precedence left AND, NAND;
+precedence left OR, NOR, XOR;
+precedence left OPEN_PARENTHESIS, CLOSE_PARENTHESIS;
+precedence left ELSE;
+
+start with main_body;
+
+main_body ::= tab principal main_body
+        | tab pista main_body
+        |tab function main_body
+        |SPACE
+        ;
+
+principal ::= PRINCIPAL OPEN_PARENTHESIS CLOSE_PARENTHESIS SPACE instruction
+        ;
+
+/*Declaracion de variables, asignaciones, incrementos, for, while, do_while, if, switch, funciones especiales*/
+instruction ::= tab increm_variables instruction
+                |tab func_especiales instruction
+                |tab v instruction
+                |tab for instruction
+                |tab while instruction
+                |tab do_while instruction
+                |tab if instruction
+                |tab switch instruction
+                |SPACE;
+
+instruction_ciclo ::= instruction
+                        |tab CONTINUE instruction_ciclo;
+
+function_instruction ::= instruction
+                        |tab RETORNA function_instruction;
+
+/*NOTAS MUSICALES*/
+notas ::= DO
+        |RE
+        |MI
+        |FA
+        |SOL
+        |LA
+        |SI
+        |DOR
+        |RER
+        ;
+
+/*FUNCIONES ESPECIALES*/
+
+ordenar_options ::= ASCENDENTE
+                |DESCENDENTE
+                ;
+
+reproducir_syntax ::= notas COMA value COMA value COMA value CLOSE_PARENTHESIS
+                    ;
+
+esperar_syntax ::= value COMA value CLOSE_PARENTHESIS
+                    ;
+
+sumarizar_syntax ::= value CLOSE_PARENTHESIS
+                    ;
+
+longitud_syntax ::= value CLOSE_PARENTHESIS
+                    ;
+
+mensaje_syntax ::= value CLOSE_PARENTHESIS
+                    ;
+
+ordenar_syntax ::= SIMBOLO COMA ordenar_options CLOSE_PARENTHESIS
+                ;
+
+func_especiales ::= REPRODUCIR OPEN_PARENTHESIS reproducir_syntax
+                    |SUMARIZAR OPEN_PARENTHESIS sumarizar_syntax
+                    |LONGITUD OPEN_PARENTHESIS longitud_syntax
+                    |ESPERAR OPEN_PARENTHESIS esperar_syntax
+                    |MENSAJE OPEN_PARENTHESIS mensaje_syntax
+                    |ORDENAR OPEN_PARENTHESIS ordenar_syntax
+                    ;
 
 
 /*TAB*/
@@ -27,14 +114,14 @@ tab ::= TAB tab
 function ::= k type_function OPEN_PARENTHESIS OPEN_BRACKET multiple_v CLOSE_PARENTHESIS SPACE function_instruction
             ;
 
-type_function ::= k class
+type_function ::= k data_type
             ;
 
 multiple_v ::= function_variables multiple_v_re
             |CLOSE_BRACKET
             ;
 
-function_variables ::= class SIMBOLO
+function_variables ::= data_type SIMBOLO
                     ;
 
 /*PISTA*/
@@ -54,7 +141,7 @@ d_ ::= COMA SIMBOLO d_
     ;
 
 /*INCREMENTACION DE VARIABLES*/
-special_variables ::= SIMBOLO increm SPACE
+increm_variables ::= SIMBOLO increm SPACE
                     ;
 
 increm ::= INCREASE
@@ -67,7 +154,7 @@ v ::= type variables assign
     |variables assign
     ;
 
-class ::= NUMBER array
+data_type ::= NUMBER array
         |DECIMAL array
         |BOOLEAN array
         |CADENA array
@@ -88,8 +175,8 @@ variables_re ::= COMA SIMBOLO variables_re
 k ::= KEEP
     |/*empty*/
 
-type ::= k VAR class
-        |k error class
+type ::= k VAR data_type
+        |k error data_type
         ;
 
 /*ASIGNAR VALORES*/
@@ -136,47 +223,15 @@ value ::= NUMBER
         |value MINUS value
         |value MULTIPLY value
         |value DIV value
+        |value POW value
+        |value MODULE value
         |OPEN_PARENTHESIS value CLOSE_PARENTHESIS
         |SIMBOLO
         |TRUE
+        |func_especiales
         |FALSE
         |error
         ;
-/*NOTAS MUSICALES*/
-notas ::= DO
-        |RE
-        |MI
-        |FA
-        |SOL
-        |LA
-        |SI
-        |DOR
-        |RER
-        ;
-
-/*FUNCIONES ESPECIALES*/
-
-reproducir_syntax ::= notas COMA valor COMA valor COMA valor CLOSE_PARENTHESIS
-                    ;
-
-esperar_syntax ::= valor COMA valor CLOSE_PARENTHESIS
-                    ;
-
-sumarizar_syntax ::= SIMBOLO CLOSE_PARENTHESIS
-                    ;
-
-longitud_syntax ::= SIMBOLO CLOSE_PARENTHESIS
-                    ;
-
-mensaje_syntax ::= SIMBOLO CLOSE_PARENTHESIS
-                    ;
-
-func_especiales ::= REPRODUCIR OPEN_PARENTHESIS reproducir_syntax
-/*No devuelve nada*/|ESPERAR OPEN_PARENTHESIS esperar_syntax
-                    |SUMARIZAR OPEN_PARENTHESIS sumarizar_syntax
-                    |LONGITUD OPEN_PARENTHESIS longitud_syntax
-/*No devuelve nada*/|MENSAJE OPEN_PARENTHESIS mensaje_syntax  
-                    ;
 
 /*SI*/
 
@@ -237,10 +292,10 @@ switch ::= SWITCH OPEN_PARENTHESIS SIMBOLO CLOSE_PARENTHESIS SPACE cases
             | SWITCH OPEN_PARENTHESIS SIMBOLO CLOSE_PARENTHESIS error cases
             ;
 
-cases ::= tab CASO value SPACE instruction SALIR cases
-        | tab error value SPACE instruction SALIR cases
-        | tab CASO value error instruction SALIR cases
-        | tab CASO value SPACE instruction error cases
+cases ::= tab CASO value SPACE instruction tab SALIR cases
+        | tab error value SPACE instruction tab SALIR cases
+        | tab CASO value error instruction tab SALIR cases
+        | tab CASO value SPACE instruction tab error cases
         | SPACE
         ;
 
@@ -255,7 +310,7 @@ for_instructions ::= v COLON for_condition
 for_condition ::= condition COLON for_increm
                 ;
 
-for_increm ::= increm CLOSE_PARENTHESIS
+for_increm ::= increm_variables CLOSE_PARENTHESIS
                 ;
 
 /*WHILE*/

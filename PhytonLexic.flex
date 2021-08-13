@@ -24,6 +24,7 @@ Decimal = (([1-9][0-9]*|0?)[.])[0-9]+
 Number = [0-9]+
 
 /*Reserved Words*/
+Principal = [pP][r][i][n][c][i][p][a][l]
 Pista = [pP][i][s][t][a]
 Extiende = [eE][x][t][i][e][n][d][e]
 Reproducir = [rR][e][p][r][o][d][u][c][i][r]
@@ -49,7 +50,7 @@ Arreglo = [aA][r][r][e][g][l][o]
 Simbolo = [aA-zZ][[aA-zZ]|[0-9]|[_]|[$]]*
 String = [\"][^\"]*[\"]
 Char = [\'][^\']*[\']
-
+Retorna = [rR][e][t][o][r][n][a]
 
 /*Condiciones*/
 If = [sS][i]
@@ -114,6 +115,8 @@ Si = [sS][i]
     {Simbolo}  {return new Symbol(SIMBOLO, yyline+1, yycolumn+1, yytext());}
     {String}  {return new Symbol(STRING, yyline+1, yycolumn+1, yytext());}
     {Char}  {return new Symbol(CHAR, yyline+1, yycolumn+1, yytext());}
+    {Principal} {return new Symbol(PRINCIPAL, yyline+1, yycolumn+1, yytext());}
+    {Retorna}   {return new Symbol(RETORNA, yyline+1, yycolumn+1, yytext());}
 
     /*Condiciones*/
     {If}    {return new Symbol(IF, yyline+1, yycolumn+1, yytext());}
