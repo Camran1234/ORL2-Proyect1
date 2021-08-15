@@ -67,8 +67,8 @@ Hacer = [hH][a][c][e][r]
 Continue = [cC][o][n][t][i][n][u][a][r]
 
 /*Notas*/
-Do# = [dD][o][#]
-Re# = [rR][e][#]
+Dor = [dD][o][#]
+Rer = [rR][e][#]
 Do = [dD][o]
 Re = [rR][e]
 Mi = [mM][i]
@@ -88,6 +88,24 @@ Si = [sS][i]
     /*Numbers*/
     {Decimal}   {return new Symbol(DECIMAL, yyline+1, yycolumn+1, yytext());}
     {Number}    {return new Symbol(NUMBER, yyline+1, yycolumn+1, yytext());}
+
+/*Condiciones*/
+    {Else}  {return new Symbol(ELSE, yyline+1, yycolumn+1, yytext());}
+    {Switch}    {return new Symbol(SWITCH, yyline+1, yycolumn+1, yytext());}
+    {Case}  {return new Symbol(CASE, yyline+1, yycolumn+1, yytext());}
+    {Exit}  {return new Symbol(EXIT, yyline+1, yycolumn+1, yytext());}
+    {Default}   {return new Symbol(DEFAULT, yyline+1, yycolumn+1, yytext());}
+
+    /*Notas*/
+    {Dor} {return new Symbol(DOR, yyline+1, yycolumn+1, yytext());}
+    {Rer} {return new Symbol(RER, yyline+1, yycolumn+1, yytext());}
+    {Do}    {return new Symbol(DO, yyline+1, yycolumn+1, yytext());}
+    {Re}    {return new Symbol(RE, yyline+1, yycolumn+1, yytext());}
+    {Mi}    {return new Symbol(MI, yyline+1, yycolumn+1, yytext());}
+    {Fa}    {return new Symbol(FA, yyline+1, yycolumn+1, yytext());}
+    {La}    {return new Symbol(LA, yyline+1, yycolumn+1, yytext());}
+    {Sol}   {return new Symbol(SOL, yyline+1, yycolumn+1, yytext());}
+    {Si}    {return new Symbol(SI, yyline+1, yycolumn+1, yytext());}
 
     /*Reserved Words*/
     {Pista} {return new Symbol(PISTA, yyline+1, yycolumn+1, yytext());}
@@ -112,19 +130,11 @@ Si = [sS][i]
     {Caracter}  {return new Symbol(CARACTER, yyline+1, yycolumn+1, yytext());}
     {Cadena}  {return new Symbol(CADENA, yyline+1, yycolumn+1, yytext());}
     {Arreglo}  {return new Symbol(ARREGLO, yyline+1, yycolumn+1, yytext());}
-    {Simbolo}  {return new Symbol(SIMBOLO, yyline+1, yycolumn+1, yytext());}
     {String}  {return new Symbol(STRING, yyline+1, yycolumn+1, yytext());}
     {Char}  {return new Symbol(CHAR, yyline+1, yycolumn+1, yytext());}
     {Principal} {return new Symbol(PRINCIPAL, yyline+1, yycolumn+1, yytext());}
     {Retorna}   {return new Symbol(RETORNA, yyline+1, yycolumn+1, yytext());}
-
-    /*Condiciones*/
-    {If}    {return new Symbol(IF, yyline+1, yycolumn+1, yytext());}
-    {Else}  {return new Symbol(ELSE, yyline+1, yycolumn+1, yytext());}
-    {Switch}    {return new Symbol(SWITCH, yyline+1, yycolumn+1, yytext());}
-    {Case}  {return new Symbol(CASE, yyline+1, yycolumn+1, yytext());}
-    {Exit}  {return new Symbol(EXIT, yyline+1, yycolumn+1, yytext());}
-    {Default}   {return new Symbol(DEFAULT, yyline+1, yycolumn+1, yytext());}
+    
 
     /*Ciclos*/
     {For} {return new Symbol(FOR, yyline+1, yycolumn+1, yytext());}
@@ -132,15 +142,6 @@ Si = [sS][i]
     {Hacer} {return new Symbol(HACER, yyline+1, yycolumn+1, yytext());}
     {Continue}  {return new Symbol(CONTINUE,yyline+1, yycolumn+1, yytext());}
 
-    /*Notas*/
-    {Do#} {return new Symbol(DOR, yyline+1, yycolumn+1, yytext());}
-    {Re#} {return new Symbol(RER, yyline+1, yycolumn+1, yytext());}
-    {Do}    {return new Symbol(DO, yyline+1, yycolumn+1, yytext());}
-    {Re}    {return new Symbol(RE, yyline+1, yycolumn+1, yytext());}
-    {Mi}    {return new Symbol(MI, yyline+1, yycolumn+1, yytext());}
-    {Fa}    {return new Symbol(FA, yyline+1, yycolumn+1, yytext());}
-    {Sol}   {return new Symbol(SOL, yyline+1, yycolumn+1, yytext());}
-    {Si}    {return new Symbol(Si, yyline+1, yycolumn+1, yytext());}
 
     /*Operadores relacionales*/
     "=" {return new Symbol(EQUAL, yyline+1, yycolumn+1, yytext());}
@@ -196,6 +197,8 @@ Si = [sS][i]
     /*Comentarios*/
     {Commentary}  {/*empty*/}
     {BlockCommentary}  {/*empty*/}
+
+    {Simbolo}  {return new Symbol(SIMBOLO, yyline+1, yycolumn+1, yytext());}
 }
 
 /*Errores*/

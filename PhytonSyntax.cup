@@ -6,24 +6,25 @@ parser code {:
 
 terminal DECIMAL, NUMBER, PISTA, EXTIENDE, REPRODUCIR, ESPERAR, ORDENAR, ASCENDENTE, DESCENDENTE, PARES, IMPARES, 
 PRIMOS, SUMARIZAR, LONGITUD, MENSAJE, PRINCIPAL, KEEP, VAR, ENTERO, DOBLE, BOOLEAN, CARACTER, CADENA, ARREGLO, SIMBOLO,
-STRING, CHAR, IF, ELSE, SWITCH, CASE, EXIT, DEFAULT, FOR, WHILE, HACER, CONTINUE, DOR, RER, DO, RE, MI, FA, SOL, LA, SI,
+STRING, CHAR, ELSE, SWITCH, CASE, EXIT, DEFAULT, FOR, WHILE, HACER, CONTINUE, DOR, RER, DO, RE, MI, FA, SOL, LA, SI,
 EQUAL, EQUALIZATION, DIFFERENTIATION, GREATER_THAN, LESSER_THAN, NULL_, GREATER, LESSER, EQUAL_MORE, INCREASE, DECREASE,
 ADD, MINUS, MULTIPLY, DIV, MODULE, POW, OPEN_BRACKET, CLOSE_BRACKET, OPEN_PARENTHESIS, CLOSE_PARENTHESIS, COLON, COMA,
-NAND, AND, NOR, OR, XOR, NOT, TAB, SPACE, OPEN_CURLY, CLOSE_CURLY, RETORNA ; 
+NAND, AND, NOR, OR, XOR, NOT, TAB, SPACE, OPEN_CURLY, CLOSE_CURLY, RETORNA , TRUE, FALSE; 
 
-non terminal tab, function, type_function, type_function, multiple_v, function_variables, pista, d, d_, increm_variables,
+non terminal tab, function, type_function, multiple_v, function_variables, pista, d, d_, increm_variables,
 increm, v, data_type, variables, variables_re, k, type, assign, equal, array, dimension, array_assign, assign_arr,
 assign_arr_re, mult_values, mult_values_re, value, notas, func_especiales, reproducir_syntax, esperar_syntax,
 sumarizar_syntax, longitud_syntax, mensaje_syntax, if, block_if, block_elseif, else_if, else, condition,
 condition_re, comparation, switch, cases, for, for_condition, for_increm, for_instructions, while,
-do_while, while_do;
+do_while, while_do, main_body, principal, instruction, instruction_ciclo, function_instruction, ordenar_options,
+ordenar_syntax, multiple_v_re, kf, block_else, condition_for, condition_re_for, comparation_for, v_for, assign_for;
 
 /*precedences*/
 
 precedence left ADD, MINUS;
-precedence left DIV, MULT, MODULE;
+precedence left DIV, MULTIPLY, MODULE;
 precedence left POW;
-precedence left NULL_, 
+precedence left NULL_;
 precedence left EQUALIZATION, DIFFERENTIATION, LESSER, LESSER_THAN, GREATER, GREATER_THAN;
 precedence left NOT;
 precedence left AND, NAND;
@@ -43,21 +44,21 @@ principal ::= PRINCIPAL OPEN_PARENTHESIS CLOSE_PARENTHESIS SPACE instruction
         ;
 
 /*Declaracion de variables, asignaciones, incrementos, for, while, do_while, if, switch, funciones especiales*/
-instruction ::= tab increm_variables instruction
-                |tab func_especiales instruction
+instruction ::= tab func_especiales instruction
                 |tab v instruction
                 |tab for instruction
                 |tab while instruction
                 |tab do_while instruction
                 |tab if instruction
                 |tab switch instruction
-                |SPACE;
+                |SPACE
+                ;
 
 instruction_ciclo ::= instruction
                         |tab CONTINUE instruction_ciclo;
 
 function_instruction ::= instruction
-                        |tab RETORNA function_instruction;
+                        |tab RETORNA value function_instruction;
 
 /*NOTAS MUSICALES*/
 notas ::= DO
@@ -75,6 +76,9 @@ notas ::= DO
 
 ordenar_options ::= ASCENDENTE
                 |DESCENDENTE
+                |PARES
+                |IMPARES
+                |PRIMOS
                 ;
 
 reproducir_syntax ::= notas COMA value COMA value COMA value CLOSE_PARENTHESIS
@@ -111,33 +115,42 @@ tab ::= TAB tab
         
 /*FUNCTION*/
 
-function ::= k type_function OPEN_PARENTHESIS OPEN_BRACKET multiple_v CLOSE_PARENTHESIS SPACE function_instruction
+kf ::= KEEP
+        |/*empty*/
+        ;
+
+function ::= kf type_function SIMBOLO OPEN_PARENTHESIS  multiple_v  SPACE function_instruction
             ;
 
-type_function ::= k data_type
+type_function ::= data_type
             ;
 
 multiple_v ::= function_variables multiple_v_re
-            |CLOSE_BRACKET
+            |CLOSE_PARENTHESIS
             ;
+
+multiple_v_re ::= COMA function_variables multiple_v_re
+                |CLOSE_PARENTHESIS
+                ;
 
 function_variables ::= data_type SIMBOLO
                     ;
 
 /*PISTA*/
-pista ::= PISTA SIMBOLO d instruccion
-    |PISTA error d instruccion
-    |PISTA SIMBOLO error instruccion
+pista ::= PISTA SIMBOLO d instruction
+    |PISTA error d instruction
+    |PISTA SIMBOLO error instruction
     ;
 
-d ::= extiende SIMBOLO d#
-    |/*empty*/
+d ::= EXTIENDE SIMBOLO d_
+    |SPACE
     ;
+
 
 d_ ::= COMA SIMBOLO d_
     |error SIMBOLO d_
     |COMA error d_
-    |/*empty*/
+    | SPACE
     ;
 
 /*INCREMENTACION DE VARIABLES*/
@@ -148,14 +161,25 @@ increm ::= INCREASE
             |DECREASE
             |error;
 
+/*Variables for*/
+
+v_for ::= type SIMBOLO assign_for
+        |SIMBOLO assign_for
+        ;
+
+assign_for ::= equal value COLON
+    |equal array_assign COLON
+    | increm COLON
+    ;
+
 /*VARIABLES*/
 
 v ::= type variables assign
     |variables assign
     ;
 
-data_type ::= NUMBER array
-        |DECIMAL array
+data_type ::= ENTERO array
+        |DOBLE array
         |BOOLEAN array
         |CADENA array
         |CARACTER array
@@ -167,21 +191,22 @@ variables ::= SIMBOLO variables_re
             ;
 
 variables_re ::= COMA SIMBOLO variables_re
-            |error SIMBOLO variables_re
             |COMA error variables_re
             |/*empty*/
             ;
 
-k ::= KEEP
-    |/*empty*/
-
-type ::= k VAR data_type
-        |k error data_type
+k ::=   KEEP VAR
+        |error VAR
+        |KEEP error
+        |VAR
+        ;
+type ::= k data_type 
         ;
 
 /*ASIGNAR VALORES*/
-assign ::= EQUAL value SPACE
+assign ::= equal value SPACE
     |equal array_assign SPACE
+    | increm SPACE
     ;
 
 equal ::= EQUAL
@@ -189,7 +214,7 @@ equal ::= EQUAL
         |error
         ;
 
-array ::= ARRAY dimension
+array ::= ARREGLO dimension
         |/*empty*/
         ;
 
@@ -197,21 +222,21 @@ dimension ::= OPEN_BRACKET value CLOSE_BRACKET dimension
         |/*empty*/
         ;
 
-array_assign ::= OPEN_CURLY value CLOSE_CURLY
+array_assign ::= OPEN_CURLY assign_arr 
                 ;
 
-assign_arr ::= OPEN_CURLY mult_values CLOSE_CURLY assign_arr_re
+assign_arr ::= OPEN_CURLY mult_values assign_arr_re
                 ;
 
-assign_arr_re ::= COMA OPEN_CURLY mult_values CLOSE_CURLY assign_arr_re
-                |/*empty*/
+assign_arr_re ::= COMA OPEN_CURLY mult_values assign_arr_re
+                | CLOSE_CURLY
                 ;
 
 mult_values ::= value mult_values_re
             ;
 
 mult_values_re ::= COMA value mult_values_re
-                |/*empty*/
+                |CLOSE_CURLY
                 ;
 
     /*VALORES*/
@@ -226,7 +251,7 @@ value ::= NUMBER
         |value POW value
         |value MODULE value
         |OPEN_PARENTHESIS value CLOSE_PARENTHESIS
-        |SIMBOLO
+        |SIMBOLO dimension
         |TRUE
         |func_especiales
         |FALSE
@@ -238,21 +263,24 @@ value ::= NUMBER
 if ::= block_if else_if else
         ;
 
-block_if ::= IF OPEN_PARENTHESIS condition SPACE instruction
+block_if ::= SI OPEN_PARENTHESIS condition SPACE instruction
         ;
 
 else_if ::= else_if block_elseif
+        |/*empty*/
         ;
 
-block_elseif ::= ELSE IF OPEN_PARENTHESIS condition SPACE instruction
-                |error IF OPEN_PARENTHESIS condition SPACE instruction
+block_elseif ::= ELSE SI OPEN_PARENTHESIS condition SPACE instruction
                 |ELSE error OPEN_PARENTHESIS condition SPACE instruction
-                |ELSE IF error condition SPACE instruction
-                |ELSE IF OPEN_PARENTHESIS condition error instruction
+                |ELSE SI error condition SPACE instruction
+                |ELSE SI OPEN_PARENTHESIS condition error instruction
                 ;
 
-else ::= ELSE SPACE instruction
-        |error SPACE instruction
+else ::= block_else
+        |/*empty*/
+        ;
+
+block_else ::= ELSE SPACE instruction
         |ELSE error instruction
         ;
 
@@ -283,6 +311,30 @@ comparation ::= comparation EQUALIZATION comparation
                 |value
                 ;
 
+/*Condicion para for*/
+condition_for ::= comparation_for condition_re_for
+            ;
+
+condition_re_for ::= AND comparation_for condition_re_for       
+                |NAND comparation_for condition_re_for
+                |OR comparation_for condition_re_for
+                |NOR comparation_for condition_re_for
+                |XOR comparation_for condition_re_for
+                |COLON
+                |error comparation_for condition_re_for
+                ;
+
+comparation_for ::= comparation_for EQUALIZATION comparation_for
+                |comparation_for DIFFERENTIATION comparation_for    
+                |comparation_for GREATER comparation_for
+                |comparation_for GREATER_THAN comparation_for
+                |comparation_for LESSER comparation_for
+                |comparation_for LESSER_THAN comparation_for
+                |NULL_ comparation_for
+                |NOT comparation_for
+                |OPEN_PARENTHESIS comparation_for CLOSE_PARENTHESIS
+                |value
+                ;
 /*SWITCH*/
 
 switch ::= SWITCH OPEN_PARENTHESIS SIMBOLO CLOSE_PARENTHESIS SPACE cases
@@ -292,22 +344,23 @@ switch ::= SWITCH OPEN_PARENTHESIS SIMBOLO CLOSE_PARENTHESIS SPACE cases
             | SWITCH OPEN_PARENTHESIS SIMBOLO CLOSE_PARENTHESIS error cases
             ;
 
-cases ::= tab CASO value SPACE instruction tab SALIR cases
-        | tab error value SPACE instruction tab SALIR cases
-        | tab CASO value error instruction tab SALIR cases
-        | tab CASO value SPACE instruction tab error cases
+cases ::= tab CASE value SPACE instruction tab EXIT cases
+        | tab error value SPACE instruction tab EXIT cases
+        | tab CASE value error instruction tab EXIT cases
+        | tab CASE value SPACE instruction tab error cases
+        | tab DEFAULT value SPACE instruction tab SPACE
         | SPACE
         ;
 
-/*PARA*/
+/*FOR*/
 
-for ::= PARA OPEN_PARENTHESIS for_instructions SPACE instruction_ciclo
+for ::= FOR OPEN_PARENTHESIS for_instructions SPACE instruction_ciclo
         ;
 
-for_instructions ::= v COLON for_condition
+for_instructions ::= v_for COLON for_condition
                 ;
 
-for_condition ::= condition COLON for_increm
+for_condition ::= condition_for for_increm
                 ;
 
 for_increm ::= increm_variables CLOSE_PARENTHESIS
@@ -315,7 +368,7 @@ for_increm ::= increm_variables CLOSE_PARENTHESIS
 
 /*WHILE*/
 
-while ::= MIENTRAS OPEN_PARENTHESIS condition SPACE instruction_ciclo
+while ::= WHILE OPEN_PARENTHESIS condition SPACE instruction_ciclo
         ;
 
 /*DO WHILE*/
@@ -323,6 +376,6 @@ while ::= MIENTRAS OPEN_PARENTHESIS condition SPACE instruction_ciclo
 do_while ::= HACER SPACE instruction_ciclo while_do
         ;
 
-while_do ::= tab MIENTRAS OPEN_PARENTHESIS condition SPACE
+while_do ::= tab WHILE OPEN_PARENTHESIS condition SPACE
         ;
 
