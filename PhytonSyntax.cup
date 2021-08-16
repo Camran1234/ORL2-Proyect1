@@ -17,7 +17,8 @@ assign_arr_re, mult_values, mult_values_re, value, notas, func_especiales, repro
 sumarizar_syntax, longitud_syntax, mensaje_syntax, if, block_if, block_elseif, else_if, else, condition,
 condition_re, comparation, switch, cases, for, for_condition, for_increm, for_instructions, while,
 do_while, while_do, main_body, principal, instruction, instruction_ciclo, function_instruction, ordenar_options,
-ordenar_syntax, multiple_v_re, kf, block_else, condition_for, condition_re_for, comparation_for, v_for, assign_for;
+ordenar_syntax, multiple_v_re, kf, block_else, condition_for, condition_re_for, comparation_for, v_for, assign_for, tab_instruction,
+tab_instruction_ciclo, tab_instruction_re, tab_instruction_ciclo_re;
 
 /*precedences*/
 
@@ -34,31 +35,44 @@ precedence left ELSE;
 
 start with main_body;
 
-main_body ::= tab principal main_body
-        | tab pista main_body
-        |tab function main_body
-        |SPACE
+main_body ::= principal main_body
+        | pista main_body
+        |function main_body
+        |SPACE main_body
+        |/*empty*/
         ;
 
 principal ::= PRINCIPAL OPEN_PARENTHESIS CLOSE_PARENTHESIS SPACE instruction
+        |PRINCIPAL error CLOSE_PARENTHESIS SPACE instruction
+        |PRINCIPAL OPEN_PARENTHESIS error SPACE instruction
+        |PRINCIPAL OPEN_PARENTHESIS CLOSE_PARENTHESIS error instruction
         ;
 
 /*Declaracion de variables, asignaciones, incrementos, for, while, do_while, if, switch, funciones especiales*/
-instruction ::= tab func_especiales instruction
-                |tab v instruction
-                |tab for instruction
-                |tab while instruction
-                |tab do_while instruction
-                |tab if instruction
-                |tab switch instruction
-                |SPACE
+tab_instruction ::= TAB tab_instruction_re
+                |SPACE tab_instruction_re
                 ;
 
-instruction_ciclo ::= instruction
-                        |tab CONTINUE instruction_ciclo;
+tab_instruction_re ::= TAB tab_instruction_re
+                |SPACE tab_instruction_re
+                |func_especiales
+                |v
+                |for
+                |while
+                |do_while
+                |if
+                |switch
+                ;
+
+instruction ::= tab_instruction instruction
+                |/*empty*/
+                ;
+
 
 function_instruction ::= instruction
-                        |tab RETORNA value function_instruction;
+                        |tab RETORNA value function_instruction
+                        ;
+                        
 
 /*NOTAS MUSICALES*/
 notas ::= DO
@@ -70,6 +84,7 @@ notas ::= DO
         |SI
         |DOR
         |RER
+        |error
         ;
 
 /*FUNCIONES ESPECIALES*/
@@ -79,32 +94,51 @@ ordenar_options ::= ASCENDENTE
                 |PARES
                 |IMPARES
                 |PRIMOS
+                |error 
                 ;
 
 reproducir_syntax ::= notas COMA value COMA value COMA value CLOSE_PARENTHESIS
+                |notas error value COMA value COMA value CLOSE_PARENTHESIS
+                |notas COMA value error value COMA value CLOSE_PARENTHESIS
+                |notas COMA value COMA value error value CLOSE_PARENTHESIS
+                |notas COMA value COMA value COMA value error
                     ;
 
 esperar_syntax ::= value COMA value CLOSE_PARENTHESIS
-                    ;
+                |value error value CLOSE_PARENTHESIS
+                |value COMA value error
+                ;
 
 sumarizar_syntax ::= value CLOSE_PARENTHESIS
+                |value error
                     ;
 
 longitud_syntax ::= value CLOSE_PARENTHESIS
+                |value error
                     ;
 
 mensaje_syntax ::= value CLOSE_PARENTHESIS
+                |value error
                     ;
 
 ordenar_syntax ::= SIMBOLO COMA ordenar_options CLOSE_PARENTHESIS
+                |error COMA ordenar_options CLOSE_PARENTHESIS
+                |SIMBOLO error ordenar_options CLOSE_PARENTHESIS
+                |SIMBOLO COMA ordenar_options error
                 ;
 
 func_especiales ::= REPRODUCIR OPEN_PARENTHESIS reproducir_syntax
+                    |REPRODUCIR error reproducir_syntax
                     |SUMARIZAR OPEN_PARENTHESIS sumarizar_syntax
+                    |SUMARIZAR error sumarizar_syntax
                     |LONGITUD OPEN_PARENTHESIS longitud_syntax
+                    |LONGITUD error longitud_syntax
                     |ESPERAR OPEN_PARENTHESIS esperar_syntax
+                    |ESPERAR error esperar_syntax
                     |MENSAJE OPEN_PARENTHESIS mensaje_syntax
+                    |MENSAJE error mensaje_syntax
                     |ORDENAR OPEN_PARENTHESIS ordenar_syntax
+                    |ORDENAR error ordenar_syntax
                     ;
 
 
@@ -120,6 +154,9 @@ kf ::= KEEP
         ;
 
 function ::= kf type_function SIMBOLO OPEN_PARENTHESIS  multiple_v  SPACE function_instruction
+                |kf type_function error OPEN_PARENTHESIS multiple_v SPACE function_instruction
+                |kf type_function SIMBOLO error multiple_v SPACE function_instruction
+                |kf type_function SIMBOLO OPEN_PARENTHESIS multiple_v error function_instruction
             ;
 
 type_function ::= data_type
@@ -130,10 +167,12 @@ multiple_v ::= function_variables multiple_v_re
             ;
 
 multiple_v_re ::= COMA function_variables multiple_v_re
+                |error function_variables multiple_v_re
                 |CLOSE_PARENTHESIS
                 ;
 
 function_variables ::= data_type SIMBOLO
+                        |data_type error
                     ;
 
 /*PISTA*/
@@ -196,9 +235,8 @@ variables_re ::= COMA SIMBOLO variables_re
             ;
 
 k ::=   KEEP VAR
-        |error VAR
-        |KEEP error
         |VAR
+        |KEEP error
         ;
 type ::= k data_type 
         ;
@@ -354,7 +392,7 @@ cases ::= tab CASE value SPACE instruction tab EXIT cases
 
 /*FOR*/
 
-for ::= FOR OPEN_PARENTHESIS for_instructions SPACE instruction_ciclo
+for ::= FOR OPEN_PARENTHESIS for_instructions SPACE /*instruction ciclo*/
         ;
 
 for_instructions ::= v_for COLON for_condition
@@ -368,14 +406,14 @@ for_increm ::= increm_variables CLOSE_PARENTHESIS
 
 /*WHILE*/
 
-while ::= WHILE OPEN_PARENTHESIS condition SPACE instruction_ciclo
+while ::= WHILE OPEN_PARENTHESIS condition SPACE /*instruction ciclo*/
         ;
 
 /*DO WHILE*/
 
-do_while ::= HACER SPACE instruction_ciclo while_do
+do_while ::= HACER SPACE /*instruction ciclo*/ while_do
         ;
 
-while_do ::= tab WHILE OPEN_PARENTHESIS condition SPACE
+while_do ::= tab WHILE OPEN_PARENTHESIS condition SPACE 
         ;
 
