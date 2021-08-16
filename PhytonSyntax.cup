@@ -11,14 +11,13 @@ EQUAL, EQUALIZATION, DIFFERENTIATION, GREATER_THAN, LESSER_THAN, NULL_, GREATER,
 ADD, MINUS, MULTIPLY, DIV, MODULE, POW, OPEN_BRACKET, CLOSE_BRACKET, OPEN_PARENTHESIS, CLOSE_PARENTHESIS, COLON, COMA,
 NAND, AND, NOR, OR, XOR, NOT, TAB, SPACE, OPEN_CURLY, CLOSE_CURLY, RETORNA , TRUE, FALSE; 
 
-non terminal tab, function, type_function, multiple_v, function_variables, pista, d, d_, increm_variables,
-increm, v, data_type, variables, variables_re, k, type, assign, equal, array, dimension, array_assign, assign_arr,
-assign_arr_re, mult_values, mult_values_re, value, notas, func_especiales, reproducir_syntax, esperar_syntax,
-sumarizar_syntax, longitud_syntax, mensaje_syntax, if, block_if, block_elseif, else_if, else, condition,
-condition_re, comparation, switch, cases, for, for_condition, for_increm, for_instructions, while,
-do_while, while_do, main_body, principal, instruction, instruction_ciclo, function_instruction, ordenar_options,
-ordenar_syntax, multiple_v_re, kf, block_else, condition_for, condition_re_for, comparation_for, v_for, assign_for, tab_instruction,
-tab_instruction_ciclo, tab_instruction_re, tab_instruction_ciclo_re;
+non terminal principal, tab, tab_re, instruction, notas, ordenar_options, reproducir_syntax, esperar_syntax,
+sumarizar_syntax, longitud_syntax, mensaje_syntax, ordenar_syntax, func_especiales, kf, function, type_function,
+multiple_v, multiple_v_re, function_variables, pista, d, d_, increm_variables, increm, v_for, assign_for, v, data_type,
+variables, variables_re, k, type, assign_special, assign, equal, array, dimension, array_assign, assign_arr, assign_arr_re, mult_values,
+mult_values_re, value, if, block_if, block_elseif, block_else, condition, condition_re, comparation, condition_for, condition_re_for,
+comparation_for, instruction_switch, switch, cases, for, for_instructions, for_condition, for_increm, while, instruction_do_while,
+do_while;
 
 /*precedences*/
 
@@ -33,14 +32,7 @@ precedence left OR, NOR, XOR;
 precedence left OPEN_PARENTHESIS, CLOSE_PARENTHESIS;
 precedence left ELSE;
 
-start with main_body;
-
-main_body ::= principal main_body
-        | pista main_body
-        |function main_body
-        |SPACE main_body
-        |/*empty*/
-        ;
+start with instruction;
 
 principal ::= PRINCIPAL OPEN_PARENTHESIS CLOSE_PARENTHESIS SPACE instruction
         |PRINCIPAL error CLOSE_PARENTHESIS SPACE instruction
@@ -49,29 +41,36 @@ principal ::= PRINCIPAL OPEN_PARENTHESIS CLOSE_PARENTHESIS SPACE instruction
         ;
 
 /*Declaracion de variables, asignaciones, incrementos, for, while, do_while, if, switch, funciones especiales*/
-tab_instruction ::= TAB tab_instruction_re
-                |SPACE tab_instruction_re
-                ;
 
-tab_instruction_re ::= TAB tab_instruction_re
-                |SPACE tab_instruction_re
-                |func_especiales
-                |v
-                |for
-                |while
-                |do_while
-                |if
-                |switch
-                ;
+/*TAB*/
+tab ::= TAB tab_re
+        ;
 
-instruction ::= tab_instruction instruction
+tab_re ::= TAB tab_re
+        |/*empty*/
+        ;
+
+instruction ::= principal instruction
+                |pista instruction
+                |function instruction
+                |tab func_especiales
+                |tab v
+                |tab for
+                |tab while
+                |tab do_while
+                |tab if
+                |tab switch
+                |tab RETORNA value instruction
+                |tab CONTINUE value instruction
+                |tab SPACE instruction
+                |SPACE instruction
+                |error instruction 
+                |tab instruction
                 |/*empty*/
                 ;
 
 
-function_instruction ::= instruction
-                        |tab RETORNA value function_instruction
-                        ;
+
                         
 
 /*NOTAS MUSICALES*/
@@ -142,21 +141,17 @@ func_especiales ::= REPRODUCIR OPEN_PARENTHESIS reproducir_syntax
                     ;
 
 
-/*TAB*/
-tab ::= TAB tab
-        |/*empty*/
-        ;
-        
+
 /*FUNCTION*/
 
-kf ::= KEEP
-        |/*empty*/
+kf ::= KEEP type_function
+        |type_function
         ;
 
-function ::= kf type_function SIMBOLO OPEN_PARENTHESIS  multiple_v  SPACE function_instruction
-                |kf type_function error OPEN_PARENTHESIS multiple_v SPACE function_instruction
-                |kf type_function SIMBOLO error multiple_v SPACE function_instruction
-                |kf type_function SIMBOLO OPEN_PARENTHESIS multiple_v error function_instruction
+function ::= kf SIMBOLO OPEN_PARENTHESIS  multiple_v  SPACE instruction
+                |kf error OPEN_PARENTHESIS multiple_v SPACE instruction
+                |kf SIMBOLO error multiple_v SPACE instruction
+                |kf SIMBOLO OPEN_PARENTHESIS multiple_v error instruction
             ;
 
 type_function ::= data_type
@@ -213,8 +208,8 @@ assign_for ::= equal value COLON
 
 /*VARIABLES*/
 
-v ::= type variables assign
-    |variables assign
+v ::= type variables assign_special /*Declaracion*/
+    |variables assign /*Solo asignacion*/
     ;
 
 data_type ::= ENTERO array
@@ -226,11 +221,11 @@ data_type ::= ENTERO array
         ;
 
 variables ::= SIMBOLO variables_re
-            |error variables_re
             ;
 
 variables_re ::= COMA SIMBOLO variables_re
             |COMA error variables_re
+            |error SIMBOLO variables_re
             |/*empty*/
             ;
 
@@ -242,6 +237,10 @@ type ::= k data_type
         ;
 
 /*ASIGNAR VALORES*/
+assign_special ::= assign
+                |SPACE
+                ;
+
 assign ::= equal value SPACE
     |equal array_assign SPACE
     | increm SPACE
@@ -298,28 +297,24 @@ value ::= NUMBER
 
 /*SI*/
 
-if ::= block_if else_if else
+if ::= block_if
+        |block_elseif
+        |block_else
         ;
 
-block_if ::= SI OPEN_PARENTHESIS condition SPACE instruction
+block_if ::= SI OPEN_PARENTHESIS condition SPACE 
+        |SI error condition SPACE
+        |SI OPEN_PARENTHESIS condition error
         ;
 
-else_if ::= else_if block_elseif
-        |/*empty*/
-        ;
-
-block_elseif ::= ELSE SI OPEN_PARENTHESIS condition SPACE instruction
-                |ELSE error OPEN_PARENTHESIS condition SPACE instruction
-                |ELSE SI error condition SPACE instruction
-                |ELSE SI OPEN_PARENTHESIS condition error instruction
+block_elseif ::= ELSE SI OPEN_PARENTHESIS condition SPACE 
+                |ELSE error OPEN_PARENTHESIS condition SPACE 
+                |ELSE SI error condition SPACE 
+                |ELSE SI OPEN_PARENTHESIS condition error 
                 ;
 
-else ::= block_else
-        |/*empty*/
-        ;
-
-block_else ::= ELSE SPACE instruction
-        |ELSE error instruction
+block_else ::= ELSE SPACE 
+        |ELSE error 
         ;
 
 /*CONDICION*/
@@ -375,6 +370,22 @@ comparation_for ::= comparation_for EQUALIZATION comparation_for
                 ;
 /*SWITCH*/
 
+instruction_switch ::= tab func_especiales instruction_switch
+                |tab v instruction_switch 
+                |tab for instruction_switch
+                |tab while instruction_switch
+                |tab do_while instruction_switch
+                |tab if instruction_switch
+                |tab switch instruction_switch
+                |tab RETORNA value instruction_switch
+                |tab CONTINUE value instruction_switch
+                |tab SPACE instruction_switch
+                |SPACE instruction_switch
+                |tab EXIT
+                |error instruction_switch
+                |tab error_ instruction_switch
+                ;
+
 switch ::= SWITCH OPEN_PARENTHESIS SIMBOLO CLOSE_PARENTHESIS SPACE cases
             | SWITCH error SIMBOLO CLOSE_PARENTHESIS SPACE cases
             | SWITCH OPEN_PARENTHESIS error CLOSE_PARENTHESIS SPACE cases
@@ -382,11 +393,12 @@ switch ::= SWITCH OPEN_PARENTHESIS SIMBOLO CLOSE_PARENTHESIS SPACE cases
             | SWITCH OPEN_PARENTHESIS SIMBOLO CLOSE_PARENTHESIS error cases
             ;
 
-cases ::= tab CASE value SPACE instruction tab EXIT cases
-        | tab error value SPACE instruction tab EXIT cases
-        | tab CASE value error instruction tab EXIT cases
-        | tab CASE value SPACE instruction tab error cases
-        | tab DEFAULT value SPACE instruction tab SPACE
+cases ::= tab CASE value SPACE instruction_switch cases
+        | tab error value SPACE instruction_switch cases
+        | tab CASE value error instruction_switch cases
+        | tab DEFAULT value SPACE
+        | tab DEFAULT value error
+        | error cases
         | SPACE
         ;
 
@@ -406,14 +418,32 @@ for_increm ::= increm_variables CLOSE_PARENTHESIS
 
 /*WHILE*/
 
-while ::= WHILE OPEN_PARENTHESIS condition SPACE /*instruction ciclo*/
+while ::= WHILE OPEN_PARENTHESIS condition SPACE 
+        |WHILE error condition SPACE
+        |WHILE error condition error
         ;
 
 /*DO WHILE*/
 
-do_while ::= HACER SPACE /*instruction ciclo*/ while_do
+instruction_do_while ::= tab func_especiales instruction_do_while
+                |tab v instruction_do_while
+                |tab for instruction_do_while
+                |tab do_while instruction_do_while
+                |tab if instruction_do_while
+                |tab switch instruction_do_while
+                |tab RETORNA value instruction_do_while
+                |tab CONTINUE instruction_do_while
+                |tab SPACE instruction_do_while
+                |tab while 
+                |SPACE instruction_do_while
+                |tab error instruction_do_while
+                |error instruction_do_while
+                ;
+
+
+do_while ::= HACER SPACE
+        |HACER error
         ;
 
-while_do ::= tab WHILE OPEN_PARENTHESIS condition SPACE 
-        ;
+
 
