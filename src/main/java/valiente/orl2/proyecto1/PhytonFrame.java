@@ -6,18 +6,14 @@
 package valiente.orl2.proyecto1;
 
 import javax.swing.JScrollPane;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import valiente.orl2.UI.*;
+import javax.swing.JTextPane;
+import valiente.orl2.UI.TextLineNumber;
 
 /**
  *
  * @author camran1234
  */
 public class PhytonFrame extends javax.swing.JFrame {
-
-        private LineNumberModel lineNumberModelImp;
-        private LineNumberComponent lineNumberComponent ;
     /**
      * Creates new form PhytonFrame
      */
@@ -48,40 +44,26 @@ public class PhytonFrame extends javax.swing.JFrame {
                 textArea.setColumns(20);
                 textArea.setRows(5);
                 jScrollPane1.setViewportView(textArea);
-                lineNumberModelImp = new LineNumberModelImp(textArea);
-                lineNumberComponent = new LineNumberComponent(lineNumberModelImp);
-                lineNumberComponent.setAlignment(LineNumberComponent.CENTER_ALIGNMENT);
-                textArea.getDocument().addDocumentListener(new DocumentListener(){
-                        @Override
-                        public void changedUpdate(DocumentEvent arg0) {
-                                lineNumberComponent.adjustWidth();
-                        }
-
-                        @Override
-                        public void insertUpdate(DocumentEvent arg0) {
-                                lineNumberComponent.adjustWidth();
-                        }
-
-                        @Override
-                        public void removeUpdate(DocumentEvent arg0) {
-                                lineNumberComponent.adjustWidth();
-                        }
-                });
+                JTextPane textPane = new JTextPane();
+                jScrollPane1 = new JScrollPane(textPane);
+                TextLineNumber tln = new TextLineNumber(textPane);
+                jScrollPane1.setRowHeaderView( tln );
+                textArea.add(jScrollPane1);
 
                 javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
                 jPanel2.setLayout(jPanel2Layout);
                 jPanel2Layout.setHorizontalGroup(
                         jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addContainerGap(32, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 535, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap())
                 );
                 jPanel2Layout.setVerticalGroup(
                         jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+                                .addGap(15, 15, 15)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
                                 .addContainerGap())
                 );
 
