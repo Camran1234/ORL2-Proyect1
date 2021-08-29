@@ -15,7 +15,6 @@ import valiente.orl2.phyton.values.Operation;
 public class Pista extends Instruction{
     String nombre;
     ArrayList<Operation> extendeds;
-    ArrayList<Instruction> instructions;
     
     public Pista(int line, int column){
         super(line, column);

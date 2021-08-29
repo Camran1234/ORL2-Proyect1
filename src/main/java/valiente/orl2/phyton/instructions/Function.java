@@ -31,9 +31,8 @@ public class Function extends Instruction{
     }
     
     
-    
-    public void execute(){
-        
+    public Operation execute(){
+        return null;
     }
 
     public boolean isMode() {

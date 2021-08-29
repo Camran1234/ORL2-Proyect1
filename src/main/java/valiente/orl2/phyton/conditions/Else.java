@@ -12,7 +12,7 @@ import valiente.orl2.phyton.instructions.Instruction;
  *
  * @author camran1234
  */
-public class Else extends Instruction{
+public class Else extends If{
     
     public Else( int line, int column) {
         super(line, column);

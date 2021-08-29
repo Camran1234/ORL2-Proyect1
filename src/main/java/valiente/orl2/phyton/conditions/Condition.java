@@ -45,6 +45,14 @@ public class Condition {
 
    public Operation execute(){
        
+       if(left!=null && right!=null){
+           
+       }else if(comparation !=null){
+           
+       }else if(value !=null){
+           
+       }
+       
        return null;
    }
    

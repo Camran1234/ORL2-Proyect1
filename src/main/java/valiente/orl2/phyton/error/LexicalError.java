@@ -12,13 +12,16 @@ package valiente.orl2.phyton.error;
 public class LexicalError extends Error{
     String lexema="";
     
-    public LexicalError(String type, int line, int column){
-        super(type, line, column);
+    public LexicalError( int line, int column){
+        super(line, column);
     }
-    
+
     @Override
-    public String execute(){
-        return "";
+    public String getDescription(){
+            StringBuilder string = new StringBuilder();
+            string.append("Erorr en el lexema: ").append(lexema);
+            string.append(", en la linea: ").append(line).append(", columna: ").append(column);
+            return string.toString();
     }
 
     public String getLexema() {
@@ -26,7 +29,7 @@ public class LexicalError extends Error{
     }
 
     public void setLexema(String lexema) {
-        this.lexema = lexema;
+        this.lexema += lexema;
     }
     
     

@@ -19,6 +19,11 @@ public class Error {
         this.type = type;
     }
     
+    public Error(int line, int column){
+            this.line = line;
+            this.column = column;
+    }
+    
     public String execute(){
         return "";
     }
@@ -47,6 +52,12 @@ public class Error {
         this.description = description;
     }
     
+    public void setType(String type){
+        this.type=type;
+    }
     
+    public String getType(){
+        return this.type;
+    }
     
 }

@@ -12,12 +12,16 @@ import valiente.orl2.phyton.instructions.Instruction;
  *
  * @author camran1234
  */
-public class ElseIf extends Instruction{
+public class ElseIf extends If{
     Condition condition;
 
     public ElseIf(Condition condition, int line, int column){
         super(line, column);
         this.condition = condition;
+    }
+    
+    public ElseIf(int line, int column){
+        super(line, column);
     }
     
     public void execute(){

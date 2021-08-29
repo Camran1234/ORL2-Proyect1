@@ -9,6 +9,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.beans.*;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
@@ -34,6 +36,8 @@ public class TextLineNumber extends JPanel
 
 	private final static int HEIGHT = Integer.MAX_VALUE - 1000000;
 
+        private JTextField status;
+        
 	//  Text component this TextTextLineNumber component is in sync with
 
 	private JTextComponent component;
@@ -49,10 +53,15 @@ public class TextLineNumber extends JPanel
 	//  Keep history information to reduce the number of times the component
 	//  needs to be repainted
 
-    private int lastDigits;
-    private int lastHeight;
-    private int lastLine;
-
+        private int lastDigits;
+        private int lastHeight;
+        private int lastLine;
+    
+         // This helper function updates the status bar with the line number and column number.
+        private void updateStatus(int linenumber, int columnnumber) {
+            status.setText("Line: " + linenumber + " Column: " + columnnumber);
+        }
+    
 	private HashMap<String, FontMetrics> fonts;
 
 	/**
@@ -61,9 +70,9 @@ public class TextLineNumber extends JPanel
 	 *
 	 *  @param component  the related text component
 	 */
-	public TextLineNumber(JTextComponent component)
+	public TextLineNumber(JTextComponent component, JTextField textField)
 	{
-		this(component, 3);
+		this(textField, component, 3);
 	}
 
 	/**
@@ -73,8 +82,9 @@ public class TextLineNumber extends JPanel
 	 *  @param minimumDisplayDigits  the number of digits used to calculate
 	 *                               the minimum width of the component
 	 */
-	public TextLineNumber(JTextComponent component, int minimumDisplayDigits)
+	public TextLineNumber(JTextField textField, JTextComponent component, int minimumDisplayDigits)
 	{
+                status = textField;
 		this.component = component;
 
 		setFont( component.getFont() );
@@ -377,13 +387,31 @@ public class TextLineNumber extends JPanel
 	public void caretUpdate(CaretEvent e)
 	{
 		//  Get the line the caret is positioned on
-
 		int caretPosition = component.getCaretPosition();
 		Element root = component.getDocument().getDefaultRootElement();
-		int currentLine = root.getElementIndex( caretPosition );
-
+		int currentLine = root.getElementIndex( caretPosition )+1;
+                int currentColumn =1;
+                if(currentLine>1 ){
+                    try {
+                        String text = component.getText(1, caretPosition-1);
+                        for(int index=text.length()-1; index>=0; index--){
+                            if(text.charAt(index)!='\n'){
+                                currentColumn++;
+                            }else{
+                                break;
+                            }
+                        }
+                        
+                    } catch (BadLocationException ex) {
+                        Logger.getLogger(TextLineNumber.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }else{
+                    currentColumn = caretPosition;
+                }
+                
+                this.updateStatus(currentLine, currentColumn);
 		//  Need to repaint so the correct line number can be highlighted
-
+                
 		if (lastLine != currentLine)
 		{
 //			repaint();
@@ -392,6 +420,7 @@ public class TextLineNumber extends JPanel
 		}
 	}
 
+        
 //
 //  Implement DocumentListener interface
 //

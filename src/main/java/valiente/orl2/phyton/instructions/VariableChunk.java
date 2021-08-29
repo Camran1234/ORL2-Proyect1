@@ -19,6 +19,16 @@ public class VariableChunk extends Instruction{
         for(int index=0; index<list.size(); index++){
             list.get(index).setValue(assignment);
         }
+        this.variables = list;
+    }
+    
+    public VariableChunk(ArrayList<Variable> list, Assignment assignment, VariableIndicator indicator){
+        for(int index=0; index<list.size(); index++){
+            list.get(index).setValue(assignment);
+            list.get(index).setParameters(indicator);
+        }
+        this.variables = list;
+        
     }
     
 }

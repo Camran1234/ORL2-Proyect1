@@ -14,9 +14,9 @@ import valiente.orl2.phyton.values.Operation;
 public class Comparation {
     private int line,column=0;
     
-    private Operation leftValue;
+    private Comparation leftValue;
     private String operador;
-    private Operation rightValue;
+    private Comparation rightValue;
     
     private Operation value;
     
@@ -31,7 +31,7 @@ public class Comparation {
            this.column = column;
     }
     
-    public Comparation(Operation leftValue, Operation rightValue, String operador, int line, int column){
+    public Comparation(Comparation leftValue, Comparation rightValue, String operador, int line, int column){
            this.leftValue = leftValue;
            this.rightValue = rightValue;
            this.operador = operador;
@@ -40,6 +40,12 @@ public class Comparation {
     }
     
     public Operation execute(){
+        if(leftValue!=null && rightValue!=null){
+            
+        }else if(value!=null){
+            return value;
+        }
+        
         return null;
     }
 
@@ -59,11 +65,11 @@ public class Comparation {
         this.column = column;
     }
 
-    public Operation getLeftValue() {
+    public Comparation getLeftValue() {
         return leftValue;
     }
 
-    public void setLeftValue(Operation leftValue) {
+    public void setLeftValue(Comparation leftValue) {
         this.leftValue = leftValue;
     }
 
@@ -75,11 +81,11 @@ public class Comparation {
          this.operador = operador;
     }
 
-    public Operation getRightValue() {
+    public Comparation getRightValue() {
         return rightValue;
     }
 
-    public void setRightValue(Operation rightValue) {
+    public void setRightValue(Comparation rightValue) {
         this.rightValue = rightValue;
     }
 

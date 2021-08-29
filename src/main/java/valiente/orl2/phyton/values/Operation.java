@@ -5,6 +5,9 @@
  */
 package valiente.orl2.phyton.values;
 
+import valiente.orl2.phyton.conditions.Condition;
+import valiente.orl2.phyton.instructions.Function;
+
 /**
  *
  * @author camran1234
@@ -16,6 +19,10 @@ public class Operation {
     String operator="";
     
     Value value;
+    Condition condition;
+    Function function;
+    
+    
     
     public Operation(Operation leftValue, Operation rightValue, String operator, int line, int column){
         this.leftValue = leftValue;
@@ -29,6 +36,34 @@ public class Operation {
         this.value = value;
         this.line= line;
         this.column= column;
+    }
+    
+    public Operation(Function function, int line, int column){
+        this.function = function;
+        this.line= line;
+        this.column= column;
+    }
+    
+    public Operation(Condition condition, int line, int column){
+        this.condition = condition;
+        this.line= line;
+        this.column= column;
+    }
+    
+    public Value execute(){
+        if(leftValue!=null && rightValue!=null){
+            
+        }else if(condition!=null){
+            Operation result = condition.execute();
+            
+        }else if(function!=null){
+            Operation result = function.execute();
+            
+        }else if(value!=null){
+            
+        }
+        
+        return null;
     }
     
     public int getLine() {
@@ -49,7 +84,4 @@ public class Operation {
     
     
     
-    public void execute(){
-        /*empty*/
-    }
 }
