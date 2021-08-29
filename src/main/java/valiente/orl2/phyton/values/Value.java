@@ -37,6 +37,7 @@ public class Value {
         this.dimension = dimension;
     }
     
+    
     public String getType() {
         return type;
     }

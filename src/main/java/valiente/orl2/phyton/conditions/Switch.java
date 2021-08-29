@@ -6,7 +6,9 @@
 package valiente.orl2.phyton.conditions;
 
 import java.util.ArrayList;
+import valiente.orl2.phyton.error.SyntaxError;
 import valiente.orl2.phyton.instructions.Instruction;
+import valiente.orl2.phyton.table.TableOfValue;
 import valiente.orl2.phyton.values.Operation;
 
 /**
@@ -15,6 +17,7 @@ import valiente.orl2.phyton.values.Operation;
  */
 public class Switch extends Instruction{
     ArrayList<Case> cases = new ArrayList();
+    Default finalCase = null;
     /*variable  a considerar*/
     Operation variable;
     
@@ -35,13 +38,38 @@ public class Switch extends Instruction{
         return cases;
     }
 
-    public void setCases(ArrayList<Case> cases) {
-        ArrayList<Case> aux = new ArrayList();
-        for(int index=cases.size()-1; index>=0; index--){
-            aux.add(cases.get(index));
+    public void addCase(Case newCase){
+        if(newCase!=null){
+            if(finalCase!=null){
+                SyntaxError newError = new SyntaxError(newCase.getLine(), newCase.getColumn());
+                newError.setType("Operaciones repetidas");
+                newError.setDescription("Se encontro mas de una declaracion default dentro del switch");
+                TableOfValue.syntaxErrors.add(newError);
+                System.err.println(newError);
+            }else{
+                this.cases.add(newCase);
+                newCase.setFather(this);
+            }
         }
-        this.cases = aux;
-    }    
+    }
+    
+    public void setDefault(Default option){
+        if(finalCase!=null){
+            SyntaxError newError = new SyntaxError(option.getLine(), option.getColumn());
+            newError.setType("Operaciones repetidas");
+            newError.setDescription("Se encontro mas de una declaracion default dentro del switch");
+            TableOfValue.syntaxErrors.add(newError);
+            System.err.println(newError);
+        }else{
+            this.finalCase = option;
+            option.setFather(this);
+        }
+    }
+    
+    public Default getDefault(){
+        return this.finalCase;
+    }
+   
     
     public void execute(){
         /*empty*/

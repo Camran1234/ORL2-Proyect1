@@ -13,6 +13,11 @@ import valiente.orl2.phyton.cycles.DoWhile;
 import valiente.orl2.phyton.cycles.For;
 import valiente.orl2.phyton.cycles.While;
 import valiente.orl2.phyton.error.SyntaxError;
+import valiente.orl2.phyton.conditions.Case;
+import valiente.orl2.phyton.conditions.Default;
+import valiente.orl2.phyton.conditions.Switch;
+import valiente.orl2.phyton.specialInstructions.Exit;
+
 
 /**
  *
@@ -37,6 +42,10 @@ public class Instruction {
         this.column = column;
     }
 
+    public void execute(){
+        //Empty
+    }
+    
     public void setFather(Instruction father){
         this.father = father;
     }
@@ -63,7 +72,8 @@ public class Instruction {
             this.addInstruction(instruction);
             instruction.setFather(this);
             if(instruction instanceof If || instruction instanceof While || instruction instanceof DoWhile
-                    || instruction instanceof For){
+                    || instruction instanceof For || instruction instanceof Switch || instruction instanceof Default
+                    || instruction instanceof Case){
                     return instruction;
             }
             return this;
@@ -108,8 +118,8 @@ public class Instruction {
                             newIf.setNewElse(instruction, erroresLista);                            
                             //returnInstruction = this.father;
                             return instruction;
-                        }else if((ElseIf) this.getFather() instanceof If){
-                            If newIf = (If) this;
+                        }else if( this instanceof ElseIf){
+                            If newIf = (If) this.getFather();
                             newIf.setNewElse(instruction,erroresLista);
                             return instruction;
                         }else{
@@ -151,6 +161,52 @@ public class Instruction {
                         }else{
                           returnInstruction = this.father.setTheInstruction(instruction, erroresLista);  
                         }
+                    }else if(instruction instanceof Case){
+                        if(this instanceof Switch){
+                            Switch newSwitch = (Switch) this;
+                            newSwitch.addCase((Case) instruction);
+                            return instruction;
+                        }else if(this instanceof Case){
+                            Switch newSwitch = (Switch) this.getFather();
+                            newSwitch.addCase((Case) instruction);
+                            return instruction;
+                        }else{
+                            SyntaxError newError = new SyntaxError(instruction.getLine(), instruction.getColumn());
+                            newError.setType("Inicio ilegal de la expresion");
+                            newError.setDescription("Se esperaba que el caso estuviera adentro de un switch");
+                            erroresLista.add(newError);
+                            System.err.println(newError.getDescription());
+                        }
+                    }else if(instruction instanceof Default){
+                        if(this instanceof Switch){
+                            Switch newSwitch = (Switch) this;
+                            newSwitch.setDefault((Default) instruction);
+                            return instruction;
+                        }else if(this instanceof Case){
+                            Switch newSwitch = (Switch) this.getFather();
+                            newSwitch.setDefault((Default) instruction);
+                            return instruction;
+                        }else{
+                            SyntaxError newError = new SyntaxError(instruction.getLine(), instruction.getColumn());
+                            newError.setType("Inicio ilegal de la expresion");
+                            newError.setDescription("Se esperaba que el caso estuviera adentro de un switch");
+                            erroresLista.add(newError);
+                            System.err.println(newError.getDescription());
+                        }
+                    }else if(instruction instanceof Exit){
+                        if(this instanceof Case){
+                            SyntaxError error = new SyntaxError(instruction.getLine(), instruction.getColumn());
+                            error.setType("Inicio ilegal de la expreison");
+                            error.setDescription("Se esperaba que exit terminara una instruccion case");
+                            erroresLista.add(error);
+                            System.err.println(error.getDescription());
+                        }else{                                
+                            SyntaxError error = new SyntaxError(instruction.getLine(), instruction.getColumn());                                
+                            error.setType("Inicio ilegal de la expreison");                            
+                            error.setDescription("Se esperaba que exit terminara una instruccion case");                            
+                            erroresLista.add(error);                            
+                            System.err.println(error.getDescription());                                
+                        }
                     }else{
                         //Le mandamos los parametros al padre
                         returnInstruction = this.father.setTheInstruction(instruction, erroresLista);
@@ -166,7 +222,7 @@ public class Instruction {
     }
     
     /**
-     * Agrega una instruccion
+     * Agrega una instruccionindex
      * @param instruction 
      */
     public void addInstruction(Instruction instruction){

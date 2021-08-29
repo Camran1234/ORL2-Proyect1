@@ -8,6 +8,9 @@ package valiente.orl2.proyecto1;
 import java.io.StringReader;
 import valiente.orl2.phyton.parser.*;
 import java.util.ArrayList;
+import valiente.orl2.phyton.conditions.Case;
+import valiente.orl2.phyton.conditions.Switch;
+import valiente.orl2.phyton.conditions.Default;
 import valiente.orl2.phyton.cycles.For;
 import valiente.orl2.phyton.cycles.While;
 import valiente.orl2.phyton.error.*;
@@ -115,7 +118,8 @@ public class Phyton {
                     }
                 }else{
                     Instruction actual = lista.get(index);
-                    if( actual instanceof If || actual instanceof While || actual instanceof DoWhile ||  actual instanceof For ){
+                    if( actual instanceof If || actual instanceof While || actual instanceof DoWhile ||  actual instanceof For || 
+                            actual instanceof Switch || actual instanceof Case || actual instanceof Default){
                             //Comprobar indentacion y los agrega automaticamente
                             function = function.setTheInstruction(actual, erroresLista);
                     }else {

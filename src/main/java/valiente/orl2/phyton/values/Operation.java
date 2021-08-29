@@ -5,7 +5,9 @@
  */
 package valiente.orl2.phyton.values;
 
+import java.util.ArrayList;
 import valiente.orl2.phyton.conditions.Condition;
+import valiente.orl2.phyton.error.SemanticError;
 import valiente.orl2.phyton.instructions.Function;
 
 /**
@@ -52,13 +54,16 @@ public class Operation {
     
     public Value execute(){
         if(leftValue!=null && rightValue!=null){
-            
+            Value left = leftValue.execute();
+            Value right = rightValue.execute();
+            ArithmeticOperator arithmeticOperator = new ArithmeticOperator();
+            return arithmeticOperator.MakeOperation(operator, left, right);
         }else if(condition!=null){
             Operation result = condition.execute();
-            
+            return result.execute();
         }else if(function!=null){
-            Operation result = function.execute();
-            
+            Value result = function.getValue();
+            return result;
         }else if(value!=null){
             
         }

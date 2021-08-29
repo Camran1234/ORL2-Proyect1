@@ -3,24 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package valiente.orl2.phyton.conditions;
+package valiente.orl2.phyton.specialInstructions;
 
-import java.util.ArrayList;
 import valiente.orl2.phyton.instructions.Instruction;
 
 /**
  *
  * @author camran1234
  */
-public class Default extends Instruction{
+public class Exit extends Instruction{
     
-    public Default(int indentation, int line, int column) {
-        super(indentation, line, column);
+    
+    public Exit(int indentation, int line, int column){
+        super(line, column);
     }
     
-    public void execute(){
-        /*empty*/
-    }
     
     
 }

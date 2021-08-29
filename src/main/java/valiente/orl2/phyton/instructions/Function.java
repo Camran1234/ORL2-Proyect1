@@ -20,6 +20,9 @@ public class Function extends Instruction{
     private Value name;
     private ArrayList<Operation> parameters=new ArrayList();
     private ArrayList<Operation> dimension = new ArrayList();
+    //The result to return
+    private Value value;
+    
     
     public Function(int line, int column){
         super(line, column);
@@ -30,9 +33,17 @@ public class Function extends Instruction{
         this.cast = cast;
     }
     
+    /**
+     * Get the value after the execute
+     * @return 
+     */
+    public Value getValue(){
+        this.execute();
+        return this.value;
+    }
     
-    public Operation execute(){
-        return null;
+    public void execute(){
+        
     }
 
     public boolean isMode() {
