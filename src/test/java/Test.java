@@ -13,16 +13,10 @@ import valiente.orl2.phyton.conditions.ElseIf;
 public class Test {
     
     public static void main (String args[]){
-        ElseIf elseIf = new ElseIf(0,0);
-        try {
-            if(elseIf instanceof Instruction){
-                System.out.println("true");
-            }else{
-                System.out.println("false");
-            }
-        } catch (Exception e) {
-        }
-        
+        double x = 4.4;
+        String z = Double.toString(x);
+        int y = (x);
+        System.out.println(y);
     }
     
 }

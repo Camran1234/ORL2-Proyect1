@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import valiente.orl2.phyton.conditions.Condition;
 import valiente.orl2.phyton.error.SemanticError;
 import valiente.orl2.phyton.instructions.Function;
+import valiente.orl2.phyton.table.TableOfValue;
 
 /**
  *
@@ -57,7 +58,7 @@ public class Operation {
             Value left = leftValue.execute();
             Value right = rightValue.execute();
             ArithmeticOperator arithmeticOperator = new ArithmeticOperator();
-            return arithmeticOperator.MakeOperation(operator, left, right);
+            return arithmeticOperator.MakeOperation(operator, left, right, line, column);
         }else if(condition!=null){
             Operation result = condition.execute();
             return result.execute();
@@ -65,9 +66,12 @@ public class Operation {
             Value result = function.getValue();
             return result;
         }else if(value!=null){
-            
+            return this.value;
         }
-        
+        SemanticError newError = new SemanticError("No se encontro el valor", line, column);
+        newError.setDescription("No existe ningun valor dentro de la operacion");
+        newError.setSolution("revise bien su entrada");
+        TableOfValue.semanticErrors.add(newError);
         return null;
     }
     

@@ -5,10 +5,11 @@
  */
 package valiente.orl2.phyton.conditions;
 
+import valiente.orl2.phyton.values.LogicalOperator;
 import valiente.orl2.phyton.values.Operation;
 
 /**
- *
+ * Para realizar comparaciones con los simbolos ==, !=, 
  * @author camran1234
  */
 public class Comparation {
@@ -18,10 +19,20 @@ public class Comparation {
     private String operador;
     private Comparation rightValue;
     
+    private boolean unary;
+    private Comparation comparation;
+    
     private Operation value;
     
     public Comparation(int line, int column){
         this.line = line;
+        this.column = column;
+    }
+    
+    public Comparation(boolean unary, Comparation comparation, int line, int column){
+        this.unary = unary;
+        this.comparation = comparation;
+        this.line= line;
         this.column = column;
     }
     
@@ -41,6 +52,13 @@ public class Comparation {
     
     public Operation execute(){
         if(leftValue!=null && rightValue!=null){
+            Operation left = leftValue.execute();
+            Operation right = rightValue.execute();
+            return new LogicalOperator().MakeComparation(left, right, operador, line, column);
+        }else if(comparation!=null && unary){
+            Operation operation  = comparation.execute();
+            //logica para la comparacion
+            
             
         }else if(value!=null){
             return value;

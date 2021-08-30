@@ -23,6 +23,7 @@ import valiente.orl2.phyton.conditions.ElseIf;
 import valiente.orl2.phyton.conditions.Else;
 import valiente.orl2.phyton.cycles.DoWhile;
 import valiente.orl2.phyton.instructions.VariableChunk;
+import valiente.orl2.phyton.table.TableOfValue;
 /**
  *
  * @author camran1234
@@ -37,6 +38,9 @@ public class Phyton {
             parser.parse();
             ArrayList<LexicalError> lexicalError = lexico.getList();
             ArrayList<SyntaxError> syntaxError = parser.getList(); 
+            TableOfValue.resetErrorsList();
+            TableOfValue.lexicalErrors = lexicalError;
+            TableOfValue.syntaxErrors = syntaxError;
             ArrayList<Instruction> instruction = parser.getInstructions();
             instruction = this.Reasignar(instruction, syntaxError);
             System.out.println("Analizando");

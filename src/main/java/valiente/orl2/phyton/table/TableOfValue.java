@@ -17,7 +17,10 @@ public class TableOfValue {
     public static ArrayList<SyntaxError> syntaxErrors = new ArrayList();
     public static ArrayList<LexicalError> lexicalErrors = new ArrayList();
     
-    public void resetErrorsList(){
+    /**
+     * Reinicia los valores de la lista
+     */
+    public static void resetErrorsList(){
         semanticErrors = new ArrayList();
         syntaxErrors = new ArrayList();
         lexicalErrors = new ArrayList();
