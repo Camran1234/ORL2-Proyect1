@@ -22,43 +22,50 @@ public class ArithmeticOperator {
     
     public Value MakeOperation(String operation, Value left, Value right, int line, int column){
         Value result = null;
-        if(operation.equalsIgnoreCase("+")){
+        try {
+            if(operation.equalsIgnoreCase("+")){
             result = MakeAddition(left, right, line, column);
-        }else if(operation.equalsIgnoreCase("-")){
-            result = MakeSubstraction(left, right, line, column);
-        }else if(operation.equalsIgnoreCase("*")){
-            result = MakeMultiply(left, right, line, column);
-        }else if(operation.equalsIgnoreCase("/")){
-            result = MakeDiv(left, right, line, column);
-        }else if(operation.equalsIgnoreCase("^")){
-            result = MakePow(left, right, line, column);
-        }else if(operation.equalsIgnoreCase("%")){
-            result = MakeMod(left, right, line, column);
+            }else if(operation.equalsIgnoreCase("-")){
+                result = MakeSubstraction(left, right, line, column);
+            }else if(operation.equalsIgnoreCase("*")){
+                result = MakeMultiply(left, right, line, column);
+            }else if(operation.equalsIgnoreCase("/")){
+                result = MakeDiv(left, right, line, column);
+            }else if(operation.equalsIgnoreCase("^")){
+                result = MakePow(left, right, line, column);
+            }else if(operation.equalsIgnoreCase("%")){
+                result = MakeMod(left, right, line, column);
+            }
+        } catch (Exception e) {
+            SemanticError error = new SemanticError("Error de operandos", line, column);
+            error.setDescription(e.getMessage());
+            TableOfValue.semanticErrors.add(error);
         }
+        
         return result;
     }
     
-    private Value MakeAddition(Value left, Value right, int line, int column){
+    private Value MakeAddition(Value left, Value right, int line, int column) throws Exception{
         return new Addition().MakeAddition(left, right, line, column);
     }
 
-    private Value MakeSubstraction(Value left, Value right, int line, int column) {
+    private Value MakeSubstraction(Value left, Value right, int line, int column) throws Exception{
         return new Substraction().MakeSubstraction(left, right, line, column);
     }
 
-    private Value MakeMultiply(Value left, Value right, int line, int column) {
+    private Value MakeMultiply(Value left, Value right, int line, int column) throws Exception{
         return new Multiplication().MakeMultiplication(left, right, line, column);
     }
 
-    private Value MakeDiv(Value left, Value right, int line, int column) {
+    private Value MakeDiv(Value left, Value right, int line, int column)throws Exception {
         return new Division().MakeDivision(left, right, line, column);
     }
 
-    private Value MakePow(Value left, Value right, int line, int column) {
+    private Value MakePow(Value left, Value right, int line, int column)throws Exception {
         return new Pow().MakePow(left, right, line, column);
     }
 
-    private Value MakeMod(Value left, Value right, int line, int column) {
+    private Value MakeMod(Value left, Value right, int line, int column)throws Exception {
         return new Mod().MakeMod(left, right, line, column);
     }
 }

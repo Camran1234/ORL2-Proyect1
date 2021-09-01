@@ -8,17 +8,21 @@ import java.util.ArrayList;
 import valiente.orl2.phyton.values.Operation;
 import valiente.orl2.phyton.values.Value;
 /**
- *
+ * Clase para declarar y asignar variables
  * @author camran1234
  */
 public class Variable extends Instruction{
     boolean declarado=false;
     boolean mode =false;
     boolean array=false;
+    //identificador de la variable
     String name ="";
+    //Si tiene tipo se declara
     String type ="";
+    //El valor asignado a esta variable
     Assignment value;
     /*Para arreglos*/
+    //Size of the array
     ArrayList<Operation> dimension = new ArrayList();
 
     
@@ -28,7 +32,12 @@ public class Variable extends Instruction{
     }
     
     public void execute(){
-        
+        //Si posee asignacion o no
+        if(value!=null){
+            
+        }else{
+            
+        }
     }
 
     public void setParameters(VariableIndicator indicator){

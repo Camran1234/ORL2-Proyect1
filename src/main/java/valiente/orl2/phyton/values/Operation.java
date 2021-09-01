@@ -54,24 +54,30 @@ public class Operation {
     }
     
     public Value execute(){
-        if(leftValue!=null && rightValue!=null){
-            Value left = leftValue.execute();
-            Value right = rightValue.execute();
-            ArithmeticOperator arithmeticOperator = new ArithmeticOperator();
-            return arithmeticOperator.MakeOperation(operator, left, right, line, column);
-        }else if(condition!=null){
-            Operation result = condition.execute();
-            return result.execute();
-        }else if(function!=null){
-            Value result = function.getValue();
-            return result;
-        }else if(value!=null){
-            return this.value;
+        try {
+            if(leftValue!=null && rightValue!=null){
+                Value left = leftValue.execute();
+                Value right = rightValue.execute();
+                ArithmeticOperator arithmeticOperator = new ArithmeticOperator();
+                return arithmeticOperator.MakeOperation(operator, left, right, line, column);
+            }else if(condition!=null){
+                Operation result = condition.execute();
+                return result.execute();
+            }else if(function!=null){
+                Value result = function.getValue();
+                return result;
+            }else if(value!=null){
+                return this.value;
+            }
+            SemanticError newError = new SemanticError("No se encontro el valor", line, column);
+            newError.setDescription("No existe ningun valor dentro de la operacion");
+            newError.setSolution("revise bien su entrada");
+            TableOfValue.semanticErrors.add(newError);
+        } catch (Exception e) {
+            SemanticError newError = new SemanticError("Error en operacion", line, column);
+            newError.setDescription(e.getMessage());
+            TableOfValue.semanticErrors.add(newError);
         }
-        SemanticError newError = new SemanticError("No se encontro el valor", line, column);
-        newError.setDescription("No existe ningun valor dentro de la operacion");
-        newError.setSolution("revise bien su entrada");
-        TableOfValue.semanticErrors.add(newError);
         return null;
     }
     

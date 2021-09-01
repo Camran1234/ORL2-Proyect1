@@ -6,7 +6,11 @@
 package valiente.orl2.phyton.conditions;
 
 import java.util.ArrayList;
+import valiente.orl2.phyton.error.SemanticException;
+import valiente.orl2.phyton.error.ValueException;
 import valiente.orl2.phyton.instructions.Instruction;
+import valiente.orl2.phyton.specialInstructions.Exit;
+import valiente.orl2.phyton.specialInstructions.Return;
 
 /**
  *
@@ -18,8 +22,21 @@ public class Default extends Instruction{
         super(indentation, line, column);
     }
     
-    public void execute(){
-        /*empty*/
+    public void execute() throws SemanticException{
+         try {
+            for(int index=0; index<instructions.size(); index++){
+                if(instructions.get(index) instanceof Return){
+                    if(index!=instructions.size()-1){
+                        throw new ValueException("Hay mas instrucciones despues de return","Error en caso", getLine(), getColumn());
+                    }else{
+                        instructions.get(index).execute();
+                    }
+                }else{
+                    instructions.get(index).execute();
+                }
+            }
+        } catch (ValueException e) {
+        }
     }
     
     

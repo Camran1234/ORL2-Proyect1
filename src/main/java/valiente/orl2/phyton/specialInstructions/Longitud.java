@@ -19,6 +19,10 @@ public class Longitud extends Instruction{
         super(line, column);
     }
 
+    public void execute(){
+        /*empty*/
+    }
+    
     public Operation getArray() {
         return array;
     }

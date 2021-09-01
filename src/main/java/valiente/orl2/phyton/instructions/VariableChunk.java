@@ -30,5 +30,11 @@ public class VariableChunk extends Instruction{
         this.variables = list;
         
     }
+    @Override
+    public void execute(){
+        for(int index=0; index< variables.size(); index++){
+            variables.get(index).execute();
+        }
+    }
     
 }

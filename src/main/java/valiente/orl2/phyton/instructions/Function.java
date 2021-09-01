@@ -6,6 +6,7 @@
 package valiente.orl2.phyton.instructions;
 
 import java.util.ArrayList;
+import valiente.orl2.phyton.error.SemanticException;
 import valiente.orl2.phyton.values.Operation;
 import valiente.orl2.phyton.values.Value;
 
@@ -33,18 +34,28 @@ public class Function extends Instruction{
         this.cast = cast;
     }
     
+    @Override
+    public void execute()  throws SemanticException{
+        try {
+            for(int index=0; index<instructions.size(); index++){
+                instructions.get(index).execute();
+            }
+        } catch (SemanticException e) {
+            e.checkErrorAmbit();
+        }
+        
+        
+    }
+    
     /**
      * Get the value after the execute
      * @return 
      */
-    public Value getValue(){
+    public Value getValue() throws SemanticException{
         this.execute();
         return this.value;
     }
     
-    public void execute(){
-        
-    }
 
     public boolean isMode() {
         return mode;

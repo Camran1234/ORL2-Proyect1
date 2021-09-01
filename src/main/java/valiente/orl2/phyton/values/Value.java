@@ -6,7 +6,10 @@
 package valiente.orl2.phyton.values;
 
 import java.util.ArrayList;
+import valiente.orl2.phyton.error.SemanticException;
+import valiente.orl2.phyton.error.ValueException;
 import valiente.orl2.phyton.instructions.Instruction;
+import valiente.orl2.phyton.table.TableOfValue;
 
 /**
  * tipos: entero, doble, boolean, caracter, cadena, arreglo, funcion como pista, principal. roc, etc, variable, nota0
@@ -18,21 +21,22 @@ public class Value {
     private String type="";
     private String value="";
     private ArrayList<Operation> dimension = new ArrayList();
+    private String typeFather = "";
     private Instruction specialValue; //Reserved for function
     
-    public Value(String type, Instruction specialValue){
+    public Value(String type, Instruction specialValue, int line, int column){
         this.type = type;
         this.specialValue = specialValue;
     }
     
     
-    public Value(String type, String value){
+    public Value(String type, String value, int line, int column){
         this.type=type;
         this.value=value;
         this.checkType();
     }
     
-    public Value(String value, ArrayList<Operation> dimension){
+    public Value(String value, ArrayList<Operation> dimension, int line, int column){
         this.type="variable";
         this.value=value;
         this.dimension = dimension;
@@ -57,9 +61,13 @@ public class Value {
         return type;
     }
     
-    public String getType() {
+    public String getType() throws ValueException{
         //Sacar el valor de la tabla de valores
-        return type;
+        if(type.equalsIgnoreCase("variable")){
+            return TableOfValue.findTypeSymbol(value, line, column);
+        }else{
+            return type;
+        }
     }
 
     public void setType(String type) {
@@ -70,20 +78,32 @@ public class Value {
         return value;
     }
     
-    public String getValue() {
-        if(this.type.equalsIgnoreCase("boolean")){
+    public String getValue() throws ValueException{
+        if(type.equalsIgnoreCase("boolean")){
             if(this.value.equalsIgnoreCase("1") || this.value.equalsIgnoreCase("true")){
                 return "true";
             }else if(this.value.equalsIgnoreCase("0") || this.value.equalsIgnoreCase("false")){
                 return "false";
             }
-        }else if(this.type.equalsIgnoreCase("entero")){
+        }else if(type.equalsIgnoreCase("entero")){
             if(this.value.equalsIgnoreCase("true")){
                 return "1";
             }else if(this.value.equalsIgnoreCase("false")){
                 return "0";
             }
+        }else if(type.equalsIgnoreCase("variable")){
+            if(TableOfValue.isArray(type)){
+                String tipo = getType();
+                if(tipo.equalsIgnoreCase("caracter")){
+                    return TableOfValue.convertCharArrayAsString(value, line, column);
+                }else{
+                    throw new ValueException("No se transformar los valores de un arreglo de tipo "+tipo+" a un solo valor","Error de variable", line, column);
+                }
+            }else{
+                return TableOfValue.getValue(value, line, column);
+            }
         }
+        
         return value;
     }
 

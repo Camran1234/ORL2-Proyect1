@@ -17,11 +17,13 @@ public class Assignment {
     /*Para variables primitivas*/
     Operation value;
     /*Si aumenta o se iguala el valor*/
+    // ==, +=, ++
     String metodo="";
     
     /*Para arreglos*/
-    ArrayList<Object> valueArray; 
-
+    Dimension dimension = null;
+    
+    
     public Assignment(int line, int column){
         this.line = line;
         this.column = column;
@@ -29,6 +31,22 @@ public class Assignment {
     
     public void execute(){
         
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public void setLine(int line) {
+        this.line = line;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public void setColumn(int column) {
+        this.column = column;
     }
     
     public Operation getValue() {
@@ -47,15 +65,12 @@ public class Assignment {
         this.metodo = metodo;
     }
 
-    public ArrayList<Object> getValueArray() {
-        return valueArray;
-    }
-
-    public void setValueArray(ArrayList<Object> valueArray) {
-        this.valueArray = valueArray;
+    public Dimension getDimension(){
+        return dimension;
     }
     
-    
-    
+    public void setDimension(Dimension dimension){
+        this.dimension = dimension;
+    }
     
 }

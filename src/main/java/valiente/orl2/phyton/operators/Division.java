@@ -16,7 +16,7 @@ import valiente.orl2.phyton.values.Value;
  */
 public class Division {
     ArrayList<SemanticError> semanticErrors = TableOfValue.semanticErrors;
-    public Value MakeDivision(Value left, Value right, int line, int column){
+    public Value MakeDivision(Value left, Value right, int line, int column) throws Exception{
         String typeL = left.getType();
         String typeR = right.getType();
         
@@ -31,7 +31,7 @@ public class Division {
                     semanticErrors.add(newError);
                     return null;
                 }else{
-                    return new Value("entero",Integer.toString(leftV/rightV) );
+                    return new Value("entero",Integer.toString(leftV/rightV), line, column );
                 }
                 
             }else if(typeR.equalsIgnoreCase("doble")){
@@ -45,7 +45,7 @@ public class Division {
                     return null;
                 }else{
                     double result = leftV / rightV;
-                    return new Value("doble",Double.toString(result));
+                    return new Value("doble",Double.toString(result), line, column);
                 }
                 
             }else if(typeR.equalsIgnoreCase("boolean")){
@@ -61,7 +61,7 @@ public class Division {
                     semanticErrors.add(newError);
                     return null;
                 }
-                return new Value("entero",Integer.toString(result));
+                return new Value("entero",Integer.toString(result), line, column);
             }else if(typeR.equalsIgnoreCase("caracter")){
                 int leftV = Integer.parseInt(left.getValue());
                 char rightV = left.getValue().charAt(0);
@@ -73,7 +73,7 @@ public class Division {
                     return null;
                 }else{
                     int result = leftV / rightV;
-                    return new Value("entero",Integer.toString(result));
+                    return new Value("entero",Integer.toString(result), line, column);
                 }
             }else if(typeR.equalsIgnoreCase("cadena")){
                 SemanticError newError = new SemanticError("Tipos incompatibles",line, column);
@@ -95,7 +95,7 @@ public class Division {
                     return null;
                 }
                 double result = leftV / rightV;
-                return new Value("doble", Double.toString(result));
+                return new Value("doble", Double.toString(result), line, column);
             }else if(typeR.equalsIgnoreCase("doble")){
                 double rightV = Double.parseDouble(right.getValue());
                 if(rightV ==0){
@@ -106,7 +106,7 @@ public class Division {
                     return null;
                 }
                 double result = leftV / rightV;
-                return new Value("doble",Double.toString(result));
+                return new Value("doble",Double.toString(result), line, column);
             }else if(typeR.equalsIgnoreCase("boolean")){
                 
                 boolean rightV = Boolean.parseBoolean(right.getValue());
@@ -117,7 +117,7 @@ public class Division {
                     semanticErrors.add(newError);
                     return null;
                 }
-                return new Value("doble", Double.toString(leftV));
+                return new Value("doble", Double.toString(leftV), line, column);
             }else if(typeR.equalsIgnoreCase("caracter")){
                 char rightV = right.getValue().charAt(0);
                 if(rightV==0){
@@ -128,7 +128,7 @@ public class Division {
                     return null;
                 }
                 double result = leftV / rightV;
-                return new Value("doble", Double.toString(result));
+                return new Value("doble", Double.toString(result), line, column);
             }else if(typeR.equalsIgnoreCase("cadena")){
                 SemanticError newError = new SemanticError("Tipo incompatible",line, column);
                     newError.setDescription("No se puede realizar una division a un doble y una cadena");
@@ -153,7 +153,7 @@ public class Division {
                 }else{
                     resultado = 0 / rightV;
                 }
-                return new Value("entero", Integer.toString(resultado));
+                return new Value("entero", Integer.toString(resultado), line, column);
             }else if(typeR.equalsIgnoreCase("doble")){
                 double rightV = Double.parseDouble(right.getValue());
                 if(rightV==0){
@@ -169,7 +169,7 @@ public class Division {
                 }else{
                     resultado = 0 / rightV;
                 }
-                return new Value("doble",Double.toString(resultado));
+                return new Value("doble",Double.toString(resultado), line, column);
             }else if(typeR.equalsIgnoreCase("boolean")){
                 boolean rightV = Boolean.parseBoolean(right.getValue());
                 int leftParameter = 0;
@@ -188,7 +188,7 @@ public class Division {
                     return null;
                 }else{
                     int resultado = leftParameter / rightParameter;
-                    return new Value("entero", Integer.toString(resultado));   
+                    return new Value("entero", Integer.toString(resultado), line, column);   
                 }                
             }else if(typeR.equalsIgnoreCase("caracter")){
                 char rightV = right.getValue().charAt(0);
@@ -204,7 +204,7 @@ public class Division {
                     return null;
                 }
                 int resultado = leftParameter/ rightV;
-                return new Value("caracter",(char)(resultado)+"");
+                return new Value("caracter",(char)(resultado)+"", line, column);
             }else if(typeR.equalsIgnoreCase("cadena")){
                 SemanticError newError = new SemanticError("Tipos incompatibles",line, column);
                     newError.setDescription("No se puede dividir un booleano con una cadena");
@@ -224,7 +224,7 @@ public class Division {
                     return null;
                 }
                 int resultado = leftV / rightV;
-                return new Value("entero", Integer.toString(resultado));
+                return new Value("entero", Integer.toString(resultado), line, column);
             }else if(typeR.equalsIgnoreCase("doble")){
                 double rightV = Double.parseDouble(right.getValue());
                 if(rightV==0){
@@ -235,7 +235,7 @@ public class Division {
                     return null;
                 }
                 double resultado = leftV / rightV;
-                return new Value("doble",Double.toString(resultado));
+                return new Value("doble",Double.toString(resultado), line, column);
             }else if(typeR.equalsIgnoreCase("boolean")){
                 boolean rightV = Boolean.parseBoolean(right.getValue());
                 int rightParameter=0;
@@ -250,7 +250,7 @@ public class Division {
                     return null;
                 }
                 int resultado = leftV / rightParameter;
-                return new Value("caracter",(char)(resultado)+"");
+                return new Value("caracter",(char)(resultado)+"", line, column);
             }else if(typeR.equalsIgnoreCase("caracter")){
                 char rightV = right.getValue().charAt(0);
                 if(rightV==0){
@@ -261,7 +261,7 @@ public class Division {
                     return null;
                 }
                 char resultado = (char) (leftV / rightV);
-                return new Value("caracter", resultado+"");
+                return new Value("caracter", resultado+"", line, column);
             }else if(typeR.equalsIgnoreCase("cadena")){
                 SemanticError newError = new SemanticError("Tipos incompatibles",line, column);
                     newError.setDescription("No se puede dividir un caracter con una cadena");

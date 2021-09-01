@@ -19,6 +19,10 @@ public class Sumarizar extends Instruction{
         super(line, column);
     }
     
+    public void execute(){
+        /*empty*/
+    }
+    
     public void setArreglo(Operation arreglo){
         this.arreglo = arreglo;
     }

@@ -5,8 +5,14 @@
  */
 package valiente.orl2.phyton.conditions;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import valiente.orl2.phyton.table.TableOfValue;
 import valiente.orl2.phyton.values.Operation;
-
+import valiente.orl2.phyton.values.Value;
+import valiente.orl2.phyton.error.SemanticError;
+import valiente.orl2.phyton.error.ValueException;
+import valiente.orl2.phyton.values.RelationalOperator;
 /**
  *
  * @author camran1234
@@ -44,13 +50,36 @@ public class Condition {
    }
 
    public Operation execute(){
-       
        if(left!=null && right!=null){
-           
+           Operation leftOp = left.execute();
+           Operation rightOp = right.execute();
+           RelationalOperator relationalOperator = new RelationalOperator();
+           return relationalOperator.MakeCondition(leftOp, rightOp, operador, line, column);
        }else if(comparation !=null){
-           
+           try {
+               Operation result = comparation.execute();
+               Value newValue = result.execute();
+               if(newValue.getType().equalsIgnoreCase("boolean")){
+                   boolean valor=false;
+                       valor = Boolean.parseBoolean(newValue.getValue());
+                   if(valor){
+                       newValue = new Value("boolean","false", line, column);
+                   }else{
+                       newValue = new Value("boolean","true", line, column);
+                   }
+               }else{
+                   throw new ValueException("El valor no era boolean", "Tipo incompatible en condicion", line, column);
+               }
+               result = new Operation(newValue, result.getLine(), result.getColumn());
+               return result;
+           } catch (ValueException ex) {
+           }
        }else if(value !=null){
-           
+           try {
+               return this.value.execute();
+           } catch (ValueException ex) {
+               
+           }
        }
        
        return null;

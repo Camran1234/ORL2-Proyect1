@@ -20,6 +20,10 @@ public class Ordenar extends Instruction{
         super(line, column);
     }
 
+    public void execute(){
+        /*empty*/
+    }
+    
     public Operation getArray() {
         return array;
     }

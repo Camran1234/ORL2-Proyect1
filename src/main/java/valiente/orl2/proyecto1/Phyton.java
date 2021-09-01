@@ -35,10 +35,10 @@ public class Phyton {
             StringReader string = new StringReader(text);
             PhytonLexic lexico = new PhytonLexic(string);
             PhytonSyntax parser = new PhytonSyntax(lexico);
+            TableOfValue.resetErrorsList();
             parser.parse();
             ArrayList<LexicalError> lexicalError = lexico.getList();
             ArrayList<SyntaxError> syntaxError = parser.getList(); 
-            TableOfValue.resetErrorsList();
             TableOfValue.lexicalErrors = lexicalError;
             TableOfValue.syntaxErrors = syntaxError;
             ArrayList<Instruction> instruction = parser.getInstructions();

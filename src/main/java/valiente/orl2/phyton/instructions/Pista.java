@@ -6,6 +6,8 @@
 package valiente.orl2.phyton.instructions;
 
 import java.util.ArrayList;
+import valiente.orl2.phyton.error.SemanticException;
+import valiente.orl2.phyton.table.TableOfValue;
 import valiente.orl2.phyton.values.Operation;
 
 /**
@@ -36,7 +38,16 @@ public class Pista extends Instruction{
         this.extendeds = extendeds;
     }
 
-    
+    public void execute() throws SemanticException{
+        try {
+            for(int index=0; index<instructions.size(); index++){
+                instructions.get(index).execute();
+            }
+        } catch (SemanticException e) {
+            e.checkErrorAmbit();
+        }
+        
+    }
     
     
     

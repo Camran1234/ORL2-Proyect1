@@ -16,6 +16,7 @@ import valiente.orl2.phyton.error.SyntaxError;
 import valiente.orl2.phyton.conditions.Case;
 import valiente.orl2.phyton.conditions.Default;
 import valiente.orl2.phyton.conditions.Switch;
+import valiente.orl2.phyton.error.SemanticException;
 import valiente.orl2.phyton.specialInstructions.Exit;
 
 
@@ -26,7 +27,7 @@ import valiente.orl2.phyton.specialInstructions.Exit;
 public class Instruction {
     int indentation=0;
     int line, column=0;
-    ArrayList<Instruction> instructions = new ArrayList();
+    public ArrayList<Instruction> instructions = new ArrayList();
     Instruction father = null;
     
     public Instruction(){}
@@ -42,8 +43,14 @@ public class Instruction {
         this.column = column;
     }
 
-    public void execute(){
+    public void execute() throws SemanticException{
         //Empty
+    }
+    
+    public void executeInstructions() throws SemanticException{
+        for(int index=0; index<instructions.size()-1; index++){
+            instructions.get(index).execute();
+        }
     }
     
     public void setFather(Instruction father){
@@ -256,6 +263,22 @@ public class Instruction {
 
     public void setColumn(int column) {
         this.column = column;
+    }
+
+    /**
+     * Busca si tiene de padre a algun ciclo 
+     * @return 
+     */
+    public boolean lookForFatherExit() {
+        boolean result=false;
+        if(this instanceof Pista || this instanceof Function || this instanceof Principal){
+            return false;
+        }else if(this instanceof For || this instanceof While || this instanceof DoWhile){
+            return true;
+        }else{
+            result = father.lookForFatherExit();
+        }
+        return result;
     }
     
     

@@ -22,6 +22,10 @@ public class Esperar extends Instruction{
         super(line, column);
     }
 
+    public void execute(){
+        /*empty*/
+    }
+    
     public Operation getMilisegundos() {
         return milisegundos;
     }

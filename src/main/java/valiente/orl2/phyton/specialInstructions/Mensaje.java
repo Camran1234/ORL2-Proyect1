@@ -19,6 +19,10 @@ public class Mensaje extends Instruction{
         super(line, column);
     }
 
+    public void execute(){
+        /*empty*/
+    }
+    
     public Operation getMensaje() {
         return mensaje;
     }

@@ -22,6 +22,10 @@ public class Reproducir extends Instruction{
         super(line, column);
     }
 
+    public void execute(){
+        /*empty*/
+    }
+    
     public Operation getNota() {
         return nota;
     }

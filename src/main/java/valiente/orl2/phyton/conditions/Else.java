@@ -6,7 +6,10 @@
 package valiente.orl2.phyton.conditions;
 
 import java.util.ArrayList;
+import valiente.orl2.phyton.error.SemanticException;
+import valiente.orl2.phyton.error.ValueException;
 import valiente.orl2.phyton.instructions.Instruction;
+import valiente.orl2.phyton.specialInstructions.Return;
 
 /**
  *
@@ -18,7 +21,16 @@ public class Else extends If{
         super(line, column);
     }
     
-    public void execute(){
-        /*empty*/
+    public void execute()throws SemanticException{
+        try {
+            for(int index=0; index< instructions.size(); index++){                    
+                if(instructions.get(index) instanceof Return && index != instructions.size()-1 ){                
+                    throw new ValueException("No se esperaban mas instrucciones adentro de while","Estado inalcanzable", getLine(), getColumn());                    
+                }else{                
+                    instructions.get(index).execute();                    
+                }                
+            }
+        } catch (ValueException e) {
+        }
     }
 }

@@ -6,7 +6,13 @@
 package valiente.orl2.phyton.conditions;
 
 import java.util.ArrayList;
+import valiente.orl2.phyton.error.SemanticError;
+import valiente.orl2.phyton.error.SemanticException;
+import valiente.orl2.phyton.error.ValueException;
 import valiente.orl2.phyton.instructions.Instruction;
+import valiente.orl2.phyton.specialInstructions.Exit;
+import valiente.orl2.phyton.specialInstructions.Return;
+import valiente.orl2.phyton.table.TableOfValue;
 import valiente.orl2.phyton.values.Operation;
 
 
@@ -32,7 +38,27 @@ public class Case extends Instruction{
     
     
     
-    public void execute(){
-        /*empty*/
+    public void execute() throws SemanticException{
+        try {
+            for(int index=0; index<instructions.size(); index++){    
+                if(instructions.get(index) instanceof Exit){
+                    if(index!=instructions.size()-1){
+                        throw new ValueException("Hay mas instrucciones despues de exit","Error en caso",getLine(), getColumn());
+                    }else{
+                        break;
+                    }
+                }else if(instructions.get(index) instanceof Return){
+                    if(index!=instructions.size()-1){
+                        throw new ValueException("Hay mas instrucciones despues de return","Error en caso", getLine(), getColumn());
+                    }else{
+                        instructions.get(index).execute();
+                    }
+                }else{
+                    instructions.get(index).execute();
+                }
+            }
+        } catch (ValueException e) {
+        }
+        
     }
 }

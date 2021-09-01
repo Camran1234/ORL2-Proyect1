@@ -18,7 +18,7 @@ public class Pow {
     
     
     
-    public Value MakePow(Value left, Value right, int line, int column){
+    public Value MakePow(Value left, Value right, int line, int column) throws Exception{
         String typeL = left.getType();
         String typeR = right.getType();
         
@@ -26,7 +26,7 @@ public class Pow {
             int leftV = Integer.parseInt(left.getValue());
             if(typeR.equalsIgnoreCase("entero")){
                 int rightV = Integer.parseInt(right.getValue());
-                return new Value("entero",Integer.toString(leftV^rightV) );
+                return new Value("entero",Integer.toString(leftV^rightV) , line, column);
             }else if(typeR.equalsIgnoreCase("doble")){
                 SemanticError newError = new SemanticError("Tipos incompatibles", line, column);
                 newError.setDescription("El exponente de la potencia debe de ser entero");
@@ -42,11 +42,11 @@ public class Pow {
                 }else{
                     result = leftV ^ 0;
                 }
-                return new Value("entero",Integer.toString(result));
+                return new Value("entero",Integer.toString(result), line, column);
             }else if(typeR.equalsIgnoreCase("caracter")){
                 char rightV = left.getValue().charAt(0);
                 int result = leftV ^ rightV;
-                return new Value("entero",Integer.toString(result));
+                return new Value("entero",Integer.toString(result), line, column);
             }else if(typeR.equalsIgnoreCase("cadena")){
                 SemanticError newError = new SemanticError("Tipos incompatibles", line, column);
                 newError.setDescription("El exponente de la potencia debe de ser entero");
@@ -59,7 +59,7 @@ public class Pow {
             if(typeR.equalsIgnoreCase("entero")){                
                 int rightV = Integer.parseInt(right.getValue());
                 double result = Math.pow(leftV, rightV);
-                return new Value("doble", Double.toString(result));
+                return new Value("doble", Double.toString(result), line, column);
             }else if(typeR.equalsIgnoreCase("doble")){
                 SemanticError newError = new SemanticError("Tipos incompatibles", line, column);
                 newError.setDescription("El exponente de la potencia debe de ser entero");
@@ -74,11 +74,11 @@ public class Pow {
                 }else{
                     leftV = Math.pow(leftV, 0);
                 }
-                return new Value("doble", Double.toString(leftV));
+                return new Value("doble", Double.toString(leftV), line, column);
             }else if(typeR.equalsIgnoreCase("caracter")){
                 char rightV = right.getValue().charAt(0);
                 double result = Math.pow(leftV, rightV);
-                return new Value("doble", Double.toString(result));
+                return new Value("doble", Double.toString(result), line, column);
             }else if(typeR.equalsIgnoreCase("cadena")){
                 SemanticError newError = new SemanticError("Tipos incompatibles", line, column);
                 newError.setDescription("El exponente de la potencia debe de ser entero");
@@ -96,7 +96,7 @@ public class Pow {
                 }else{
                     resultado = 0 ^ rightV;
                 }
-                return new Value("entero", Integer.toString(resultado));
+                return new Value("entero", Integer.toString(resultado), line, column);
             }else if(typeR.equalsIgnoreCase("doble")){
                 double rightV = Double.parseDouble(right.getValue());
                 double resultado =0;
@@ -105,7 +105,7 @@ public class Pow {
                 }else{
                     resultado = Math.pow(0, rightV);
                 }
-                return new Value("doble",Double.toString(rightV));
+                return new Value("doble",Double.toString(rightV), line, column);
             }else if(typeR.equalsIgnoreCase("boolean")){
                 boolean rightV = Boolean.parseBoolean(right.getValue());
                 int leftParameter = 0;
@@ -116,7 +116,7 @@ public class Pow {
                 if(rightV){
                     rightParameter++;
                 }
-                return new Value("entero", Integer.toString(leftParameter^rightParameter));   
+                return new Value("entero", Integer.toString(leftParameter^rightParameter), line, column);   
             }else if(typeR.equalsIgnoreCase("caracter")){
                 char rightV = right.getValue().charAt(0);
                 int leftParameter = 0;
@@ -124,7 +124,7 @@ public class Pow {
                     leftParameter++;
                 }
                 int resultado = leftParameter ^ rightV;
-                return new Value("caracter",(char)(resultado)+"");
+                return new Value("caracter",(char)(resultado)+"", line, column);
             }else if(typeR.equalsIgnoreCase("cadena")){
                 SemanticError newError = new SemanticError("Tipos incompatibles", line, column);
                 newError.setDescription("El exponente de la potencia debe de ser entero");
@@ -137,11 +137,11 @@ public class Pow {
             if(typeR.equalsIgnoreCase("entero")){
                 int rightV = Integer.parseInt(right.getValue());
                 int resultado = leftV ^ rightV;
-                return new Value("entero", Integer.toString(resultado));
+                return new Value("entero", Integer.toString(resultado), line, column);
             }else if(typeR.equalsIgnoreCase("doble")){
                 double rightV = Double.parseDouble(right.getValue());
                 double resultado = Math.pow(leftV, rightV);
-                return new Value("doble",Double.toString(resultado));
+                return new Value("doble",Double.toString(resultado), line, column);
             }else if(typeR.equalsIgnoreCase("boolean")){
                 boolean rightV = Boolean.parseBoolean(right.getValue());
                 int rightParameter=0;
@@ -149,11 +149,11 @@ public class Pow {
                     rightParameter++;
                 }
                 int resultado = leftV ^ rightParameter;
-                return new Value("caracter",(char)(resultado)+"");
+                return new Value("caracter",(char)(resultado)+"", line, column);
             }else if(typeR.equalsIgnoreCase("caracter")){
                 char rightV = right.getValue().charAt(0);
                 char resultado = (char) (leftV ^ rightV);
-                return new Value("caracter", resultado+"");
+                return new Value("caracter", resultado+"", line, column);
             }else if(typeR.equalsIgnoreCase("cadena")){
                 SemanticError newError = new SemanticError("Tipos incompatibles", line, column);
                 newError.setDescription("El exponente de la potencia debe de ser entero");

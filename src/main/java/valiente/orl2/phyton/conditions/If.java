@@ -6,8 +6,13 @@
 package valiente.orl2.phyton.conditions;
 
 import java.util.ArrayList;
+import valiente.orl2.phyton.error.SemanticError;
+import valiente.orl2.phyton.error.SemanticException;
 import valiente.orl2.phyton.error.SyntaxError;
+import valiente.orl2.phyton.error.ValueException;
 import valiente.orl2.phyton.instructions.Instruction;
+import valiente.orl2.phyton.specialInstructions.Return;
+import valiente.orl2.phyton.table.TableOfValue;
 
 /**
  *
@@ -52,8 +57,44 @@ public class If extends Instruction{
         }
     }
     
-    public void execute(){
-        /*empty*/
+    @Override
+    public void execute() throws SemanticException{
+        
+        try {
+            if(condition.execute().execute().getValue().equalsIgnoreCase("true")){
+                for(int index=0; index< instructions.size(); index++){
+                    if(instructions.get(index) instanceof Return && index != instructions.size()-1 ){
+                        throw new ValueException("No se esperaban mas instrucciones adentro de while","Estado inalcanzable", getLine(), getColumn());
+                    }else{                
+                        instructions.get(index).execute();                    
+                    }
+                }
+            }else if(condition.execute().execute().getValue().equalsIgnoreCase("false")){
+                boolean founded=false;
+                for(int index=0; index<elseifs.size(); index++){
+                    if(elseifs.get(index).getCondition().execute().execute().getValue().equalsIgnoreCase("true")){
+                        elseifs.get(index).execute();
+                        founded=true;
+                        break;
+                    }
+                }
+                if(!founded){
+                    if(elses!=null){
+                        elses.execute();
+                    }
+                }
+            }
+        } catch (ValueException e) {
+            
+        }
+    }
+    
+    public void setCondition(Condition condition){
+        this.condition = condition;
+    }
+    
+    public Condition getCondition(){
+        return condition;
     }
     
 }

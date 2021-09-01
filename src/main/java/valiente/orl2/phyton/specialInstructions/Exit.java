@@ -5,6 +5,8 @@
  */
 package valiente.orl2.phyton.specialInstructions;
 
+import valiente.orl2.phyton.error.LoopException;
+import valiente.orl2.phyton.error.SemanticException;
 import valiente.orl2.phyton.instructions.Instruction;
 
 /**
@@ -18,6 +20,10 @@ public class Exit extends Instruction{
         super(line, column);
     }
     
-    
+    public void execute() throws SemanticException{
+        if(this.lookForFatherExit()){
+            throw new LoopException("NobodyYouDidGreat!!!",false, getLine(), getColumn());
+        }
+    }
     
 }

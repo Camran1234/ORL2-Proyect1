@@ -6,11 +6,14 @@
 package valiente.orl2.phyton.conditions;
 
 import java.util.ArrayList;
+import valiente.orl2.phyton.error.SemanticError;
+import valiente.orl2.phyton.error.SemanticException;
 import valiente.orl2.phyton.error.SyntaxError;
+import valiente.orl2.phyton.error.ValueException;
 import valiente.orl2.phyton.instructions.Instruction;
 import valiente.orl2.phyton.table.TableOfValue;
 import valiente.orl2.phyton.values.Operation;
-
+import valiente.orl2.phyton.values.Value;
 /**
  *
  * @author camran1234
@@ -23,6 +26,40 @@ public class Switch extends Instruction{
     
     public Switch( int line, int column) {
         super( line, column);
+    }
+    
+    @Override
+    public void execute() throws SemanticException{
+        
+        try {
+            Value value = variable.execute();
+            String type = value.getType();
+            boolean founded=false;
+            for(int index=0; index<cases.size(); index++){
+                String compare=cases.get(index).getValue().execute().getType();
+                //Comparamos el tipo de variable
+                if(!compare.equalsIgnoreCase(type)){
+                    throw new ValueException("se encontro en los casos un simbolo tipo "+compare+" cuando el switch maneja una variable tipo "+type,"Error en switch", getLine(), getColumn());
+                }else{
+                    String valor = cases.get(index).getValue().execute().getValue();
+                    if(valor.equalsIgnoreCase(value.getValue())){
+                        cases.get(index).execute();
+                        founded=true;
+                        break;
+                    }
+                }
+            }
+            if(finalCase!=null){
+                if(!founded){
+                    finalCase.execute();
+                }
+            }
+            
+        } catch (ValueException e) {
+            SemanticError error = new SemanticError("Error en switch", getLine(), getColumn());
+            error.setDescription(e.getMessage());
+            TableOfValue.semanticErrors.add(error);
+        }
     }
 
     public Operation getVariable() {
@@ -68,11 +105,6 @@ public class Switch extends Instruction{
     
     public Default getDefault(){
         return this.finalCase;
-    }
-   
-    
-    public void execute(){
-        /*empty*/
     }
     
 }

@@ -7,6 +7,7 @@ package valiente.orl2.proyecto1;
 import java.util.ArrayList;
 import valiente.orl2.phyton.error.*;
 import valiente.orl2.phyton.instructions.Instruction;
+import valiente.orl2.phyton.table.TableOfValue;
 /**
  * Clase encargada de manejar la semantica del programa
  * Se requiere de establecer las listas de errores sintacticos y lexicos
@@ -14,25 +15,27 @@ import valiente.orl2.phyton.instructions.Instruction;
  * @author camran1234
  */
 public class PhytonSemantic {
-    ArrayList<SemanticError> semanticErrors = new ArrayList();
-    ArrayList<SyntaxError> syntaxErrors = new ArrayList();
-    ArrayList<LexicalError> lexicalErrors = new ArrayList();
+    ArrayList<SemanticError> semanticErrors = TableOfValue.semanticErrors;
+    ArrayList<SyntaxError> syntaxErrors = TableOfValue.syntaxErrors;
+    ArrayList<LexicalError> lexicalErrors = TableOfValue.lexicalErrors;
     boolean accesToSemantic=false;
     
     
-    public PhytonSemantic(ArrayList<LexicalError> lexicalErrors, ArrayList<SyntaxError> syntaxErrors){
-        this.syntaxErrors = syntaxErrors;
-        this.lexicalErrors = lexicalErrors;
+    public PhytonSemantic(){
         if(syntaxErrors.size() == 0 && lexicalErrors.size() == 0){
             accesToSemantic=true;
         }
     }
     
-    public boolean setSemantic(ArrayList<Instruction> instruction){
+    public void execute(){
+        //Agregar de primero a la tabla de simbolos la pista que tiene el metodo principal
+    }
+    
+    public boolean setSemantic(ArrayList<Instruction> instruction) throws SemanticException{
         if(accesToSemantic){
             //Operate instructions
             for(int index=0; index<instruction.size(); index++){
-                instruction.get(index).execute();
+                execute();
             }
             if(semanticErrors.size() !=0){
                 return false;

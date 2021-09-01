@@ -7,7 +7,11 @@ package valiente.orl2.phyton.cycles;
 
 import java.util.ArrayList;
 import valiente.orl2.phyton.conditions.Condition;
+import valiente.orl2.phyton.error.LoopException;
+import valiente.orl2.phyton.error.SemanticException;
+import valiente.orl2.phyton.error.ValueException;
 import valiente.orl2.phyton.instructions.Instruction;
+import valiente.orl2.phyton.specialInstructions.Return;
 
 /**
  *
@@ -20,9 +24,27 @@ public class While extends Instruction{
         super(line, column);
         this.condition = condition;
     }
-    
-    public void execute(){
-        
+    @Override
+    public void execute()throws SemanticException{
+        try {            
+            while(Boolean.parseBoolean(condition.execute().execute().getValue())){
+                try {
+                    for(int index=0; index< instructions.size(); index++){
+                        if(instructions.get(index) instanceof Return && index != instructions.size()-1 ){
+                            throw new ValueException("No se esperaban mas instrucciones adentro de while","Estado inalcanzable", getLine(), getColumn());
+                        }else{
+                            instructions.get(index).execute();
+                        }
+                    }
+                } catch (LoopException e) {
+                    if(!e.getMood()){
+                        break;
+                    }
+                }
+                
+            }
+        } catch (ValueException e) {
+        }
     }
 
     public Condition getCondition() {

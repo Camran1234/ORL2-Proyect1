@@ -5,6 +5,7 @@
  */
 package valiente.orl2.phyton.conditions;
 
+import valiente.orl2.phyton.error.ValueException;
 import valiente.orl2.phyton.values.LogicalOperator;
 import valiente.orl2.phyton.values.Operation;
 
@@ -50,15 +51,14 @@ public class Comparation {
            this.column = column;
     }
     
-    public Operation execute(){
+    public Operation execute() throws ValueException{
         if(leftValue!=null && rightValue!=null){
             Operation left = leftValue.execute();
             Operation right = rightValue.execute();
             return new LogicalOperator().MakeComparation(left, right, operador, line, column);
-        }else if(comparation!=null && unary){
+        }else if(comparation!=null){
             Operation operation  = comparation.execute();
-            //logica para la comparacion
-            
+            //logica para la comparacion            
             
         }else if(value!=null){
             return value;
