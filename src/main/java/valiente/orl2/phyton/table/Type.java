@@ -7,21 +7,97 @@ package valiente.orl2.phyton.table;
 
 import java.util.ArrayList;
 import valiente.orl2.phyton.instructions.Instruction;
+import valiente.orl2.phyton.values.Value;
 
 /**
  *
  * @author camran1234
  */
 public class Type {
-    private Object value="";
+    private Instruction value=null;
     private String id="";
+    //Tipos de bases: entero, doble, caracter, boolean, string, funcion, pista, principio
     private String base = "";
-    private String father="";
+    //Para funciones
+    private int numberParameters=0;
+    private ArrayList<Parameter> parameters = new ArrayList();
+    //La estructura o metodo al que pertenecen
+    private Instruction father=null;
+    //Las dimensiones por si es arreglo
     private ArrayList<Integer> dimension = new ArrayList();
     private int min=0;
     private int max=0;
     private int ambit=0;
+
+    /**
+     * Genera una instancia de tipo Type
+     * El id es el identificador
+     * Base es el tipo de variable (entero, doble, caracter, boolean, cadena) o funcion, pista, principal
+     * numberParameters numero de parametros si es una funcion
+     * parameters son los parametros que se esperan recibir si es una funcion
+     * father es el metodo o estructura al cual pertenece
+     * 
+     * @param id
+     * @param base
+     * @param numberParameters
+     * @param parameters
+     * @param father
+     * @param dimension
+     * @param ambit
+     * @param value 
+     */
+    public Type(String id, String base, int numberParameters, ArrayList<Parameter> parameters, Instruction father,
+            ArrayList<Integer> dimension, int ambit , Instruction value){
+        this.id = id;
+        this.base = base;
+        this.numberParameters = numberParameters;
+        this.parameters = parameters;
+        this.father = father;
+        this.dimension = dimension;
+        this.ambit = ambit;
+        this.value = value;
+    }
     
+    /**
+     * Compara los parametros de la funcion
+     * Retorna verdadero si son iguales
+     * Retorna falso si no son iguales
+     * @return 
+     */
+    public boolean compareParameters(ArrayList<Parameter> parameters){
+        if(parameters.size() == this.parameters.size()){
+            for(int index=0; index<parameters.size(); index++){
+                if(!parameters.get(index).getType().equalsIgnoreCase(this.parameters.get(index).getType())){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    public Instruction getValue() {
+        return value;
+    }
+
+    public void setValue(Instruction value) {
+        this.value = value;
+    }
+
+    public int getNumberParameters() {
+        return numberParameters;
+    }
+
+    public void setNumberParameters(int numberParameters) {
+        this.numberParameters = numberParameters;
+    }
+
+    public ArrayList<Parameter> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(ArrayList<Parameter> parameters) {
+        this.parameters = parameters;
+    }
     
     public String getId() {
         return id;
@@ -31,11 +107,11 @@ public class Type {
         this.id = id;
     }
 
-    public String getFather() {
+    public Instruction getFather() {
         return father;
     }
 
-    public void setFather(String father) {
+    public void setFather(Instruction father) {
         this.father = father;
     }
 
@@ -79,6 +155,18 @@ public class Type {
         this.ambit = ambit;
     }
     
-    
+    /**
+     * Obtiene la categoria de este simbolo
+     * variable, method, class, function...
+     * @return 
+     */
+    public String getCategory(){
+        String categoria = base;
+        if(categoria.equalsIgnoreCase("funcion") || categoria.equalsIgnoreCase("pista") || categoria.equalsIgnoreCase("principal")){
+            return categoria;
+        }else{
+            return "variable";
+        }
+    }
     
 }

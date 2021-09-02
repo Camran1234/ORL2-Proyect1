@@ -12,6 +12,7 @@ import valiente.orl2.phyton.error.SemanticException;
 import valiente.orl2.phyton.error.ValueException;
 import valiente.orl2.phyton.instructions.Instruction;
 import valiente.orl2.phyton.specialInstructions.Return;
+import valiente.orl2.phyton.table.TableOfValue;
 
 /**
  *
@@ -30,12 +31,17 @@ public class While extends Instruction{
             while(Boolean.parseBoolean(condition.execute().execute().getValue())){
                 try {
                     for(int index=0; index< instructions.size(); index++){
-                        if(instructions.get(index) instanceof Return && index != instructions.size()-1 ){
-                            throw new ValueException("No se esperaban mas instrucciones adentro de while","Estado inalcanzable", getLine(), getColumn());
+                         if(instructions.get(index) instanceof Return){
+                            if(index!=instructions.size()-1){
+                                throw new ValueException("Hay mas instrucciones despues de return","Error en While", getLine(), getColumn());
+                            }else{
+                                instructions.get(index).execute();
+                            }
                         }else{
                             instructions.get(index).execute();
                         }
                     }
+                    TableOfValue.deleteAmbit(getIndentation()+1);
                 } catch (LoopException e) {
                     if(!e.getMood()){
                         break;

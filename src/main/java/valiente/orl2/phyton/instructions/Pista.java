@@ -43,6 +43,7 @@ public class Pista extends Instruction{
             for(int index=0; index<instructions.size(); index++){
                 instructions.get(index).execute();
             }
+            TableOfValue.deleteAmbit(this.indentation+1);
         } catch (SemanticException e) {
             e.checkErrorAmbit();
         }

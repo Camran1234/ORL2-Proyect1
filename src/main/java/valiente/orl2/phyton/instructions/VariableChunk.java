@@ -6,6 +6,7 @@
 package valiente.orl2.phyton.instructions;
 
 import java.util.ArrayList;
+import valiente.orl2.phyton.error.SemanticException;
 
 /**
  *
@@ -31,7 +32,7 @@ public class VariableChunk extends Instruction{
         
     }
     @Override
-    public void execute(){
+    public void execute() throws SemanticException{
         for(int index=0; index< variables.size(); index++){
             variables.get(index).execute();
         }

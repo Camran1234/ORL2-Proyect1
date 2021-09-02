@@ -6,6 +6,7 @@
 package valiente.orl2.phyton.instructions;
 
 import valiente.orl2.phyton.error.SemanticException;
+import valiente.orl2.phyton.table.TableOfValue;
 
 /**
  *
@@ -23,6 +24,7 @@ public class Principal extends Instruction{
             for(int index=0; index<instructions.size(); index++){
                 instructions.get(index).execute();
             }
+            TableOfValue.deleteAmbit(this.indentation+1);
         } catch (SemanticException e) {
             e.checkErrorAmbit();
         }

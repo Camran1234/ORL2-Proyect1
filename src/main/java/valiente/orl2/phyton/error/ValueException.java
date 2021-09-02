@@ -22,10 +22,6 @@ public class ValueException extends Exception{
         checkErrorAmbit();
     }
     
-    public ValueException(String nothing, boolean isReturn){
-        super(nothing);
-    }
-    
     public ValueException(String text){
         super(text);
     }

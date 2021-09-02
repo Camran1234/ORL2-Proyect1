@@ -7,6 +7,7 @@ package valiente.orl2.phyton.instructions;
 
 import java.util.ArrayList;
 import valiente.orl2.phyton.error.SemanticException;
+import valiente.orl2.phyton.table.TableOfValue;
 import valiente.orl2.phyton.values.Operation;
 import valiente.orl2.phyton.values.Value;
 
@@ -16,10 +17,10 @@ import valiente.orl2.phyton.values.Value;
  */
 public class Function extends Instruction{
     private boolean mode;
-    private boolean cast;
     private String type;
     private Value name;
     private ArrayList<Operation> parameters=new ArrayList();
+    //Dimension of the value to return
     private ArrayList<Operation> dimension = new ArrayList();
     //The result to return
     private Value value;
@@ -29,22 +30,18 @@ public class Function extends Instruction{
         super(line, column);
     }
     
-    public Function(boolean cast,int line, int column){
-        super(line, column);
-        this.cast = cast;
-    }
-    
     @Override
     public void execute()  throws SemanticException{
         try {
             for(int index=0; index<instructions.size(); index++){
                 instructions.get(index).execute();
             }
+            TableOfValue.deleteAmbit(this.indentation+1);
         } catch (SemanticException e) {
-            e.checkErrorAmbit();
+            if(e.isReturn()){
+               value = e.getOperation().execute();
+            }
         }
-        
-        
     }
     
     /**

@@ -5,27 +5,88 @@
  */
 package valiente.orl2.phyton.table;
 import java.util.ArrayList;
+import valiente.orl2.phyton.error.SemanticError;
+import valiente.orl2.phyton.instructions.Assignment;
+import valiente.orl2.phyton.instructions.Dimension;
+import valiente.orl2.phyton.values.Operation;
+import valiente.orl2.phyton.values.Value;
 /**
  *
  * @author camran1234
  */
 public class Symbol {
+    private boolean keep=false;
     private String id="";
-    //variable, method, class, function...
-    private String category="";
-    private Type type = null;
-    private String value="";
+    private Type referencedType = null;
+    //Clase para funciones
+    private Data value;
+    //For functions
     private int numberParameters=0;
     private ArrayList<Parameter> parameters = new ArrayList();
-    private Object direction = this;
     private int ambit = 0;
-
-    public void setValue(String value){
-        this.value = value;
+    
+    /**
+     * Declarar simbolo
+     * @param type 
+     */
+    public Symbol(Type type, int indentation, boolean keep){
+        this.ambit = indentation;
+        this.referencedType = type;
+        this.keep = keep;
+    }
+    
+    
+    
+    public void setNewValue(Assignment assignment, boolean declarado, int line, int column){
+        int choice = assignment.selectMethod();
+        //Para asignar el valor de los arreglos
+        if(choice ==1){
+            if(declarado){
+                value.addMultipleValuesFromDimension(assignment.getDimension(), line, column);
+            }else{
+                SemanticError error = new SemanticError("Problema en asignacion", line, column);
+                error.setDescription("Solo se pueden inicializar arreglos que estan siendo declarados");
+                TableOfValue.semanticErrors.add(error);
+            }
+            
+        }else if(choice==0){
+            //Para asignar el valor de los variables
+            Value valor = assignment.getValueFromOperation();
+            value.setValue(id, valor, assignment.getMetodo(), ambit, ambit);
+        }
+        
+    }
+    
+    public Boolean isGlobal(){
+        return keep;
+    }
+    
+    public String[] getArray(){
+        return value.getArray();
+    }
+    
+    public String getValueArray(ArrayList<Integer> dimension, int line, int column){
+        return value.getArrayValue(dimension, line, column);
+    }
+    
+    /**
+     * Obtiene la categoria de este simbolo ya sea variable, methodo o funcion
+     * @return 
+     */
+    public String getCategory(){
+        return referencedType.getCategory();
+    }
+    
+    public boolean isArray(){
+        return this.value.isArray();
+    }
+    
+    public void addMultipleValuesFromDimension(Dimension dimension){
+        
     }
     
     public String getValue(){
-        return value;
+        return this.value.getValue();
     }
     
     public String getId() {
@@ -36,20 +97,20 @@ public class Symbol {
         this.id = id;
     }
 
-    public String getCategory() {
-        return category;
+    public Type getReference(){
+        return this.referencedType;
     }
-
-    public void setCategory(String category) {
-        this.category = category;
+    
+    public void setReference(Type referencedType){
+        this.referencedType = referencedType;
     }
-
-    public Type getType() {
-        return type;
+    
+    public String getType() {
+        return referencedType.getBase();
     }
 
     public void setType(Type type) {
-        this.type = type;
+        this.referencedType = type;
     }
 
     public int getNumberParameters() {
@@ -68,12 +129,12 @@ public class Symbol {
         this.parameters = parameters;
     }
 
+    /**
+     * Get the value of memory of this symbol
+     * @return 
+     */
     public Object getDirection() {
-        return direction;
-    }
-
-    public void setDirection(Object direction) {
-        this.direction = direction;
+        return this.value.getValue();
     }
 
     public int getAmbit() {

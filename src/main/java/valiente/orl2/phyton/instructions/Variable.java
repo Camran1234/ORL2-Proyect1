@@ -5,8 +5,15 @@
  */
 package valiente.orl2.phyton.instructions;
 import java.util.ArrayList;
+import valiente.orl2.phyton.error.SemanticException;
+import valiente.orl2.phyton.error.ValueException;
+import valiente.orl2.phyton.table.TableOfType;
+import valiente.orl2.phyton.table.Type;
 import valiente.orl2.phyton.values.Operation;
 import valiente.orl2.phyton.values.Value;
+import valiente.orl2.phyton.table.Parameter;
+import valiente.orl2.phyton.table.Symbol;
+import valiente.orl2.phyton.table.TableOfValue;
 /**
  * Clase para declarar y asignar variables
  * @author camran1234
@@ -20,7 +27,7 @@ public class Variable extends Instruction{
     //Si tiene tipo se declara
     String type ="";
     //El valor asignado a esta variable
-    Assignment value;
+    Assignment value = null;
     /*Para arreglos*/
     //Size of the array
     ArrayList<Operation> dimension = new ArrayList();
@@ -30,14 +37,38 @@ public class Variable extends Instruction{
         this.line=line;
         this.column=column;
     }
-    
-    public void execute(){
-        //Si posee asignacion o no
-        if(value!=null){
-            
-        }else{
+  
+    @Override
+    public void execute() throws SemanticException{
+        try {
+            //Si es una declaracion o no
+            if(declarado){
+                //Generamos el tipo
+                ArrayList<Integer> dimensiones = new ArrayList();
+                for(int index=0; index<dimension.size(); index++){
+                    Value value = dimension.get(index).execute();
+                   if(value.getType().equalsIgnoreCase("entero")){
+                       dimensiones.add(Integer.parseInt(value.getValue()));
+                   }else{
+                       throw new ValueException("Las dimensiones de los arreglos solo pueden ser declaradas por numeros"
+                               + "","Valor no reconocido", getLine(), getColumn());
+                   }
+                }
+                Type type = new Type(name, this.type, 0, new ArrayList<Parameter>(), lookForContainer(), dimensiones, getIndentation(), this);
+                TableOfType.addType(type);
+                Symbol symbol = new Symbol(type, getIndentation(),mode);
+                if(value!=null){
+                    symbol.setNewValue(value, declarado, getLine(), getColumn());
+                }
+                TableOfValue.addSymbol(symbol, getLine(), getColumn());
+            }else{
+                //Reasignar un nuevo valor
+                Symbol symbol = TableOfValue.getSymbol(name, "variable");
+            }
+        } catch (ValueException e) {
             
         }
+        
     }
 
     public void setParameters(VariableIndicator indicator){
@@ -89,5 +120,7 @@ public class Variable extends Instruction{
     public void setDimension(ArrayList<Operation> dimension) {
         this.dimension = dimension;
     }
+
+    
     
 }

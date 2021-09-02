@@ -43,16 +43,23 @@ public class For extends Instruction{
                 try {
                     //Ejecutamos las instrucciones
                     for(int index=0; index< instructions.size(); index++){                    
-                        if(instructions.get(index) instanceof Return && index != instructions.size()-1 ){                
-                            throw new ValueException("No se esperaban mas instrucciones adentro de while","Estado inalcanzable", getLine(), getColumn());                    
-                        }else{                
-                            instructions.get(index).execute();                    
-                        }                
+                         if(instructions.get(index) instanceof Return){
+                            if(index!=instructions.size()-1){
+                                throw new ValueException("Hay mas instrucciones despues de return","Error en For", getLine(), getColumn());
+                            }else{
+                                instructions.get(index).execute();
+                            }
+                        }else{
+                            instructions.get(index).execute();
+                        }             
                     }
                     paso.execute();
+                    TableOfValue.deleteAmbit(getIndentation()+1);
                 } catch (LoopException e) {
                     if(!e.getMood()){
                         break;
+                    }else{
+                        paso.execute();
                     }
                 }
             }

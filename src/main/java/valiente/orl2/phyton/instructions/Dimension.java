@@ -16,8 +16,11 @@ import valiente.orl2.phyton.values.Operation;
  */
 public class Dimension {
     int dimension = 0;
+    //Aqui van las dimensiones
     private ArrayList<Operation> data = new ArrayList();
+    //Aqui van el resto de los arreglos
     private ArrayList<Dimension> dimensions = new ArrayList();
+    private boolean isFirst=false;
     int line, column=0;
     
     public Dimension(int line, int column){
@@ -38,6 +41,8 @@ public class Dimension {
     }
 
     public void setData(ArrayList<Operation> data) {
+        this.dimension = 1;
+        isFirst = true;
         this.data = data;
     }
 
@@ -45,7 +50,7 @@ public class Dimension {
         return dimensions;
     }
 
-    public void setDimensions(ArrayList<Dimension> dimensions) {
+    public void setDimensions(ArrayList<Dimension> dimensions, ArrayList<Integer> direction) {
         this.dimensions = dimensions;
         if(dimensions.size()>0){
             this.dimension = dimensions.get(0).dimension+1;
@@ -60,7 +65,29 @@ public class Dimension {
         }
     }
     
-    
+    public ArrayList<Direction> startHarvest(){
+        ArrayList<Direction> direcciones = new ArrayList();
+        if(isFirst){
+            for(int index=0; index< data.size(); index++){
+                Direction direction = new Direction(data.get(index));
+                direction.pushDirection(index);
+                direcciones.add(direction);
+            }
+        }else{
+            
+            for(int index=0; index< dimensions.size(); index++){
+                ArrayList<Direction> aux = new ArrayList();
+                aux = dimensions.get(index).startHarvest();
+                for(int indexAux=0; indexAux<aux.size(); indexAux++){
+                        Direction direction = aux.get(indexAux);
+                        direction.pushDirection(index);
+                        direcciones.add(direction);
+                }
+            }
+        }
+        
+        return direcciones;
+    }
     
     
 }

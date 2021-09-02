@@ -175,4 +175,81 @@ public class TypeParser {
         return newValue;
     }
     
+    public Value tryParse(Value value, String typeToParse, int line, int column) throws Exception{
+        Value newValue=null;
+        String type = value.getType();
+        String data = value.getValue();
+        if(typeToParse.equalsIgnoreCase("doble")){
+            if(type.equalsIgnoreCase("doble")){
+                newValue = value;
+            }else if(type.equalsIgnoreCase("entero")){
+                newValue = new Value("doble", Integer.toString((int) Double.parseDouble(data)), line, column);
+            }else if(type.equalsIgnoreCase("caracter")){
+                throw new Exception("No se pudo asignar un caracter a un doble");
+            }else if(type.equalsIgnoreCase("boolean")){
+                throw new Exception("No se pudo asignar un boolean a un doble");
+            }else if(type.equalsIgnoreCase("cadena")){
+                throw new Exception("No se pudo asignar una cadena a una doble");
+            }
+        }else if(typeToParse.equalsIgnoreCase("entero")){
+            if(type.equalsIgnoreCase("doble")){
+                double x = Double.parseDouble(data);
+                newValue = new Value("entero", Integer.toString((int)x), line, column);
+            }else if(type.equalsIgnoreCase("entero")){
+                newValue = value;
+            }else if(type.equalsIgnoreCase("caracter")){
+                char x = data.charAt(0);
+                newValue = new Value("entero", Integer.toString((int)x), line, column);
+            }else if(type.equalsIgnoreCase("boolean")){
+                boolean x = Boolean.parseBoolean(data);
+                int y = 0;
+                if(x)
+                    y=1;
+                newValue = new Value("entero",Integer.toString(y), line, column);
+            }else if(type.equalsIgnoreCase("cadena")){
+                throw new Exception("No se pudo asignar una cadena a un doble");
+            }
+        }else if(typeToParse.equalsIgnoreCase("caracter")){
+            if(type.equalsIgnoreCase("doble")){
+                throw new Exception("No se pudo asignar un doble a un caracter");
+            }else if(type.equalsIgnoreCase("entero")){
+                int x = Integer.parseInt(data);
+                char y = (char)x;
+                newValue = new Value("caracter", y+"", line, column);
+            }else if(type.equalsIgnoreCase("caracter")){
+                newValue = value;
+            }else if(type.equalsIgnoreCase("boolean")){
+                throw new Exception("No se pudo asignar un boolean a un caracter");
+            }else if(type.equalsIgnoreCase("cadena")){
+                throw new Exception("No se pudo asignar una cadena a un caracter");
+            }
+        }else if(typeToParse.equalsIgnoreCase("boolean")){
+            if(type.equalsIgnoreCase("doble")){
+                throw new Exception("No se pudo asignar un doble a un boolean");
+            }else if(type.equalsIgnoreCase("entero")){
+                throw new Exception("No se pudo asignar un entero a un boolean");
+            }else if(type.equalsIgnoreCase("caracter")){
+                throw new Exception("No se pudo asignar un caracter a un boolean");
+            }else if(type.equalsIgnoreCase("boolean")){
+                newValue = value;
+            }else if(type.equalsIgnoreCase("cadena")){
+                throw new Exception("No se pudo asignar una cadena a un boolean");
+            }
+        }else if(typeToParse.equalsIgnoreCase("cadena")){
+            if(type.equalsIgnoreCase("doble")){
+                throw new Exception("No se pudo asignar un doble a una cadena");
+            }else if(type.equalsIgnoreCase("entero")){
+                throw new Exception("No se pudo asignar un entero a una cadena");
+            }else if(type.equalsIgnoreCase("caracter")){
+                throw new Exception("No se pudo asignar un caracter a una cadena");
+            }else if(type.equalsIgnoreCase("boolean")){
+                throw new Exception("No se pudo asignar un boolean a una cadena");
+            }else if(type.equalsIgnoreCase("cadena")){
+                newValue = value;
+            }
+        }
+        
+        return newValue;
+    }
+    
 }

@@ -8,6 +8,7 @@ package valiente.orl2.phyton.conditions;
 import valiente.orl2.phyton.error.ValueException;
 import valiente.orl2.phyton.values.LogicalOperator;
 import valiente.orl2.phyton.values.Operation;
+import valiente.orl2.phyton.values.Value;
 
 /**
  * Para realizar comparaciones con los simbolos ==, !=, 
@@ -57,9 +58,15 @@ public class Comparation {
             Operation right = rightValue.execute();
             return new LogicalOperator().MakeComparation(left, right, operador, line, column);
         }else if(comparation!=null){
-            Operation operation  = comparation.execute();
-            //logica para la comparacion            
-            
+            Value variable = comparation.execute().execute();
+            Value result = null;
+            if(!variable.getRawType().equalsIgnoreCase("variable")){
+                throw new ValueException("El valor referenciado no es una variable","Operador nulo mal establecido", line, column);
+            }
+            if(variable.getValue()==null){
+                result = new Value("boolean","true",line, column);
+            }
+            return new Operation(result, line, column);
         }else if(value!=null){
             return value;
         }

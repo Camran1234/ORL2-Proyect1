@@ -11,6 +11,7 @@ import valiente.orl2.phyton.error.ValueException;
 import valiente.orl2.phyton.instructions.Instruction;
 import valiente.orl2.phyton.specialInstructions.Exit;
 import valiente.orl2.phyton.specialInstructions.Return;
+import valiente.orl2.phyton.table.TableOfValue;
 
 /**
  *
@@ -35,6 +36,7 @@ public class Default extends Instruction{
                     instructions.get(index).execute();
                 }
             }
+            TableOfValue.deleteAmbit(getIndentation()+1);
         } catch (ValueException e) {
         }
     }

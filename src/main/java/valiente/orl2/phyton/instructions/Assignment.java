@@ -7,6 +7,7 @@ package valiente.orl2.phyton.instructions;
 
 import java.util.ArrayList;
 import valiente.orl2.phyton.values.Operation;
+import valiente.orl2.phyton.values.Value;
 
 /**
  * Una forma mas comoda de agregar los parametros a las variables
@@ -17,8 +18,8 @@ public class Assignment {
     /*Para variables primitivas*/
     Operation value;
     /*Si aumenta o se iguala el valor*/
-    // ==, +=, ++
-    String metodo="";
+    // --, ++, +=, =
+    String metodo="=";
     
     /*Para arreglos*/
     Dimension dimension = null;
@@ -29,8 +30,25 @@ public class Assignment {
         this.column = column;
     }
     
-    public void execute(){
-        
+    
+    /**
+     *Retorna 0 para variables
+     * Retorna 1 para arreglos
+     * Retorna 2 para incrementos
+     * @return 
+     */
+    public int selectMethod(){
+        if(value!=null){
+            return 0;
+        }else if(dimension!=null){
+            return 1;
+        }else{
+            return 2;
+        }
+    }
+    
+    public Value getValueFromOperation(){
+        return value.execute();
     }
 
     public int getLine() {

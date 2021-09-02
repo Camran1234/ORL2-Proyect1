@@ -26,7 +26,6 @@ public class DoWhile extends Instruction{
     
     @Override
     public void execute() throws SemanticException{
-        boolean flag=false;
         try {
             do{
                 try {
@@ -34,7 +33,7 @@ public class DoWhile extends Instruction{
                         //instructions.size()-1 porque seria la ultima instruccion
                         if(instructions.get(index) instanceof Return){
                             if(index!=instructions.size()-1){
-                                throw new ValueException("Hay mas instrucciones despues de return","Error en caso", getLine(), getColumn());
+                                throw new ValueException("Hay mas instrucciones despues de return","Error en DoWhile", getLine(), getColumn());
                             }else{
                                 instructions.get(index).execute();
                             }
@@ -42,9 +41,7 @@ public class DoWhile extends Instruction{
                             instructions.get(index).execute();
                         }
                     }
-                    if(flag){
-                        break;
-                    }
+                    TableOfValue.deleteAmbit(getIndentation()+1);
                 } catch (LoopException e) {
                     if(!e.getMood()){
                         break;

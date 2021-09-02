@@ -266,10 +266,25 @@ public class Instruction {
     }
 
     /**
+     * Busca la funcion, principal o pista que contiene esta instruccion
+     * @return 
+     */
+    protected Instruction lookForContainer() {
+        Instruction instruction=null;
+        if(this instanceof Pista || this instanceof Function || this instanceof Principal){
+            return this;
+        }else{
+            instruction = father.lookForContainer();
+        }
+        
+        return instruction;
+    }
+    
+    /**
      * Busca si tiene de padre a algun ciclo 
      * @return 
      */
-    public boolean lookForFatherExit() {
+    protected boolean lookForFatherExit() {
         boolean result=false;
         if(this instanceof Pista || this instanceof Function || this instanceof Principal){
             return false;
@@ -281,6 +296,14 @@ public class Instruction {
         return result;
     }
     
-    
+    public Instruction lookForPista(){
+        Instruction instruction = null;
+        if(this instanceof Pista){
+            return this;
+        }else{
+            instruction = father.lookForPista();
+        }
+        return instruction;
+    }
     
 }
