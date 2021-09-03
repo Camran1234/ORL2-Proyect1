@@ -18,6 +18,12 @@ parser code {:
         ArrayList<SyntaxError> list = new ArrayList();
         ArrayList<Instruction> instructions = new ArrayList();
 
+        public void settingInstructions(ArrayList<Instruction> ins){
+                for(int index=ins.size()-1; index>=0; index--){
+                        instructions.add(ins.get(index));
+                }
+        }
+
         public ArrayList<Instruction> getInstructions(){
                 return instructions;
         }
@@ -92,28 +98,29 @@ EQUAL, EQUALIZATION, DIFFERENTIATION, GREATER_THAN, LESSER_THAN, NULL_, GREATER,
 ADD, MINUS, MULTIPLY, DIV, MODULE, POW, OPEN_BRACKET, CLOSE_BRACKET, OPEN_PARENTHESIS, CLOSE_PARENTHESIS, COLON, COMA,
 NAND, AND, NOR, OR, XOR, NOT, TAB, SPACE, OPEN_CURLY, CLOSE_CURLY, RETORNA , TRUE, FALSE; 
 
-non terminal new_assign, array_assign, assign_arr, 
-mult_values, mult_values_re,  kar, method_value, method_value_re;
-
+non terminal kar;
+non terminal Dimension array_assign;
+non terminal ArrayList<Dimension>  assign_arr, assign_arr_re, new_assign;
 non terminal For for_instructions, for_condition, for_increm;
-non terminal ArrayList<Case> cases;
 non terminal Condition condition, condition_re;
 non terminal Comparation comparation;
 non terminal Assignment assign, assign_special, assign_for;
-non terminal ArrayList<Operation> multiple_v, multiple_v_re, d, d_, array,dimension, dimension_re, function_mode;
+non terminal ArrayList<Operation> multiple_v, multiple_v_re, d, d_, array,dimension, dimension_re, mult_values, mult_values_re, method_value, method_value_re;
+non terminal Integer function_mode;
 non terminal Esperar esperar_syntax;
 non terminal VariableIndicator type, type_function, kf;
 non terminal ArrayList<Variable> variables, variables_re;
 non terminal Variable increm_variables, v_for;
 non terminal Boolean k;
 non terminal Integer tab, tab_re;
-non terminal String data_type, equal, increm;
-non terminal Function function, throw_function;
+non terminal String data_type, equal, increm, word_functions;
+non terminal Function function;
+non terminal ThrowFunction throw_function;
 non terminal Principal principal;
 non terminal Pista pista;
 non terminal Instruction func_especiales, v, for, while, do_while, if, switch, reproducir_syntax, sumarizar_syntax, longitud_syntax,
-mensaje_syntax, ordenar_syntax;
-non terminal ArrayList<Instruction> main_body, instruction, instruction_switch;
+mensaje_syntax, ordenar_syntax, cases, default;
+non terminal ArrayList<Instruction> main_body, instruction;
 non terminal Operation notas, value, ordenar_options, function_variables;
 non terminal If block_if;
 non terminal ElseIf block_elseif;
@@ -123,13 +130,14 @@ non terminal Else block_else;
 precedence left ADD, MINUS;
 precedence left DIV, MULTIPLY, MODULE;
 precedence left POW;
-precedence left NULL_;
 precedence left EQUALIZATION, DIFFERENTIATION, LESSER, LESSER_THAN, GREATER, GREATER_THAN;
-precedence left NOT;
-precedence left AND, NAND;
+precedence left NULL_;
 precedence left OR, NOR, XOR;
+precedence left AND, NAND;
+precedence left NOT;
 precedence left OPEN_PARENTHESIS, CLOSE_PARENTHESIS;
-precedence left ELSE;
+precedence left OPEN_CURLY, CLOSE_CURLY, COMA;
+
 
 start with main_body;
 
@@ -149,13 +157,19 @@ principal ::= kar PRINCIPAL OPEN_PARENTHESIS CLOSE_PARENTHESIS tab_re SPACE {:
 
 /*TAB*/
 tab ::= TAB tab_re:e {: RESULT=1+e; :}
+        
         ;
 
 tab_re ::= TAB tab_re:e {: RESULT=1+e; :}
         |/*empty*/ {: RESULT=0; :}
         ;
 
-main_body ::= instruction:ins {: if(ins!=null){instructions = ins;} :}
+main_body ::= instruction:ins {: 
+                if(ins!=null){
+                        settingInstructions(ins);
+                }
+         :}
+        |error instruction:ins {: parser.report_error("Error en la sintaxis","Inicio ilegal de la expresion"); :}
         ;
 
 instruction ::= tab:numTab principal:prin instruction:ins {: 
@@ -201,114 +215,158 @@ instruction ::= tab:numTab principal:prin instruction:ins {:
                 |tab:numTab func_especiales:e1 SPACE instruction:ins {:
                         if(ins!=null){
                                 ArrayList<Instruction> lista = ins;
-                                int tabNumber = numTab;
+                                if(e1 !=null){
+                                        lista.add(e1);
+                                        e1.setIndentation(numTab);
+                                }
+                                RESULT=lista;
                         }
                 :}
                 |tab:numTab v:e1 instruction:ins{:
                         if(ins!=null){
                                 ArrayList<Instruction> lista = ins;
-                                int tabNumber = numTab;
-                                
+                                if(e1 !=null){
+                                        lista.add(e1);
+                                        e1.setIndentation(numTab);
+                                }
+                                RESULT=lista;
                         }
                 :}
                 |tab:numTab for:e1 instruction:ins{:
                         if(ins!=null){
                                 ArrayList<Instruction> lista = ins;
-                                int tabNumber = numTab;
-                                
+                                if(e1 !=null){
+                                        lista.add(e1);
+                                        e1.setIndentation(numTab);
+                                }
+                                RESULT=lista;
                         }
                 :}
                 |tab:numTab while:e1 instruction:ins{:
                         if(ins!=null){
                                 ArrayList<Instruction> lista = ins;
-                                int tabNumber = numTab;
-                                
+                                if(e1 !=null){
+                                        lista.add(e1);
+                                        e1.setIndentation(numTab);
+                                }
+                                RESULT=lista;
                         }
                 :}
                 |tab:numTab do_while:e1 instruction:ins{:
                         if(ins!=null){
                                 ArrayList<Instruction> lista = ins;
-                                int tabNumber = numTab;
-                                
+                                if(e1 !=null){
+                                        lista.add(e1);
+                                        e1.setIndentation(numTab);
+                                }
+                                RESULT=lista;
                         }
                 :}
                 |tab:numTab if:e1 instruction:ins {:
                         if(ins!=null){
                                 ArrayList<Instruction> lista = ins;
-                                int tabNumber = numTab;
-                                
+                                if(e1 !=null){
+                                        lista.add(e1);
+                                        e1.setIndentation(numTab);
+                                }
+                                RESULT=lista;
                         }
                 :}
                 |tab:numTab switch:e1 instruction:ins{:
                         if(ins!=null){
                                 ArrayList<Instruction> lista = ins;
-                                int tabNumber = numTab;
-                                
+                                if(e1 !=null){
+                                        lista.add(e1);
+                                        e1.setIndentation(numTab);
+                                }
+                                RESULT=lista;
                         }
                 :}
-                |tab:numTab RETORNA:e1 value tab_re SPACE instruction:ins{:
+                |tab:num EXIT tab_re SPACE instruction:ins{:
+                        if(ins!=null){
+                                Exit newExit = new Exit(num, cur_token.left, cur_token.right);
+                                ins.add(newExit);
+                                RESULT = ins;
+                        }
+                :}
+                |tab:numTab RETORNA:e1 value:v tab_re SPACE instruction:ins{:
                         if(ins!=null){
                                 ArrayList<Instruction> lista = ins;
-                                int tabNumber = numTab;
-                                
+                                Return newReturn = new Return(numTab, cur_token.left, cur_token.right, v);
+                                lista.add(newReturn);
+                                RESULT=lista;
                         }
                 :}
                 |tab:numTab CONTINUE:e1 tab_re SPACE instruction:ins{:
                         if(ins!=null){
                                 ArrayList<Instruction> lista = ins;
-                                int tabNumber = numTab;
-                                
+                                Continue newContinue = new Continue(numTab, cur_token.left, cur_token.right);
+                                lista.add(newContinue);
+                                RESULT=lista;
+                        }
+                :}
+                |default:e1 tab_re SPACE instruction:ins {:
+                        if(ins!=null && e1!=null){
+                                ins.add(e1);
+                                RESULT = ins;
+                        }
+                :}
+                |cases:e1 tab_re SPACE instruction:ins {:
+                        if(ins!=null && e1 !=null){
+                                ins.add(e1);
+                                RESULT = ins;
                         }
                 :}
                 |tab SPACE instruction:ins {:RESULT = ins;:}
                 |SPACE instruction:ins {:RESULT = ins;:} 
+                |tab error instruction {: parser.report_error("Se esperaba alguna expresion como si, sino si, sino, mientras, hacer, para...","Inicio ilegal de la expresion"); :}
                 |/*empty*/ {:ArrayList<Instruction> list = new ArrayList(); RESULT=list;:}
                 ;
                         
 
 /*NOTAS MUSICALES*/
 notas ::= DO:r {:
-                Value value = new Value("nota", r.toString()); 
+                Value value = new Value("nota", r.toString(), cur_token.left, cur_token.right); 
                 Operation operation = new Operation(value, cur_token.left, cur_token.right);
                 RESULT=operation;
         :}
         |RE:r {:
-                Value value = new Value("nota", r.toString()); 
+                Value value = new Value("nota", r.toString(), cur_token.left, cur_token.right); 
                 Operation operation = new Operation(value, cur_token.left, cur_token.right);
                 RESULT=operation;
         :}
         |MI:r {:
-                Value value = new Value("nota", r.toString()); 
+                Value value = new Value("nota", r.toString(), cur_token.left, cur_token.right); 
                 Operation operation = new Operation(value, cur_token.left, cur_token.right);
                 RESULT=operation;
         :}
         |FA:r {:
-                Value value = new Value("nota", r.toString()); 
+                Value value = new Value("nota", r.toString(), cur_token.left, cur_token.right); 
                 Operation operation = new Operation(value, cur_token.left, cur_token.right);
                 RESULT=operation;
         :}
         |SOL:r {:
-                Value value = new Value("nota", r.toString()); 
+                Value value = new Value("nota", r.toString(), cur_token.left, cur_token.right); 
                 Operation operation = new Operation(value, cur_token.left, cur_token.right);
                 RESULT=operation;
         :}
         |LA:r {:
-                Value value = new Value("nota", r.toString()); 
+                Value value = new Value("nota", r.toString(), cur_token.left, cur_token.right); 
                 Operation operation = new Operation(value, cur_token.left, cur_token.right);
                 RESULT=operation;
         :}
         |SI:r {:
-                Value value = new Value("nota", r.toString()); 
+                Value value = new Value("nota", r.toString(), cur_token.left, cur_token.right); 
                 Operation operation = new Operation(value, cur_token.left, cur_token.right);
                 RESULT=operation;
         :}
         |DOR:r {:
-                Value value = new Value("nota", r.toString()); 
+                Value value = new Value("nota", r.toString(), cur_token.left, cur_token.right); 
                 Operation operation = new Operation(value, cur_token.left, cur_token.right);
                 RESULT=operation;
         :}
         |RER:r {:
-                Value value = new Value("nota", r.toString()); 
+                Value value = new Value("nota", r.toString(), cur_token.left, cur_token.right); 
                 Operation operation = new Operation(value, cur_token.left, cur_token.right);
                 RESULT=operation;
         :}
@@ -318,27 +376,27 @@ notas ::= DO:r {:
 /*FUNCIONES ESPECIALES*/
 
 ordenar_options ::= ASCENDENTE{:
-                        Value value = new Value("string", "ascendente");
+                        Value value = new Value("string", "ascendente", cur_token.left, cur_token.right);
                         Operation operation = new Operation(value, cur_token.left, cur_token.right);
                         RESULT = operation;
                 :}
                 |DESCENDENTE{:
-                        Value value = new Value("string", "descendente");
+                        Value value = new Value("string", "descendente", cur_token.left, cur_token.right);
                         Operation operation = new Operation(value, cur_token.left, cur_token.right);
                         RESULT = operation;
                 :}
                 |PARES{:
-                        Value value = new Value("string", "pares");
+                        Value value = new Value("string", "pares", cur_token.left, cur_token.right);
                         Operation operation = new Operation(value, cur_token.left, cur_token.right);
                         RESULT = operation;
                 :}
                 |IMPARES{:
-                        Value value = new Value("string", "impares");
+                        Value value = new Value("string", "impares", cur_token.left, cur_token.right);
                         Operation operation = new Operation(value, cur_token.left, cur_token.right);
                         RESULT = operation;
                 :}
                 |PRIMOS{:
-                        Value value = new Value("string", "primos");
+                        Value value = new Value("string", "primos", cur_token.left, cur_token.right);
                         Operation operation = new Operation(value, cur_token.left, cur_token.right);
                         RESULT = operation;
                 :}
@@ -451,7 +509,7 @@ kf ::= KEEP type_function:tf function_mode:m{:
                 VariableIndicator indicator = tf;
                 indicator.setGlobal(true);
                 if(m!=null){
-                        indicator.setDimension(m);
+                        indicator.setSize(m);
                 }
                 RESULT=indicator;
         }
@@ -460,25 +518,28 @@ kf ::= KEEP type_function:tf function_mode:m{:
         if(tf!=null){
                 VariableIndicator indicator = tf;
                 if(m!=null){
-                        indicator.setDimension(m);
+                        indicator.setSize(m);
                 }
                 RESULT=indicator;
         }
         :}
-        
         ;
 
-function_mode ::= ARREGLO dimension:dim{:
-                RESULT = dim;
+function_mode ::= OPEN_BRACKET CLOSE_BRACKET function_mode:m{:
+                        if(m!=null){
+                                RESULT = m+1;
+                        }
                 :}
-                |/*empty*/
+                |/*empty*/{:
+                        RESULT = 0;
+                :}
                 ;
 
-function ::= kf:variableIndicator SIMBOLO:sim OPEN_PARENTHESIS  multiple_v:mv tab_re  SPACE {:
+function ::= kf:variableIndicator word_functions:sim OPEN_PARENTHESIS  multiple_v:mv tab_re  SPACE {:
                 if(variableIndicator!=null && mv!=null){
                         VariableIndicator indicator = variableIndicator;
                         ArrayList<Operation> list = mv;
-                        Value value = new Value("function",sim.toString());
+                        Value value = new Value("function",sim, cur_token.left, cur_token.right);
                         Operation operation = new Operation(value, cur_token.left, cur_token.right);
                         Function function = new Function(cur_token.left, cur_token.right);
                         function.setName(value);
@@ -488,8 +549,8 @@ function ::= kf:variableIndicator SIMBOLO:sim OPEN_PARENTHESIS  multiple_v:mv ta
                 }
                 :}
                 |kf error:e OPEN_PARENTHESIS multiple_v SPACE {: parser.report_error("Error, se esperaba un nombre","Nombre no encontrado"); :}
-                |kf SIMBOLO error:e multiple_v SPACE {: parser.report_error("Se esperaba \"(\" ","Sintaxis incorrecta"); :}
-                |kf SIMBOLO OPEN_PARENTHESIS multiple_v error:e {: parser.report_error("Se esperaba un salto de linea ","Sintaxis incorrecta"); :}
+                |kf word_functions error:e multiple_v SPACE {: parser.report_error("Se esperaba \"(\" ","Sintaxis incorrecta"); :}
+                |kf word_functions OPEN_PARENTHESIS multiple_v error:e {: parser.report_error("Se esperaba un salto de linea ","Sintaxis incorrecta"); :}
             ;
 
 type_function ::= data_type:data 
@@ -537,31 +598,62 @@ multiple_v_re ::= COMA function_variables:fv multiple_v_re:mvre{:
 
 function_variables ::= data_type:data SIMBOLO:sim 
                         {:
-                                Value value = new Value(data, sim.toString());
+                                Value value = new Value(data, sim.toString(), cur_token.left, cur_token.right);
                                 Operation operation = new Operation(value, cur_token.left, cur_token.right);
                                 RESULT = operation;
                         :}
-                        |data_type:data ARREGLO SIMBOLO:sim dimension
+                        |data_type:data ARREGLO SIMBOLO:sim dimension:dim 
                         {:
+                                Value value = new Value(data, sim.toString(), dim, cur_token.left, cur_token.right);
+                                Operation operation = new Operation(value, cur_token.left, cur_token.right);
+                                RESULT = operation;
                         :}
-                        |data_type:data ARREGLO SIMBOLO error
                         |data_type error:e {: parser.report_error("Error, se esperaba un nombre","Nombre no encontrado"); :}
                     ;
 /*LLAMAR FUNCIONES*/
-method_value ::= condition_re method_value_re
-                |CLOSE_PARENTHESIS
+method_value ::= condition_re:condition method_value_re:re{:
+                if(condition !=null && re !=null){
+                        ArrayList<Operation> aux = new ArrayList();
+                        re.add(new Operation(condition, cur_token.left, cur_token.right));
+                        for(int index=re.size()-1; index>=0; index--){
+                                aux.add(re.get(index));
+                        }
+                        RESULT = aux;
+                }
+                :}
+                |CLOSE_PARENTHESIS{:
+                        ArrayList<Operation> lista = new ArrayList();
+                        RESULT = lista;
+                :}
                 ;
 
-method_value_re ::= COMA condition_re method_value_re
-                |CLOSE_PARENTHESIS
+method_value_re ::= COMA condition_re:condition method_value_re:re{:
+                        if(condition!=null && re !=null){
+                                Operation operation = new Operation(condition, cur_token.left, cur_token.right);
+                                re.add(operation);
+                                RESULT = re;
+                        }
+                :}
+                |CLOSE_PARENTHESIS{:
+                        ArrayList<Operation> lista = new ArrayList();
+                        RESULT = lista;
+                :}
                 ;
 
-throw_function ::= SIMBOLO:sim OPEN_PARENTHESIS method_value:v {:
-                        /*Function function = new Function(true ,cur_token.left, cur_token.right);
-                        Value value = new Value("variable",sim.toString());
-                        function.setName(value);
-                        function.setParameters(v);
-                        RESULT = function;*/
+word_functions ::= SIMBOLO:sim {:RESULT= sim.toString();:}
+                |REPRODUCIR:e {: RESULT = e.toString(); :}
+                |ESPERAR:e {: RESULT = e.toString(); :}
+                |ORDENAR:e {: RESULT = e.toString(); :}
+                |LONGITUD:e {: RESULT = e.toString(); :}
+                |MENSAJE:e {: RESULT = e.toString(); :}
+                ;
+
+throw_function ::= word_functions:sim OPEN_PARENTHESIS method_value:v {:
+                        if(sim!=null && v !=null){
+                                ThrowFunction function = new ThrowFunction(sim, cur_token.left, cur_token.right);
+                                function.setParameters(v);
+                                RESULT = function;
+                        }
                 :}
                 ;
 
@@ -585,7 +677,7 @@ pista ::= PISTA SIMBOLO:sim d:extended  {:
 d ::= EXTIENDE SIMBOLO:sim d_:d {:
         if(d!=null){
                 ArrayList<Operation> lista = d;
-                Value value = new Value("pista",sim.toString());
+                Value value = new Value("pista",sim.toString(), cur_token.left, cur_token.right);
                 Operation operation = new Operation(value, cur_token.left, cur_token.right);
                 lista.add(operation);
                 ArrayList<Operation> auxiliar = new ArrayList();
@@ -602,7 +694,7 @@ d ::= EXTIENDE SIMBOLO:sim d_:d {:
 d_ ::=  COMA SIMBOLO:sim d_:d  {:
         if(d!=null){
                 ArrayList<Operation> lista = d;
-                Value value = new Value("pista", sim.toString());
+                Value value = new Value("pista", sim.toString(), cur_token.left, cur_token.right);
                 Operation operation = new Operation(value, cur_token.left, cur_token.right);
                 lista.add(operation);
                 RESULT = lista;
@@ -679,11 +771,12 @@ v ::= type:typ variables:var assign_special:assign /*Declaracion*/{:
         }    
     :}
     |variables:var increm:inc SPACE {:
-         /*if(inc!=null){
+         if(inc!=null && var!=null){
                 Assignment asignacion = new Assignment(cur_token.left, cur_token.right);
                 asignacion.setMetodo(inc);
-                RESULT = asignacion;
-        }*/
+                VariableChunk chunk = new VariableChunk(var ,asignacion);
+                RESULT = chunk;
+        }
         :}
     ;
 
@@ -709,7 +802,17 @@ variables ::= SIMBOLO:sim variables_re:arr {:
                 
                 RESULT = lista;
                 :}
-                |ARREGLO SIMBOLO variables_re dimension:dim 
+                |ARREGLO SIMBOLO:sim variables_re:re dimension:dim {:
+                        if(re!=null && dim!=null){
+                                Variable variable = new Variable(cur_token.left, cur_token.right);
+                                variable.setName(sim.toString());
+                                re.add(variable);
+                                for(int index=0; index<re.size(); index++){
+                                        re.get(index).setDimension(dim);
+                                }
+                                RESULT = re;
+                        }
+                :}
             ;
 
 variables_re ::= COMA SIMBOLO:sim variables_re:arr {: 
@@ -728,7 +831,6 @@ variables_re ::= COMA SIMBOLO:sim variables_re:arr {:
 
 k ::=   KEEP VAR {:RESULT=true;:}
         |VAR {:RESULT=false;:}
-        |error {:RESULT = false;  parser.report_error("Se esperaba un simbolo o declaracion de variable ","Sintaxis incorrecta"); :}
         |KEEP error:e {:
         parser.report_error("Se esperaba \"var\" ","Sintaxis incorrecta");
         RESULT=false;
@@ -748,6 +850,20 @@ type ::= k:kValue data_type:typ  {:
                 VariableIndicator indicator = new VariableIndicator(keep, data, list);
                 RESULT = indicator;
         :}
+        |k:kValue {:
+                String data="void";
+                boolean keep = kValue;
+                ArrayList<Operation> list = new ArrayList();
+                if(data==null){
+                        data="";
+                }
+                if(list==null){
+                        ArrayList<Operation> value = new ArrayList();
+                        list = value;
+                }
+                VariableIndicator indicator = new VariableIndicator(keep, data, list);
+                RESULT = indicator;
+        :}
         ;
 
 /*ASIGNAR VALORES*/
@@ -755,15 +871,18 @@ assign_special ::= assign:assi {:RESULT = assi;:}
                 |tab_re SPACE 
                 ;
 
-assign ::= equal:e1 array_assign SPACE /*VERIFICAR PARA ARREGLOS*/
-    |equal:e1 condition_re:re assign_special{:
+assign ::= equal:e1 condition_re:re assign_special:f{:
                 if(e1!=null && re!=null){
-                        String mode = e1.toString();
-                        Operation value = new Operation(re,cur_token.left, cur_token.right);
-                        Assignment asignacion = new Assignment(cur_token.left, cur_token.right);
-                        asignacion.setMetodo(mode);
-                        asignacion.setValue(value);
-                        RESULT=asignacion;
+                        if(f!=null){
+
+                        }else{
+                                String mode = e1.toString();
+                                Operation value = new Operation(re,cur_token.left, cur_token.right);
+                                Assignment asignacion = new Assignment(cur_token.left, cur_token.right);
+                                asignacion.setMetodo(mode);
+                                asignacion.setValue(value);
+                                RESULT=asignacion;
+                        }
                 }
     :}
     ;
@@ -773,6 +892,7 @@ equal ::= EQUAL {:RESULT = "=";:}
         |error:e {: parser.report_error("No se pudo declarar correctamente la variable","Igualacion esperada"); :}
         ;
 
+//Depricated
 array ::= ARREGLO dimension:dim {: 
                 if(dim!=null)
                 {
@@ -806,49 +926,146 @@ dimension_re ::= dimension_re:dim OPEN_BRACKET value:v CLOSE_BRACKET {:
                 ;
 /*Asignacion de valores a arreglos*/
 /*PENDIENTE*/
-array_assign ::= OPEN_CURLY assign_arr new_assign
+/*{{5,10,15},{1,3,8},{20,25,30}}*/
+                        
+
+array_assign ::= OPEN_CURLY assign_arr:arr   // nD
+                {:
+                        if(arr!=null){
+                                Dimension dimension = new Dimension(cur_token.left,cur_token.right);
+                                dimension.setDimensions(arr);
+                                dimension.setDimension(0);
+                                RESULT = dimension;
+                        }
+                :}
+                |OPEN_CURLY mult_values:m CLOSE_CURLY //1D
+                {:
+                        if(m!=null){
+                                Dimension dimension = new Dimension(cur_token.left,cur_token.right);
+                                dimension.setDimension(1);
+                                dimension.setData(m);
+                                RESULT = dimension;
+                        }
+                :}
                 ;
 
-new_assign ::= COMA OPEN_CURLY assign_arr new_assign
+//Genera una lista de Dimensiones de grado 1
+new_assign ::= COMA OPEN_CURLY mult_values:m CLOSE_CURLY new_assign:n
+                {:
+                        if(m!=null && n!=null){
+                                Dimension dimension = new Dimension(cur_token.left,cur_token.right);
+                                dimension.setDimension(1);
+                                dimension.setData(m);
+                                n.add(dimension);
+                                RESULT = n;
+                        }
+                :}
                 |/*empty*/
+                {:
+                        ArrayList<Dimension> dimension = new ArrayList();
+                        RESULT = dimension;
+                :}
                 ;
 
-assign_arr ::= OPEN_CURLY mult_values CLOSE_CURLY assign_arr
-                |mult_values CLOSE_CURLY 
+assign_arr ::= OPEN_CURLY assign_arr:arr CLOSE_CURLY assign_arr_re:re{: //Como es la parte final le damos vuelta a los arreglos siempre
+                if(arr!=null && re!=null){
+                        Dimension dimension = new Dimension(cur_token.left,cur_token.right);
+                        dimension.setDimensions(arr);
+                        re.add(dimension);
+                        ArrayList<Dimension> aux = new ArrayList();
+                        for(int index=re.size()-1; index>=0; index--){
+                                aux.add(re.get(index));
+                        }
+                        RESULT=aux;
+                }
+                :}
+                |OPEN_CURLY mult_values:m new_assign:n {: //SOlo para dimensiones de grado 1
+                        if(n!=null && m!=null){
+                                Dimension dimension = new Dimension(cur_token.left,cur_token.right);
+                                dimension.setDimension(1);
+                                dimension.setData(m);
+                                n.add(dimension);
+                                ArrayList<Dimension> aux = new ArrayList();
+                                for(int index=n.size()-1; index>=0; index--){
+                                        aux.add(n.get(index));
+                                }
+                                RESULT = aux;
+                        }
+                :}
                 ;
 
-mult_values ::= value mult_values_re
+assign_arr_re ::= COMA OPEN_CURLY assign_arr:arr CLOSE_CURLY assign_arr_re:re{:
+                        if(arr!=null && re!=null){
+                                Dimension dimension = new Dimension(cur_token.left,cur_token.right);
+                                dimension.setDimensions(arr);
+                                re.add(dimension);
+                                RESULT = re;
+                        }
+                :}
+                |/*empty*/{:
+                        ArrayList<Dimension> dimension = new ArrayList();
+                        RESULT = dimension;
+                :}
+                ;
+mult_values ::= value:v mult_values_re:re{:
+                if(v!=null && re!=null){
+                        ArrayList<Operation> aux = new ArrayList();
+                        re.add(v);
+                        for(int index=re.size()-1; index>=0; index--){
+                                aux.add(re.get(index));
+                        }
+                        RESULT = aux;
+                }
+                :}
                 ;
 
-mult_values_re ::= COMA value mult_values_re
-                |/*empty*/
+mult_values_re ::= COMA value:v mult_values_re:re{:
+                        if(v!=null && re!=null){
+                                re.add(v);
+                                RESULT = re;
+                        }
+                :}
+                |CLOSE_CURLY {:ArrayList<Operation> list = new ArrayList(); RESULT = list;:}
                 ;
 
 
     /*VALORES*/
-value ::= NUMBER:num {: Value value = new Value("entero",num.toString()); 
+value ::= NUMBER:num {: Value value = new Value("entero",num.toString(), cur_token.left, cur_token.right); 
                         Operation operation = new Operation(value,cur_token.left,cur_token.right);
                         RESULT =operation;
                         :}
-        |MINUS NUMBER:num {: Value value = new Value("entero","-"+num.toString()); 
+        |MINUS NUMBER:num {: Value value = new Value("entero","-"+num.toString(), cur_token.left, cur_token.right); 
                         Operation operation = new Operation(value,cur_token.left,cur_token.right);
                         RESULT =operation;
                         :}
-        |DECIMAL:num {: Value value = new Value("doble",num.toString()); 
+        |DECIMAL:num {: Value value = new Value("doble",num.toString(), cur_token.left, cur_token.right); 
                         Operation operation = new Operation(value,cur_token.left,cur_token.right);
                         RESULT =operation;
                         :} 
-        |MINUS DECIMAL:num {: Value value = new Value("doble","-"+num.toString()); 
+        |MINUS DECIMAL:num {: Value value = new Value("doble","-"+num.toString(), cur_token.left, cur_token.right); 
                         Operation operation = new Operation(value,cur_token.left,cur_token.right);
                         RESULT =operation;
                         :}
-        |STRING:num {: Value value = new Value("cadena",num.toString());
+        |STRING:num {: 
+                        String text = num.toString();
+                        text = text.substring(1, text.length() - 1);
+                        Value value = new Value("cadena",text, cur_token.left, cur_token.right);
                         Operation operation = new Operation(value,cur_token.left,cur_token.right);
                         RESULT =operation;
                         :}
-        |CHAR:num {: Value value = new Value("caracter",num.toString()); 
+        |CHAR:num {: 
+                        String text = num.toString();
+                        text = text.substring(1, text.length() - 1);
+                        Value value = new Value("caracter", text, cur_token.left, cur_token.right); 
                         Operation operation = new Operation(value,cur_token.left,cur_token.right);
                         RESULT =operation;
+                        :}
+        |array_assign:e {:
+                        if(e!=null){
+                                Value value = new Value(e, cur_token.left, cur_token.right);
+                                Operation operation = new Operation(value,cur_token.left, cur_token.right);
+                                RESULT=operation;
+                        }
                         :}
         |throw_function:num {:
                         Operation operation = new Operation(num, cur_token.left, cur_token.right);
@@ -905,20 +1122,20 @@ value ::= NUMBER:num {: Value value = new Value("entero",num.toString());
                         :}
         |OPEN_PARENTHESIS value:e2 CLOSE_PARENTHESIS {:RESULT = e2;:}
         |SIMBOLO:sim dimension_re:dim {: 
-        Value value = new Value(sim.toString(), dim);
+        Value value = new Value(sim.toString(), dim, cur_token.left, cur_token.right);
         Operation operation = new Operation(value, cur_token.left, cur_token.right);
         RESULT=operation; 
         :}
-        |TRUE {:Value value = new Value("boolean","true"); 
+        |TRUE {:Value value = new Value("boolean","true", cur_token.left, cur_token.right); 
         Operation operation = new Operation(value, cur_token.left, cur_token.right);
         RESULT=operation;
         :}
         |func_especiales:func {:
-        Value value = new Value("specialFunction",func );
+        Value value = new Value("specialFunction",func , cur_token.left, cur_token.right);
         Operation operation = new Operation(value, cur_token.left, cur_token.right);
         RESULT=operation;
         :}
-        |FALSE {:Value value = new Value("boolean","false");
+        |FALSE {:Value value = new Value("boolean","false", cur_token.left, cur_token.right);
         Operation operation = new Operation(value, cur_token.left, cur_token.right);
          RESULT = operation;:}
         |error {: parser.report_error("Se esperaba algun valor","Valor inesperado"); :}
@@ -927,8 +1144,8 @@ value ::= NUMBER:num {: Value value = new Value("entero",num.toString());
 /*SI*/
 
 if ::= block_if:e1 {:RESULT=e1;:}
-        |block_elseif:e1 {:RESULT=e1;:}
-        |block_else:e1 {:RESULT=e1;:}
+        |block_elseif:e2 {:RESULT=e2;:}
+        |block_else:e3 {:RESULT=e3;:}
         ;
 
 block_if ::= SI OPEN_PARENTHESIS condition:con tab_re SPACE{:
@@ -1010,13 +1227,6 @@ condition_re ::= condition_re:e1 AND:f condition_re:e2 {:
                         }
                 :}
                 |OPEN_PARENTHESIS condition_re:e1 CLOSE_PARENTHESIS {: RESULT = e1;:}
-                |NULL_ condition_re:e1{:
-                        if(e1!=null){
-                                Condition condition = e1;
-                                condition.setUnary("!!");
-                                RESULT = condition;
-                        }
-                :}
                 |NOT condition_re:e1 {:
                         if(e1!=null){
                                 Condition condition = e1;
@@ -1070,173 +1280,47 @@ comparation ::= comparation:e1 EQUALIZATION:f comparation:e2{:
                         }
                 :}
                 |OPEN_PARENTHESIS comparation:e1 CLOSE_PARENTHESIS{:RESULT = e1;:}
+                |NULL_ comparation:e {:
+                        Comparation comparation = new Comparation(true, e, cur_token.left, cur_token.right);
+                        RESULT = comparation;
+                :}
                 |value:e1 {:
                         if(e1!=null){
                                 Comparation comparation = new Comparation(e1, cur_token.left, cur_token.right);
+                                RESULT = comparation;
                         }
                 :}
                 ;
 /*SWITCH*/
 
-instruction_switch ::= tab:t func_especiales:e1 instruction_switch:ins{:
-                        if(e1!=null){
-                                e1.setIndentation(t);
-                                if(ins!=null){
-                                        ins.add(e1);
-                                        RESULT = ins;
-                                }
-                        }else{
-                                RESULT = ins;
-                        }
-                        
-                :}
-                |tab:numTab throw_function:func tab_re SPACE instruction_switch:ins {:
-                        if(func!=null){
-                                func.setIndentation(numTab);
-                                if(ins!=null){
-                                        ins.add(func);
-                                        RESULT = ins;
-                                }
-                        }else{
-                                RESULT = ins;
-                        }
-                :}
-                |tab:t v:e1 instruction_switch:ins{:
-                        if(e1!=null){
-                                e1.setIndentation(t);
-                                if(ins!=null){
-                                        ins.add(e1);
-                                        RESULT = ins;
-                                }
-                        }else{
-                                RESULT = ins;
-                        }
-                :}
-                |tab:t for:e1 instruction_switch:ins{:
-                        if(e1!=null){
-                                e1.setIndentation(t);
-                                if(ins!=null){
-                                        ins.add(e1);
-                                        RESULT = ins;
-                                }
-                        }else{
-                                RESULT = ins;
-                        }
-                :}
-                |tab:t while:e1 instruction_switch:ins{:
-                        if(e1!=null){
-                                e1.setIndentation(t);
-                                if(ins!=null){
-                                        ins.add(e1);
-                                        RESULT = ins;
-                                }
-                        }else{
-                                RESULT = ins;
-                        }
-                :}
-                |tab:t do_while:e1 instruction_switch:ins{:
-                        if(e1!=null){
-                                e1.setIndentation(t);
-                                if(ins!=null){
-                                        ins.add(e1);
-                                        RESULT = ins;
-                                }
-                        }else{
-                                RESULT = ins;
-                        }
-                :}
-                |tab:t if:e1 instruction_switch:ins{:
-                        if(e1!=null){
-                                e1.setIndentation(t);
-                                if(ins!=null){
-                                        ins.add(e1);
-                                        RESULT = ins;
-                                }
-                        }else{
-                                RESULT = ins;
-                        }
-                :}
-                |tab:t switch:e1 instruction_switch:ins{:
-                        
-                        if(ins!=null){
 
-                        }
-                :}
-                |tab:t RETORNA value:val instruction_switch:ins{:
-                        Return retorna = new Return(t, cur_token.left, cur_token.right, val);
-                        if(ins!=null){  
-                                ins.add(retorna);
-                                RESULT = ins;
-                        }else{
-                                ArrayList<Instruction> list = new ArrayList();
-                                list.add(retorna);
-                                RESULT = list;
-                        }
-                :}
-                |tab:t CONTINUE value instruction_switch:ins{:
-                        Continue newContinue = new Continue(t, cur_token.left, cur_token.right);
-                        if(ins!=null){
-                                ins.add(newContinue);
-                                RESULT = ins;
-                        }else{
-                                ArrayList<Instruction> list = new ArrayList();
-                                list.add(newContinue);
-                                RESULT = list;
-                        }
-                :}
-                |tab:t SPACE instruction_switch:ins{:
-                        RESULT = ins;
-                :}
-                |SPACE instruction_switch:ins{:
-                        RESULT = ins;
-                :}
-                |tab EXIT{:
-                        ArrayList<Instruction> instructions = new ArrayList();
-                        RESULT = instructions;
-                :}
-                |error:e instruction_switch  {: parser.report_error("No se encontro una instruccion","Valor inesperado"); :}
-                |tab error:e instruction_switch {: parser.report_error("No se encontro una instruccion","Valor inesperado"); :}
-                ;
 
-switch ::= SWITCH OPEN_PARENTHESIS value:val CLOSE_PARENTHESIS tab_re SPACE cases:cas{:
-                        ArrayList<Case> cases = new ArrayList();
-                        if(cas !=null){
-                                cases = cas;
-                        }
+switch ::= SWITCH OPEN_PARENTHESIS value:val CLOSE_PARENTHESIS tab_re SPACE{:
                         Switch newSwitch = new Switch(cur_token.left, cur_token.right);
                         newSwitch.setVariable(val);
-                        newSwitch.setCases(cases);
                         RESULT = newSwitch;
                 :}
-            | SWITCH error:e value CLOSE_PARENTHESIS tab_re SPACE cases {: parser.report_error("Se esperaba \"(\"","Sintaxis incorrecta"); :}
-            | SWITCH OPEN_PARENTHESIS value error:e tab_re SPACE cases {: parser.report_error("Se esperaba \")\"","Sintaxis incorrecta"); :}
-            | SWITCH OPEN_PARENTHESIS value CLOSE_PARENTHESIS tab_re error:e cases {: parser.report_error("Se esperaba un salto de linea","Sintaxis incorrecta"); :}
+            | SWITCH error:e value CLOSE_PARENTHESIS tab_re SPACE  {: parser.report_error("Se esperaba \"(\"","Sintaxis incorrecta"); :}
+            | SWITCH OPEN_PARENTHESIS value error:e tab_re SPACE  {: parser.report_error("Se esperaba \")\"","Sintaxis incorrecta"); :}
+            | SWITCH OPEN_PARENTHESIS value CLOSE_PARENTHESIS tab_re error:e  {: parser.report_error("Se esperaba un salto de linea","Sintaxis incorrecta"); :}
             ;
 
-cases ::= tab:ind CASE value:val tab_re SPACE instruction_switch:ins cases:cas{:
-                if(cas!=null){
-                        ArrayList<Case> cases = cas;
+default ::= tab:ind DEFAULT tab_re SPACE 
+        {:
+                Default lastCase = new Default(ind, cur_token.left, cur_token.right);
+                RESULT = lastCase;
+        :}
+        ;
+
+cases ::= tab:ind CASE value:val tab_re SPACE {:
+                if(val!=null){
                         Case newCase = new Case(ind, cur_token.left, cur_token.right);
-                        newCase.setInstructions(ins);
                         newCase.setValue(val);
-                        cases.add(newCase);
-                        RESULT = cases;
+                        RESULT = newCase;
                 }
         :}
-        | tab error:e value tab_re SPACE instruction_switch cases {: parser.report_error("Se esperaba la palabra \"case\" o \"default\" ","Sintaxis incorrecta"); :}
-        | tab CASE value error:e instruction_switch cases {: parser.report_error("Se esperaba un salto de linea","Sintaxis incorrecta"); :}
-        | tab:ind DEFAULT tab_re SPACE {:
-                ArrayList<Case> cases = new ArrayList();
-                Default lastCase = new Default(ind, cur_token.left, cur_token.right);
-                cases.add(lastCase);
-                RESULT = cases;
-        :}
-        | tab DEFAULT value error:e {: parser.report_error("Se esperaba un salto de linea","Sintaxis incorrecta"); :}
-        | error:e cases {: parser.report_error("Error sintactico ","Valor inesperado"); :}
-        | SPACE{:
-                ArrayList<Case> cases = new ArrayList();
-                RESULT = cases;
-        :}
+        | tab error:e value tab_re SPACE  {: parser.report_error("Se esperaba la palabra \"case\" o \"default\" ","Sintaxis incorrecta"); :}
+        | tab CASE value tab_re error:e {: parser.report_error("Se esperaba un salto de linea","Sintaxis incorrecta"); :}
         ;
 
 /*FOR*/
