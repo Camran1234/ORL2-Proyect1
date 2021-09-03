@@ -5,6 +5,7 @@
  */
 package valiente.orl2.phyton.specialInstructions;
 
+import valiente.orl2.phyton.error.SemanticException;
 import valiente.orl2.phyton.instructions.Instruction;
 import valiente.orl2.phyton.values.Operation;
 import valiente.orl2.phyton.values.Value;
@@ -22,7 +23,8 @@ public class Esperar extends Instruction{
         super(line, column);
     }
 
-    public void execute(){
+    @Override
+    public void execute() throws SemanticException{
         /*empty*/
     }
     

@@ -15,6 +15,7 @@ import valiente.orl2.phyton.values.Operation;
 public class Longitud extends Instruction{
     Operation array;/*variable*/
     
+    
     public Longitud(int line, int column){
         super(line, column);
     }

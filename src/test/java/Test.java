@@ -16,10 +16,6 @@ import valiente.orl2.phyton.error.ValueException;
 public class Test {
     
     public static void main (String args[]){
-        double x =2.4;
-        System.out.println(Integer.toString((int) x));
-        
-        
         
     }
     

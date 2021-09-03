@@ -38,4 +38,8 @@ public class VariableChunk extends Instruction{
         }
     }
     
+    public boolean isGlobal(){
+        return variables.get(0).getMode();
+    }
+    
 }

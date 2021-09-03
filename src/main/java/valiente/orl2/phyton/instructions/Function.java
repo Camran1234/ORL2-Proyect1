@@ -6,9 +6,17 @@
 package valiente.orl2.phyton.instructions;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import valiente.orl2.phyton.table.Symbol;
+import valiente.orl2.phyton.error.SemanticError;
 import valiente.orl2.phyton.error.SemanticException;
+import valiente.orl2.phyton.error.ValueException;
+import valiente.orl2.phyton.table.Parameter;
 import valiente.orl2.phyton.table.TableOfValue;
+import valiente.orl2.phyton.table.Type;
 import valiente.orl2.phyton.values.Operation;
+import valiente.orl2.phyton.values.TypeParser;
 import valiente.orl2.phyton.values.Value;
 
 /**
@@ -17,17 +25,24 @@ import valiente.orl2.phyton.values.Value;
  */
 public class Function extends Instruction{
     private boolean mode;
-    private String type;
     private Value name;
-    private ArrayList<Operation> parameters=new ArrayList();
+    private ArrayList<Parameter> parameters=new ArrayList();
     //Dimension of the value to return
-    private ArrayList<Operation> dimension = new ArrayList();
+    //El tipo a retornar de la funcion
+    private String type="void";
+    private int dimension = 0;
     //The result to return
     private Value value;
     
     
     public Function(int line, int column){
         super(line, column);
+    }
+    
+    public void setAssignments(ArrayList<Assignment> asignaciones){
+        for(int index=0; index<parameters.size(); index++){
+            parameters.get(index).setAssignment(asignaciones.get(index));
+        }
     }
     
     @Override
@@ -39,8 +54,37 @@ public class Function extends Instruction{
             TableOfValue.deleteAmbit(this.indentation+1);
         } catch (SemanticException e) {
             if(e.isReturn()){
-               value = e.getOperation().execute();
+                try {
+                    TypeParser parser = new TypeParser();
+                    Value value = parser.tryParse(e.getOperation().execute(), this.type, line, column);
+                    this.value = value;
+                } catch (Exception ex) {
+                }
             }
+        }
+    }
+    @Override
+    public void declarar(){
+        try {
+            Type type = new Type(name.getValue(),this.type, parameters.size(), parameters, this.lookForContainer(), new ArrayList<Integer>(),
+            this.getIndentation(), this);
+            type.setFunction(true);
+            Symbol symbol = new Symbol(type, indentation,mode );
+            TableOfValue.addSymbol(symbol, line, column);
+        } catch (Exception e) {
+            SemanticError error = new SemanticError("Funcion no declarada", getLine(), getColumn());
+            error.setDescription(e.getMessage());
+            TableOfValue.semanticErrors.add(error);
+        }
+    }
+    
+    public void setValueToParameters(ArrayList<Operation> operation){
+        for(int index=0; index<parameters.size(); index++){
+            parameters.get(index).setValue(operation.get(index));
+            parameters.get(index).setFather(this);
+            parameters.get(index).setIndentation(indentation+1);
+            parameters.get(index).setLineColumn(line, column);
+            parameters.get(index).declarar();
         }
     }
     
@@ -50,7 +94,13 @@ public class Function extends Instruction{
      */
     public Value getValue() throws SemanticException{
         this.execute();
-        return this.value;
+        Value value = this.value;
+        this.value = null;
+        return value;
+    }
+    
+    public void reset(){
+        this.value = null;
     }
     
 
@@ -70,17 +120,21 @@ public class Function extends Instruction{
         this.name = name;
     }
 
-    public ArrayList<Operation> getParameters() {
+    public ArrayList<Parameter> getParameters() {
         return parameters;
     }
 
     public void setParameters(ArrayList<Operation> parameters) {
-        this.parameters = parameters;
+        for(int index=0; index<parameters.size(); index++){
+            Value value = parameters.get(index).execute();
+            Parameter parameter = new Parameter(value);
+            this.parameters.add(parameter);
+        }
     }
 
     public void setParamsIndicator(VariableIndicator indicator){
         this.type = indicator.getType();
-        this.dimension = indicator.getDimension();
+        this.dimension = indicator.getSize();
         this.mode = indicator.getGlobal();
     }
     

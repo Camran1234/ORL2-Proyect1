@@ -17,13 +17,22 @@ public class VariableIndicator {
     boolean global=false;
     String type="";
     ArrayList<Operation> dimension = new ArrayList();
-
+    int dimensions=0;
+    
     public VariableIndicator(boolean global, String type, ArrayList<Operation> dimension) {
         this.global = global;
         this.type = type;
         this.dimension = dimension;
     }
 
+    public void setSize(Integer enter){
+        this.dimensions = enter;
+    }
+    
+    public int getSize(){
+        return dimensions;
+    }
+    
     public void setGlobal(boolean global){
         this.global = global;
     }

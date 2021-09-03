@@ -18,6 +18,7 @@ public class Type {
     private String id="";
     //Tipos de bases: entero, doble, caracter, boolean, string, funcion, pista, principio
     private String base = "";
+    private boolean isFunction=false;
     //Para funciones
     private int numberParameters=0;
     private ArrayList<Parameter> parameters = new ArrayList();
@@ -32,11 +33,12 @@ public class Type {
     /**
      * Genera una instancia de tipo Type
      * El id es el identificador
-     * Base es el tipo de variable (entero, doble, caracter, boolean, cadena) o funcion, pista, principal
+     * Base es el tipo de variable (entero, doble, caracter, boolean, cadena) o function, pista, principal
      * numberParameters numero de parametros si es una funcion
      * parameters son los parametros que se esperan recibir si es una funcion
      * father es el metodo o estructura al cual pertenece
-     * 
+     * dimension el numero de dimensiones que posee
+     * value la instruccion
      * @param id
      * @param base
      * @param numberParameters
@@ -58,6 +60,11 @@ public class Type {
         this.value = value;
     }
     
+    
+    public void setFunction(boolean flag){
+        isFunction = true;
+    }
+    
     /**
      * Compara los parametros de la funcion
      * Retorna verdadero si son iguales
@@ -75,6 +82,10 @@ public class Type {
         return true;
     }
     
+    /**
+     * Retorna la funcion perteneciente a este simbolo
+     * @return 
+     */
     public Instruction getValue() {
         return value;
     }
@@ -162,8 +173,10 @@ public class Type {
      */
     public String getCategory(){
         String categoria = base;
-        if(categoria.equalsIgnoreCase("funcion") || categoria.equalsIgnoreCase("pista") || categoria.equalsIgnoreCase("principal")){
+        if(categoria.equalsIgnoreCase("pista") || categoria.equalsIgnoreCase("principal")){
             return categoria;
+        }else if(isFunction){
+            return "function";
         }else{
             return "variable";
         }

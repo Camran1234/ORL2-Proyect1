@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import valiente.orl2.phyton.error.SemanticError;
 import valiente.orl2.phyton.instructions.Assignment;
 import valiente.orl2.phyton.instructions.Dimension;
+import valiente.orl2.phyton.instructions.Pista;
 import valiente.orl2.phyton.values.Operation;
 import valiente.orl2.phyton.values.Value;
 /**
@@ -35,6 +36,13 @@ public class Symbol {
         this.keep = keep;
     }
     
+    public boolean comparePista(String pista){
+        if(pista.equalsIgnoreCase(referencedType.getId())
+                && referencedType.getValue() instanceof Pista){
+            return true;
+        }
+        return false;
+    }
     
     
     public void setNewValue(Assignment assignment, boolean declarado, int line, int column){

@@ -21,16 +21,12 @@ public class Assignment {
     // --, ++, +=, =
     String metodo="=";
     
-    /*Para arreglos*/
-    Dimension dimension = null;
-    
     
     public Assignment(int line, int column){
         this.line = line;
         this.column = column;
     }
-    
-    
+        
     /**
      *Retorna 0 para variables
      * Retorna 1 para arreglos
@@ -40,7 +36,7 @@ public class Assignment {
     public int selectMethod(){
         if(value!=null){
             return 0;
-        }else if(dimension!=null){
+        }else if(getDimension()!=null){
             return 1;
         }else{
             return 2;
@@ -84,11 +80,12 @@ public class Assignment {
     }
 
     public Dimension getDimension(){
-        return dimension;
+        if(value.isArray()){
+            return value.execute().getArray();
+        } 
+        return null;
     }
     
-    public void setDimension(Dimension dimension){
-        this.dimension = dimension;
-    }
+    
     
 }

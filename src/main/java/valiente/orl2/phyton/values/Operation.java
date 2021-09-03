@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import valiente.orl2.phyton.conditions.Condition;
 import valiente.orl2.phyton.error.SemanticError;
 import valiente.orl2.phyton.instructions.Function;
+import valiente.orl2.phyton.instructions.ThrowFunction;
 import valiente.orl2.phyton.table.TableOfValue;
 
 /**
@@ -23,7 +24,8 @@ public class Operation {
     
     Value value;
     Condition condition;
-    Function function;
+    ThrowFunction function;
+    boolean isArray=false;
     
     
     
@@ -39,9 +41,12 @@ public class Operation {
         this.value = value;
         this.line= line;
         this.column= column;
+        if(value.isArray()){
+            isArray=true;
+        }
     }
     
-    public Operation(Function function, int line, int column){
+    public Operation(ThrowFunction function, int line, int column){
         this.function = function;
         this.line= line;
         this.column= column;
@@ -51,6 +56,10 @@ public class Operation {
         this.condition = condition;
         this.line= line;
         this.column= column;
+    }
+    
+    public boolean isArray(){
+        return isArray;
     }
     
     public Value execute(){

@@ -8,6 +8,7 @@ package valiente.orl2.phyton.values;
 import java.util.ArrayList;
 import valiente.orl2.phyton.error.SemanticException;
 import valiente.orl2.phyton.error.ValueException;
+import valiente.orl2.phyton.instructions.Dimension;
 import valiente.orl2.phyton.instructions.Instruction;
 import valiente.orl2.phyton.table.TableOfValue;
 
@@ -16,12 +17,25 @@ import valiente.orl2.phyton.table.TableOfValue;
  * Encargada de almacenar los datos, su tipo
  * @author camran1234
  */
-public class Value {
+    public class Value {
     private int line, column=0;
+    //specialFunction, function, pista, principal, 
     private String type="";
     private String value="";
     private ArrayList<Operation> dimension = new ArrayList();
     private Instruction specialValue; //Reserved for function
+    /*Para arreglos*/
+    private boolean isArray=false;
+    private Dimension array = null;
+    
+    
+    public Value(Dimension dimension, int line,int column){
+        this.type = "arreglo";
+        this.array = dimension;
+        this.line = line;
+        this.column = column;
+        this.isArray=true;
+    }
     
     public Value(String type, Instruction specialValue, int line, int column){
         this.type = type;
@@ -35,10 +49,33 @@ public class Value {
         this.checkType();
     }
     
+    public Value(String type, String value, ArrayList<Operation> dimension, int line, int column){
+        this.type = type;
+        this.value = value;
+        this.dimension = dimension;
+        this.line = line;
+        this.column = column;
+        this.isArray = true;
+    }
+    
     public Value(String value, ArrayList<Operation> dimension, int line, int column){
         this.type="variable";
         this.value=value;
         this.dimension = dimension;
+    }
+    
+    public ArrayList<Operation> getDimensions(){
+        return this.dimension;
+    }
+    
+    
+    
+    public boolean isArray(){
+        return isArray;
+    }
+    
+    public Dimension getArray(){
+        return array;
     }
     
     /**
@@ -106,6 +143,8 @@ public class Value {
             }else{
                 return TableOfValue.getValue(value, line, column);
             }
+        }else if(type.equalsIgnoreCase("arreglo")){
+           return array.toString();
         }
         
         return value;

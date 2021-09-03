@@ -47,11 +47,7 @@ public class Instruction {
         //Empty
     }
     
-    public void executeInstructions() throws SemanticException{
-        for(int index=0; index<instructions.size()-1; index++){
-            instructions.get(index).execute();
-        }
-    }
+    
     
     public void setFather(Instruction father){
         this.father = father;
@@ -92,20 +88,28 @@ public class Instruction {
             erroresLista.add(newError);
             System.err.println(newError.getDescription());
         }else if(instruction.getIndentation() <= this.indentation){
-            
             if(this instanceof Pista){
                 if(instruction instanceof VariableChunk){
-                    if(instruction.getIndentation() == this.getIndentation() +1){
-                        this.addInstruction(instruction);
-                        instruction.setFather(this);
-                        return this;
-                    }else{
+                    if(((VariableChunk) instruction).isGlobal() && !(instruction.lookForContainer() instanceof Pista)){
                         SyntaxError newError = new SyntaxError(instruction.getLine(), instruction.getColumn());
-                        newError.setType("Inicio ilegal de la expresion");
-                        newError.setDescription("Se esperaba que la instruccion estuviera dentro de una instruccion contenedora");
+                        newError.setType("Estado ilegal de la expresion");
+                        newError.setDescription("Se esperaba que la variable fuera declarada fuera de una funcion");
                         erroresLista.add(newError);
-                        System.err.println(newError.getDescription());
+                    }else{
+                        if(instruction.getIndentation() == this.getIndentation() +1){
+                            this.addInstruction(instruction);
+                            instruction.setFather(this);
+                            return this;
+                        }else{
+                            SyntaxError newError = new SyntaxError(instruction.getLine(), instruction.getColumn());
+                            newError.setType("Inicio ilegal de la expresion");
+                            newError.setDescription("Se esperaba que la instruccion estuviera dentro de una instruccion contenedora");
+                            erroresLista.add(newError);
+                            System.err.println(newError.getDescription());
+                        }
                     }
+                    
+                    
                 }else{
                     SyntaxError newError = new SyntaxError(instruction.getLine(), instruction.getColumn());
                     newError.setType("Inicio ilegal de la expresion");
@@ -267,7 +271,7 @@ public class Instruction {
 
     /**
      * Busca la funcion, principal o pista que contiene esta instruccion
-     * @return 
+     * @return  
      */
     protected Instruction lookForContainer() {
         Instruction instruction=null;
@@ -296,6 +300,10 @@ public class Instruction {
         return result;
     }
     
+    /**
+     * Devuelve a la pista que pertenece
+     * @return 
+     */
     public Instruction lookForPista(){
         Instruction instruction = null;
         if(this instanceof Pista){
@@ -304,6 +312,10 @@ public class Instruction {
             instruction = father.lookForPista();
         }
         return instruction;
+    }
+
+    public void declarar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

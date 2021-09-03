@@ -5,6 +5,8 @@
  */
 package valiente.orl2.phyton.instructions;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import valiente.orl2.phyton.error.SemanticException;
 import valiente.orl2.phyton.error.ValueException;
 import valiente.orl2.phyton.table.TableOfType;
@@ -55,7 +57,7 @@ public class Variable extends Instruction{
                    }
                 }
                 Type type = new Type(name, this.type, 0, new ArrayList<Parameter>(), lookForContainer(), dimensiones, getIndentation(), this);
-                TableOfType.addType(type);
+                //TableOfType.addType(type);
                 Symbol symbol = new Symbol(type, getIndentation(),mode);
                 if(value!=null){
                     symbol.setNewValue(value, declarado, getLine(), getColumn());
@@ -64,11 +66,21 @@ public class Variable extends Instruction{
             }else{
                 //Reasignar un nuevo valor
                 Symbol symbol = TableOfValue.getSymbol(name, "variable");
+                //Actualizamos el valor desde aqui
+                symbol.setNewValue(value, false, getLine(), getColumn());
             }
         } catch (ValueException e) {
             
         }
-        
+    }
+    
+    
+    public void declarar(){
+        try {
+            execute();
+        } catch (SemanticException ex) {
+            Logger.getLogger(Variable.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void setParameters(VariableIndicator indicator){

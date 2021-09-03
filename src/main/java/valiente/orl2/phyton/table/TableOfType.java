@@ -43,7 +43,7 @@ public class TableOfType {
         } catch (ValueException e) {
         }
         
-    }
+    }   
     
     public static void reset(){
         types = new ArrayList();

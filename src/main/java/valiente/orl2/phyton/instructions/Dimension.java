@@ -49,6 +49,10 @@ public class Dimension {
     public ArrayList<Dimension> getDimensions() {
         return dimensions;
     }
+    
+    public void setDimensions(ArrayList<Dimension> dimensions){
+        this.dimensions = dimensions;
+    }
 
     public void setDimensions(ArrayList<Dimension> dimensions, ArrayList<Integer> direction) {
         this.dimensions = dimensions;
