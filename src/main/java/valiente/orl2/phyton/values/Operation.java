@@ -26,7 +26,7 @@ public class Operation {
     Condition condition;
     ThrowFunction function;
     boolean isArray=false;
-    
+    boolean isMessage=false;
     
     
     public Operation(Operation leftValue, Operation rightValue, String operator, int line, int column){
@@ -58,6 +58,10 @@ public class Operation {
         this.column= column;
     }
     
+    public void setMessage(boolean message){
+        this.isMessage = message;
+    }
+    
     public boolean isArray(){
         return isArray;
     }
@@ -67,7 +71,15 @@ public class Operation {
             if(leftValue!=null && rightValue!=null){
                 Value left = leftValue.execute();
                 Value right = rightValue.execute();
+                if(left.getRawType().equalsIgnoreCase("specialFunction")){
+                    left = left.getRefinatedValue();
+                }
+                if(right.getRawType().equalsIgnoreCase("specialFunction")){
+                    right = right.getRefinatedValue();
+                }
+                
                 ArithmeticOperator arithmeticOperator = new ArithmeticOperator();
+                
                 return arithmeticOperator.MakeOperation(operator, left, right, line, column);
             }else if(condition!=null){
                 Operation result = condition.execute();

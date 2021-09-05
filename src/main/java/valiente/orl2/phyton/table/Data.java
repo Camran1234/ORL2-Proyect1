@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import valiente.orl2.phyton.error.SemanticError;
+import valiente.orl2.phyton.error.SemanticException;
 import valiente.orl2.phyton.error.ValueException;
 import valiente.orl2.phyton.instructions.Dimension;
 import valiente.orl2.phyton.instructions.Direction;
@@ -29,6 +30,15 @@ public class Data {
     //Helpers
     private boolean isArray=false;
     private ArrayList<Integer> dimension =null;
+    private int line, column=0;
+    
+    /**
+     * An empty constructor for data to acces the functions
+     */
+    public Data(){
+        
+    }
+    
     /**
      * Si son variables de un solo valor
      * @param type
@@ -37,9 +47,11 @@ public class Data {
     public Data(String type, String value, int line, int column) {
         try {
             this.type = type;
-            checkValue(value ,line, column);
             this.value = value;
             this.isArray = false;
+            this.line = line;
+            this.column = column;
+            //checkValue(value ,line, column);
         } catch (Exception ex) {
             SemanticError error = new SemanticError("Tipos incompatibles", line, column);
             error.setDescription("Se requeria un valor de tipo "+type);
@@ -58,6 +70,8 @@ public class Data {
         this.isArray=true;
         this.type = type;
         this.dimension = dimension;
+        this.line = line;
+            this.column = column;
         checkArray(line, column);
     }
     
@@ -139,6 +153,7 @@ public class Data {
                 }else if(metodo.equalsIgnoreCase("=")){
                     result = value;
                     result = new TypeParser().tryParse(value, type, line, column);
+                    
                     array[direction] = result.getRawValue();
                 }else if(metodo.equalsIgnoreCase("++")||metodo.equalsIgnoreCase("--")){
                     increm(metodo, direction, line, column);
@@ -174,7 +189,11 @@ public class Data {
                     asignacion = typeParser.tryParse(asignacion, type, line, column);
                     this.value = asignacion.getRawValue();
                 }else if(metodo.equalsIgnoreCase("=")){
-                    Value asignacion = new TypeParser().tryParse(value, type, line, column);
+                    Value asignacion=value;
+                    if(value.getRawType().equalsIgnoreCase("specialFunction")){
+                        asignacion = value.getRefinatedValue();
+                    }
+                    asignacion = new TypeParser().tryParse(asignacion, type, line, column);
                     this.value = asignacion.getRawValue();
                 }else if(metodo.equalsIgnoreCase("++") || metodo.equalsIgnoreCase("--")){
                     increm(metodo, line, column);
@@ -196,9 +215,9 @@ public class Data {
         direction = dimension.startHarvest();
         for(int index=0; index<direction.size(); index++){
             Direction aux = direction.get(index);
-            this.setArrayValue(aux.getValueFromOperation(), aux.getDirection(), "==", line, column);
+            this.setArrayValue(aux.getValueFromOperation(), aux.getDirection(), "=", line, column);
         }
-        
+
     }
     
     /**
@@ -266,10 +285,14 @@ public class Data {
     
     public String[] getArray(){
         if(dimension.size()>1){
-            return getFirstRowLength();
-        }else{
             return array;
+        }else{            
+            return getFirstRowLength();
         }
+    }
+    
+    public void setArray(String[] array){
+        this.array = array;
     }
     
     public String getValue(){
@@ -290,8 +313,19 @@ public class Data {
         for(int index=0; index<firstRowSize; index++){
             list.add(array[index]);
         }
-        
-        return (String[])list.toArray();
+        String[] string = new String[dimension.get(0)];
+        for(int index=0; index<list.size(); index++){
+            string[index] = list.get(index);
+        }
+        return string;
+    }
+    
+    public boolean isMultidimensional(){
+        if(dimension.size()>1){
+            return true;
+        }else{
+            return false;
+        }
     }
     
     private void checkArray(int line, int column){

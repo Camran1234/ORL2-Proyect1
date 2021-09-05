@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import valiente.orl2.phyton.conditions.Condition;
 import valiente.orl2.phyton.error.SemanticException;
 import valiente.orl2.phyton.error.ValueException;
+import valiente.orl2.phyton.table.Symbol;
 import valiente.orl2.phyton.table.TableOfValue;
 import valiente.orl2.phyton.values.Value;
 /**
@@ -19,6 +20,7 @@ import valiente.orl2.phyton.values.Value;
  */
 public class ThrowFunction extends Instruction{
     
+    //parametros de la funcion
     ArrayList<Operation> parameters = new ArrayList();
     String id = "";
     int line,column=0;
@@ -36,18 +38,21 @@ public class ThrowFunction extends Instruction{
      * @throws SemanticException 
      */
     public void execute() throws SemanticException{
+        Symbol previousSymbol = TableOfValue.getWorkingSymbol();
         Function function = (Function) TableOfValue.getFunctionOfSymbol(id, parameters);
-        ArrayList<Assignment> asignaciones = new ArrayList();
-        
-        for(int index=0; index<parameters.size(); index++){
-            Assignment assignment = new Assignment(line, column);
-            assignment.setValue(parameters.get(index));
-        }
         if(function==null){
             throw new SemanticException("No se encontro la funcion", "funcion no declarada", line, column);
         }
+        ArrayList<Assignment> asignaciones = new ArrayList();
+        for(int index=0; index<parameters.size(); index++){
+            Assignment assignment = new Assignment(line, column);
+            assignment.setValue(parameters.get(index));
+            asignaciones.add(assignment);
+        }
+        
         function.setAssignments(asignaciones);
         this.value = function.getValue();
+        TableOfValue.setWorkingSymbol(previousSymbol);
     }
     
     public Value getValue(){

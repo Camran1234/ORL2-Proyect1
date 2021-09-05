@@ -43,7 +43,10 @@ public class Phyton {
             TableOfValue.syntaxErrors = syntaxError;
             ArrayList<Instruction> instruction = parser.getInstructions();
             instruction = this.Reasignar(instruction, syntaxError);
-            System.out.println("Analizando");
+            PhytonSemantic semantico = new PhytonSemantic();
+            semantico.setSemantic(instruction);
+            semantico.execute();
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

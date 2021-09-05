@@ -69,7 +69,7 @@ public class If extends Instruction{
                         instructions.get(index).execute();                    
                     }
                 }
-                TableOfValue.deleteAmbit(getIndentation()+1);
+                TableOfValue.deleteAmbit(getIndentation()+1, this);
             }else if(condition.execute().execute().getValue().equalsIgnoreCase("false")){
                 boolean founded=false;
                 for(int index=0; index<elseifs.size(); index++){

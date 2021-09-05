@@ -22,6 +22,7 @@ import valiente.orl2.phyton.values.Value;
 public class Pista extends Instruction{
     String nombre;
     ArrayList<Operation> extendeds;
+    Symbol workingSymbol=null;
     
     public Pista(int line, int column){
         super(line, column);
@@ -54,7 +55,9 @@ public class Pista extends Instruction{
     public void execute() throws SemanticException{
         try {
             for(int index=0; index<instructions.size(); index++){
-                instructions.get(index).execute();
+                if(instructions.get(index) instanceof Principal){
+                    instructions.get(index).execute();
+                }
             }
         } catch (SemanticException e) {
             
@@ -65,8 +68,11 @@ public class Pista extends Instruction{
     public void declarar(){
         try {
             Type type = new Type(nombre, "pista", 0, new ArrayList<Parameter>(), this, new ArrayList<Integer>(), getIndentation(), this);
-            Symbol symbol = new Symbol(type, 0, true);
+            Symbol symbol = new Symbol(type, 0, true, line, column);
             TableOfValue.addSymbol(symbol, line, column);
+            //Agregamos el simbolo
+            TableOfValue.setWorkingSymbol(symbol);
+            workingSymbol = symbol;
             for(int index=0; index<instructions.size(); index++){
                 if(instructions.get(index) instanceof Function || instructions.get(index) instanceof Principal || 
                         instructions.get(index) instanceof Variable){

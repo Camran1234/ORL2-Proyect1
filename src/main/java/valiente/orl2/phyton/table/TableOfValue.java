@@ -39,9 +39,22 @@ public class TableOfValue {
         TableOfType.reset();
     }
     
-    public void setWorkingSymbol(Symbol symbol){
-        this.workingSymbol = symbol;
+    public static boolean isRunable(){
+        if(semanticErrors.size()==0 && syntaxErrors.size()==0 && lexicalErrors.size()==0){
+            return true;
+        }
+        return false;
     }
+    
+    public static void setWorkingSymbol(Symbol symbol){
+        TableOfValue.workingSymbol = symbol;
+    }
+    
+    public static Symbol getWorkingSymbol(){
+        return TableOfValue.workingSymbol;
+    }
+    
+    
     
     public static boolean compareParameters(ArrayList<Parameter> list1, ArrayList<Operation> list2){
         boolean flag=true;        
@@ -62,6 +75,11 @@ public class TableOfValue {
     }
     
     
+    /**
+     * Comprueba que el simbolo enviado pertenece al contexto de la pista actual
+     * @param symbol
+     * @return 
+     */
     public static boolean fromSamePista(Symbol symbol){
         boolean flag=false;
         //Solo comprobar el contenedor Pista
@@ -83,9 +101,11 @@ public class TableOfValue {
             ArrayList<Value> nameOfPistas = mainPista.getNumberOfExtendeds();
             for(int index=0; index<nameOfPistas.size(); index++){
                 ArrayList<Symbol> symbols = getInstructionsFromPista(nameOfPistas.get(index).getValue());
-                //Comparar si se encuentra la instruccion y si es global
-                if(symbols.get(index).getReference().getValue() == referenced && symbols.get(index).isGlobal()){
-                    return true;
+                for( int indexSym=0; indexSym<symbols.size(); indexSym++){
+                    //Comparar si se encuentra la instruccion y si es global
+                    if(symbols.get(indexSym).getReference().getValue().equals(referenced)  && symbols.get(indexSym).isGlobal()){
+                        return true;
+                    }
                 }
             }
         } catch (ValueException e) {
@@ -123,8 +143,8 @@ public class TableOfValue {
                     if(compareParameters(parameter, operation)){
                         if(fromSamePista(symbols.get(index))){
                             symbols.get(index);
+                            return symbols.get(index).getReference().getValue();
                         }
-                        return symbols.get(index).getReference().getValue();
                     }
                 }
             }
@@ -132,8 +152,22 @@ public class TableOfValue {
         return null;
     }
     
+    public static Symbol getPistaSymbol(String id, String categoria) {
+        Symbol symbol=null;
+        
+        for(int index=symbols.size()-1; index>=0; index--){
+            if(symbols.get(index).getId().equalsIgnoreCase(id) &&
+                    symbols.get(index).getCategory().equalsIgnoreCase(categoria) && symbols.get(index).getReference().getValue() instanceof Pista){
+                    symbol = symbols.get(index);
+                    break;
+            }
+        }
+        return symbol;
+    }
+    
     public static Symbol getSymbol(String id, String categoria){
         Symbol symbol=null;
+        
         for(int index=symbols.size()-1; index>=0; index--){
             if(symbols.get(index).getId().equalsIgnoreCase(id) &&
                     symbols.get(index).getCategory().equalsIgnoreCase(categoria)){
@@ -182,7 +216,7 @@ public class TableOfValue {
                 return symbols.get(index).getType();
             }
         }
-        throw new ValueException("No se encontro ningun simbolo con identificador"+id,"Simbolo no encontrado", line, column);
+        throw new ValueException("No se encontro ningun simbolo con identificador "+id,"Simbolo no encontrado", line, column);
     }
     
     public static boolean isArray(String id){
@@ -257,12 +291,29 @@ public class TableOfValue {
      * Remueve los simbolos de ese ambito
      * @param ambit 
      */
-    public static void deleteAmbit(int ambit){
+    public static void deleteAmbit(int ambit, Instruction container){
         for(int index=symbols.size()-1; index>=0; index--){
             if(symbols.get(index).getAmbit()==ambit && !symbols.get(index).isGlobal()
-                    && fromSamePista(symbols.get(index))){
-                TableOfType.deleteType(symbols.get(index).getReference());
+                    && fromSamePista(symbols.get(index)) && symbols.get(index).getReference().getValue().lookForContainer().equals(container.lookForContainer()) ){
                 symbols.remove(index);
+            }
+        }
+    }
+    
+    public static void deleteAmbitBut(int ambit, Instruction container, String id){
+        for(int index=symbols.size()-1; index>=0; index--){
+            if(symbols.get(index).getAmbit()==ambit && !symbols.get(index).isGlobal() && !symbols.get(index).getId().equalsIgnoreCase(id)
+                    && fromSamePista(symbols.get(index)) && symbols.get(index).getReference().getValue().lookForContainer().equals(container.lookForContainer()) ){
+                symbols.remove(index);
+            }
+        }
+    }
+    
+    public static void forceDelete(int ambit){
+        for(int index=symbols.size()-1; index>=0; index--){
+            if(symbols.get(index).getAmbit()==ambit && fromSamePista(symbols.get(index))){
+                symbols.remove(index);
+                
             }
         }
     }
@@ -289,5 +340,7 @@ public class TableOfValue {
         }
         return arreglo;        
     }
+
+    
 
 }

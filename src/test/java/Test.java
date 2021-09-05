@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import java.util.ArrayList;
 import valiente.orl2.phyton.instructions.Function;
 import valiente.orl2.phyton.instructions.Instruction;
 import valiente.orl2.phyton.conditions.ElseIf;
@@ -16,9 +17,18 @@ import valiente.orl2.phyton.error.ValueException;
 public class Test {
     
     public static void main (String args[]){
+        String texto = "a,2,3,4";
+        String[] array = texto.split(",");
         
+        
+        for(String text:array){
+            System.out.println("'"+text+"'");
+        }
     }
     
+    public static void xD(){
+        
+    }
     
     
 }

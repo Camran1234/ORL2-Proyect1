@@ -10,6 +10,10 @@ import valiente.orl2.phyton.error.SemanticException;
 import valiente.orl2.phyton.error.ValueException;
 import valiente.orl2.phyton.instructions.Dimension;
 import valiente.orl2.phyton.instructions.Instruction;
+import valiente.orl2.phyton.specialInstructions.Longitud;
+import valiente.orl2.phyton.specialInstructions.Ordenar;
+import valiente.orl2.phyton.specialInstructions.Reproducir;
+import valiente.orl2.phyton.specialInstructions.Sumarizar;
 import valiente.orl2.phyton.table.TableOfValue;
 
 /**
@@ -20,10 +24,15 @@ import valiente.orl2.phyton.table.TableOfValue;
     public class Value {
     private int line, column=0;
     //specialFunction, function, pista, principal, 
+    //El tipo arreglo se utiliza cuando se le introdujo un valor dimension
+    //es decir es un array nested
     private String type="";
     private String value="";
     private ArrayList<Operation> dimension = new ArrayList();
     private Instruction specialValue; //Reserved for function
+    //Para funciones
+    private int sizeDimensions=0;
+    private boolean isParameter=false;
     /*Para arreglos*/
     private boolean isArray=false;
     private Dimension array = null;
@@ -40,13 +49,26 @@ import valiente.orl2.phyton.table.TableOfValue;
     public Value(String type, Instruction specialValue, int line, int column){
         this.type = type;
         this.specialValue = specialValue;
+        this.line = line;
+        this.column = column;
     }
     
     
     public Value(String type, String value, int line, int column){
         this.type=type;
         this.value=value;
-        this.checkType();
+        this.line = line;
+        this.column = column;
+       // this.checkType();
+    }
+    
+    public Value(String type, String value, int dimensions, int line, int column){
+        this.type = type;
+        this.value = value;
+        this.sizeDimensions = dimensions;
+        this.line = line;
+        this.column = column;
+        this.isParameter = true;
     }
     
     public Value(String type, String value, ArrayList<Operation> dimension, int line, int column){
@@ -62,6 +84,11 @@ import valiente.orl2.phyton.table.TableOfValue;
         this.type="variable";
         this.value=value;
         this.dimension = dimension;
+        if(dimension.size()>0){
+            isArray = true;
+        }
+        this.line = line;
+        this.column = column;
     }
     
     public ArrayList<Operation> getDimensions(){
@@ -69,6 +96,9 @@ import valiente.orl2.phyton.table.TableOfValue;
     }
     
     
+    public boolean isParameter(){
+        return isParameter;
+    }
     
     public boolean isArray(){
         return isArray;
@@ -115,19 +145,11 @@ import valiente.orl2.phyton.table.TableOfValue;
     }
     
     public String getValue() throws ValueException{
-        if(type.equalsIgnoreCase("boolean")){
-            if(this.value.equalsIgnoreCase("1") || this.value.equalsIgnoreCase("true")){
-                return "true";
-            }else if(this.value.equalsIgnoreCase("0") || this.value.equalsIgnoreCase("false")){
-                return "false";
-            }
-        }else if(type.equalsIgnoreCase("entero")){
-            if(this.value.equalsIgnoreCase("true")){
-                return "1";
-            }else if(this.value.equalsIgnoreCase("false")){
-                return "0";
-            }
-        }else if(type.equalsIgnoreCase("variable")){
+        if(isParameter){
+            return Integer.toString(sizeDimensions);
+        }
+        
+        if(type.equalsIgnoreCase("variable")){
             if(TableOfValue.isArray(value)){
                 if(dimension.size()>0){
                     return TableOfValue.getArrayValue(value, dimension, line, column);
@@ -145,9 +167,51 @@ import valiente.orl2.phyton.table.TableOfValue;
             }
         }else if(type.equalsIgnoreCase("arreglo")){
            return array.toString();
+        }else if(type.equalsIgnoreCase("specialFunction")){
+            if(specialValue ==null){
+                throw new ValueException("No se encontro una funcion especial", "Nulo no encontrado", getLine(), getColumn());
+            }
+            if(specialValue instanceof Reproducir || specialValue instanceof Ordenar || specialValue instanceof Sumarizar ||
+                    specialValue instanceof Longitud){
+                return specialValue.getValueSpecialFunction().getValue();
+            }else{
+                throw new ValueException("void no se puede transformar a un valor", "Tipos incompatibles", getLine(), getColumn());
+            }
+        }if(type.equalsIgnoreCase("boolean")){
+            if(this.value.equalsIgnoreCase("1") || this.value.equalsIgnoreCase("true") || this.value.equalsIgnoreCase("verdadero")){
+                return "true";
+            }else if(this.value.equalsIgnoreCase("0") || this.value.equalsIgnoreCase("false") || this.value.equalsIgnoreCase("falso")){
+                return "false";
+            }
+        }else if(type.equalsIgnoreCase("entero")){
+            if(this.value.equalsIgnoreCase("true")){
+                return "1";
+            }else if(this.value.equalsIgnoreCase("false")){
+                return "0";
+            }
         }
         
         return value;
+    }
+    
+    /**
+     * Para obtener el valor de las funciones especiales
+     * @return
+     * @throws ValueException 
+     */
+    public Value getRefinatedValue() throws ValueException{
+        if(type.equalsIgnoreCase("specialFunction")){
+            if(specialValue ==null){
+                throw new ValueException("No se encontro una funcion especial", "Nulo no encontrado", getLine(), getColumn());
+            }
+            if(specialValue instanceof Reproducir || specialValue instanceof Ordenar || specialValue instanceof Sumarizar ||
+                    specialValue instanceof Longitud){
+                return specialValue.getValueSpecialFunction();
+            }else{
+                throw new ValueException("void no se puede transformar a un valor", "Tipos incompatibles", getLine(), getColumn());
+            }
+        }
+        return this;
     }
 
     public void setValue(String value) {

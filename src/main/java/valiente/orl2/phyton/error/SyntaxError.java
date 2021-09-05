@@ -5,6 +5,8 @@
  */
 package valiente.orl2.phyton.error;
 
+import java.util.ArrayList;
+
 /**
  * Clase para invocar errores sintacticos
  * Donde tipo es la descripcion corta del error
@@ -30,18 +32,19 @@ public class SyntaxError extends Error{
     
     @Override
     public String getDescription(){
-            StringBuilder string = new StringBuilder();          
-            if(line<0 && column<0){
-                line = lastLine;
-                column = lastColumn;
-            }
-            string.append("Error sintactico ").append(description).append(", tipo: ").append(type).append(": ").append(tokenError).append(", linea: ").append(line).append(", column: ").append(column);
-            string.append("\t\n").append("Excpected Tokens: ").append(expectedTokens);
+            StringBuilder string = new StringBuilder();
+            string.append(type+": "+description+", POSIBLES SOLUCIONES: "+expectedTokens);
             return string.toString();
     }
 
     public void setExpectedTokens(String tokens){
         this.expectedTokens = tokens;
+        checkValues();
+    }
+    
+    //Funcion para cambiarle el nombre a los tokens
+    public void checkValues(){
+        expectedTokens = tokenParser.checkValue(expectedTokens);
     }
     
     public String getExpectedTokens(){

@@ -30,6 +30,13 @@ public class Type {
     private int max=0;
     private int ambit=0;
 
+    public boolean isArray(){
+        if(dimension.size()>0){
+            return true;
+        }
+        return false;
+    }
+    
     /**
      * Genera una instancia de tipo Type
      * El id es el identificador

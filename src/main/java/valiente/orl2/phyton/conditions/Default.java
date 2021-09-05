@@ -36,7 +36,7 @@ public class Default extends Instruction{
                     instructions.get(index).execute();
                 }
             }
-            TableOfValue.deleteAmbit(getIndentation()+1);
+            TableOfValue.deleteAmbit(getIndentation()+1, this);
         } catch (ValueException e) {
         }
     }

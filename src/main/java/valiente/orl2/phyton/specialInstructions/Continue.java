@@ -14,15 +14,19 @@ import valiente.orl2.phyton.instructions.Instruction;
  * @author camran1234
  */
 public class Continue extends Instruction{
+   
     
     public Continue(int indentation, int line, int column){
         super(indentation, line, column);
     }
     
-    public void execute() throws SemanticException{
-        if(this.lookForFatherExit()){
-            throw new LoopException("NobodyYouDidGreat!!!",true, getLine(), getColumn());
+
+    
+    public void execute() throws SemanticException{            
+        if(this.lookForFatherExit()){        
+            throw new LoopException("NobodyYouDidGreat!!!",true, getLine(), getColumn());            
         }
+        
     }
     
 }

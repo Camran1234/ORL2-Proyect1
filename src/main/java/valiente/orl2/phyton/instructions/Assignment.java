@@ -20,13 +20,31 @@ public class Assignment {
     /*Si aumenta o se iguala el valor*/
     // --, ++, +=, =
     String metodo="=";
+    Assignment assignment=null;
+    //Esto lo enviamos para asignar valores al arreglo
+    ArrayList<Integer> directionToAssign = new ArrayList();
     
     
     public Assignment(int line, int column){
         this.line = line;
         this.column = column;
     }
+    
+    public void setDirectionToAssign(ArrayList<Integer> direction){
+        this.directionToAssign = direction;
+        if(assignment!=null){
+            assignment.setDirectionToAssign(direction);
+        }
+    }
+    
+    public ArrayList<Integer> getDirectionToAssign(){
+        return this.directionToAssign;
+    }
         
+    public void setAssignment(Assignment assignment){
+        this.assignment = assignment;
+    }
+    
     /**
      *Retorna 0 para variables
      * Retorna 1 para arreglos
@@ -34,11 +52,11 @@ public class Assignment {
      * @return 
      */
     public int selectMethod(){
-        if(value!=null){
-            return 0;
-        }else if(getDimension()!=null){
+        if(getDimension()!=null || directionToAssign.size()>0){
             return 1;
-        }else{
+        } else if(value!=null){
+            return 0;
+        } else{
             return 2;
         }
     }
@@ -80,10 +98,25 @@ public class Assignment {
     }
 
     public Dimension getDimension(){
+        if(value==null){
+            return null;
+        }
         if(value.isArray()){
             return value.execute().getArray();
         } 
         return null;
+    }
+
+    ArrayList<Assignment> getAsignaciones() {
+        ArrayList<Assignment> lista = new ArrayList();
+        lista.add(this);
+        if(assignment!=null){
+            ArrayList<Assignment> aux = assignment.getAsignaciones();
+            for(int index=0; index<aux.size(); index++){
+                lista.add(aux.get(index));
+            }
+        }
+        return lista;
     }
     
     

@@ -5,9 +5,13 @@
  */
 package valiente.orl2.phyton.specialInstructions;
 
+import valiente.orl2.phyton.error.SemanticError;
+import valiente.orl2.phyton.error.ValueException;
 import valiente.orl2.phyton.instructions.Instruction;
+import valiente.orl2.phyton.table.TableOfValue;
 import valiente.orl2.phyton.values.Operation;
-
+import valiente.orl2.phyton.values.TypeParser;
+import valiente.orl2.phyton.values.Value;
 /**
  *
  * @author camran1234
@@ -24,6 +28,21 @@ public class Reproducir extends Instruction{
 
     public void execute(){
         /*empty*/
+    }
+    
+    @Override
+    public Value getValueSpecialFunction(){
+        Value valor = milisegundos.execute();
+        try {
+            valor = new TypeParser().tryParse(valor, "entero", getLine(), getColumn());
+            this.execute();
+            return valor;
+        } catch (Exception e) {
+            SemanticError error = new SemanticError("Tipos incompatibles", getLine(), getColumn);
+            error.setDescription(e.getMessage());
+            TableOfValue.semanticErrors.add(error);
+        }
+        return null;
     }
     
     public Operation getNota() {

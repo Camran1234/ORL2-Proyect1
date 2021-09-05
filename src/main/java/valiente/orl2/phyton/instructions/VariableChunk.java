@@ -19,6 +19,7 @@ public class VariableChunk extends Instruction{
     public VariableChunk(ArrayList<Variable> list, Assignment assignment){
         for(int index=0; index<list.size(); index++){
             list.get(index).setValue(assignment);
+            list.get(index).setDeclarado(false);
         }
         this.variables = list;
     }
@@ -34,6 +35,8 @@ public class VariableChunk extends Instruction{
     @Override
     public void execute() throws SemanticException{
         for(int index=0; index< variables.size(); index++){
+            variables.get(index).setFather(father);
+            variables.get(index).setIndentation(indentation);
             variables.get(index).execute();
         }
     }

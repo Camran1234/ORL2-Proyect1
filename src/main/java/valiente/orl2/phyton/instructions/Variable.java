@@ -43,31 +43,58 @@ public class Variable extends Instruction{
     @Override
     public void execute() throws SemanticException{
         try {
+            if(mode && !(this.lookForContainer() instanceof Pista)){
+                throw new SemanticException("No se puede volver publico una variable dentro de una funcion","Inicio ilegal de la expresion",getLine(), getColumn());
+            }
             //Si es una declaracion o no
             if(declarado){
                 //Generamos el tipo
                 ArrayList<Integer> dimensiones = new ArrayList();
-                for(int index=0; index<dimension.size(); index++){
-                    Value value = dimension.get(index).execute();
-                   if(value.getType().equalsIgnoreCase("entero")){
-                       dimensiones.add(Integer.parseInt(value.getValue()));
-                   }else{
-                       throw new ValueException("Las dimensiones de los arreglos solo pueden ser declaradas por numeros"
-                               + "","Valor no reconocido", getLine(), getColumn());
-                   }
+                if(array){
+                    for(int index=0; index<dimension.size(); index++){
+                        Value value = dimension.get(index).execute();
+                       if(value.getType().equalsIgnoreCase("entero")){
+                           dimensiones.add(Integer.parseInt(value.getValue()));
+                       }else{
+                           throw new ValueException("Las dimensiones de los arreglos solo pueden ser declaradas por numeros"
+                                   + "","Valor no reconocido", getLine(), getColumn());
+                       }
+                    }
                 }
+                
                 Type type = new Type(name, this.type, 0, new ArrayList<Parameter>(), lookForContainer(), dimensiones, getIndentation(), this);
                 //TableOfType.addType(type);
-                Symbol symbol = new Symbol(type, getIndentation(),mode);
+                Symbol symbol = new Symbol(type, getIndentation(),mode, line, column);
                 if(value!=null){
-                    symbol.setNewValue(value, declarado, getLine(), getColumn());
+                    ArrayList<Assignment> asignaciones = new ArrayList();
+                    asignaciones = value.getAsignaciones();
+                    for(int index=0; index<asignaciones.size(); index++){
+                        symbol.setNewValue(asignaciones.get(index), declarado, getLine(), getColumn());
+                    }
                 }
                 TableOfValue.addSymbol(symbol, getLine(), getColumn());
             }else{
-                //Reasignar un nuevo valor
-                Symbol symbol = TableOfValue.getSymbol(name, "variable");
-                //Actualizamos el valor desde aqui
-                symbol.setNewValue(value, false, getLine(), getColumn());
+                if(value!=null){
+                    ArrayList<Integer> dimensiones = new ArrayList();
+                     for(int index=0; index<dimension.size(); index++){
+                            Value value = dimension.get(index).execute();
+                           if(value.getType().equalsIgnoreCase("entero")){
+                               dimensiones.add(Integer.parseInt(value.getValue()));
+                           }else{
+                               throw new ValueException("Las dimensiones de los arreglos solo pueden ser declaradas por numeros"
+                                       + "","Valor no reconocido", getLine(), getColumn());
+                           }   
+                     }
+                    //Reasignar un nuevo valor
+                    this.value.setDirectionToAssign(dimensiones);
+                    Symbol symbol = TableOfValue.getSymbol(name, "variable");
+                    
+                    ArrayList<Assignment> asignaciones = new ArrayList();
+                    asignaciones = value.getAsignaciones();
+                    for(int index=0; index<asignaciones.size(); index++){
+                        symbol.setNewValue(asignaciones.get(index), false, getLine(), getColumn());
+                    }
+                }
             }
         } catch (ValueException e) {
             
@@ -86,11 +113,7 @@ public class Variable extends Instruction{
     public void setParameters(VariableIndicator indicator){
         this.mode = indicator.getGlobal();
         this.type = indicator.getType();
-        if(!indicator.getDimension().isEmpty()){
-            array=true;
-        }
-        this.dimension = indicator.getDimension();
-        this.declarado=true;
+        this.declarado= true;
     }
     
     public void setValue(Assignment value){
@@ -131,8 +154,14 @@ public class Variable extends Instruction{
 
     public void setDimension(ArrayList<Operation> dimension) {
         this.dimension = dimension;
+        if(dimension.size()>0){
+            this.array = true;
+        }
     }
 
+    public void setDeclarado(boolean declarado){
+        this.declarado=declarado;
+    }
     
     
 }

@@ -10,6 +10,7 @@ public class PhytonSym {
   /* terminals */
   public static final int GREATER_THAN = 50;
   public static final int INCREASE = 56;
+  public static final int SIR = 87;
   public static final int MI = 42;
   public static final int MENSAJE = 16;
   public static final int CLOSE_BRACKET = 65;
@@ -27,6 +28,7 @@ public class PhytonSym {
   public static final int NOR = 72;
   public static final int FA = 43;
   public static final int ORDENAR = 8;
+  public static final int MIR = 83;
   public static final int NULL_ = 52;
   public static final int VAR = 19;
   public static final int LA = 45;
@@ -59,6 +61,7 @@ public class PhytonSym {
   public static final int DIV = 61;
   public static final int ELSE = 29;
   public static final int DOR = 38;
+  public static final int LAR = 86;
   public static final int ARREGLO = 25;
   public static final int OPEN_PARENTHESIS = 66;
   public static final int EOF = 0;
@@ -78,6 +81,7 @@ public class PhytonSym {
   public static final int CONTINUE = 37;
   public static final int RER = 39;
   public static final int EXTIENDE = 5;
+  public static final int FAR = 84;
   public static final int COLON = 68;
   public static final int ESPERAR = 7;
   public static final int RETORNA = 80;
@@ -86,6 +90,7 @@ public class PhytonSym {
   public static final int CADENA = 24;
   public static final int STRING = 27;
   public static final int ASCENDENTE = 9;
+  public static final int SOLR = 85;
   public static final int AND = 71;
   public static final int DESCENDENTE = 10;
   public static final int CLOSE_PARENTHESIS = 67;
@@ -174,7 +179,12 @@ public class PhytonSym {
   "CLOSE_CURLY",
   "RETORNA",
   "TRUE",
-  "FALSE"
+  "FALSE",
+  "MIR",
+  "FAR",
+  "SOLR",
+  "LAR",
+  "SIR"
   };
 }
 

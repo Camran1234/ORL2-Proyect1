@@ -20,6 +20,7 @@ public class SemanticException extends Exception{
         super(description);
         SemanticError newError = new SemanticError(type, line, column);
         newError.setDescription(description);
+        this.newError = newError;
     }
     
     public SemanticException(String message, Operation returnOperation){

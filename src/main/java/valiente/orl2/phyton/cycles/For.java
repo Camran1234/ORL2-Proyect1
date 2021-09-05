@@ -8,6 +8,7 @@ package valiente.orl2.phyton.cycles;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import valiente.orl2.phyton.conditions.Condition;
 import valiente.orl2.phyton.error.LoopException;
 import valiente.orl2.phyton.instructions.Instruction;
@@ -36,6 +37,8 @@ public class For extends Instruction{
             //Ejecutamos la variable para que se asigne en la tabla de simbolos
             this.variable.setIndentation(this.getIndentation()+1);
             this.paso.setIndentation(this.getIndentation()+1);
+            this.variable.setFather(this);
+            this.paso.setFather(this);
             variable.execute();
             //Ejecutamos la condicion
             //Que nos da una operacion y la ejecutamos para obtener el valor
@@ -54,7 +57,7 @@ public class For extends Instruction{
                         }             
                     }
                     paso.execute();
-                    TableOfValue.deleteAmbit(getIndentation()+1);
+                    TableOfValue.deleteAmbitBut(getIndentation()+1, this, variable.getName());
                 } catch (LoopException e) {
                     if(!e.getMood()){
                         break;
@@ -63,6 +66,7 @@ public class For extends Instruction{
                     }
                 }
             }
+            TableOfValue.deleteAmbit(getIndentation()+1, this);
         } catch (ValueException e) {
         }
          

@@ -18,17 +18,14 @@ public class Direction {
     private Operation value;
     
     public Direction(Operation operation){
-        this.value = value;
+        this.value = operation;
     }
     
     /**
      * Agrega en forma de pila
      */
     public void pushDirection(Integer data){
-        ArrayList<Integer> aux = new ArrayList();
-        for(int index=direction.size()-1; index>=0; index--){
-            aux.add(direction.get(index));
-        }
+        ArrayList<Integer> aux = direction;
         aux.add(data);
         direction = aux;
     }
@@ -50,7 +47,11 @@ public class Direction {
     }
     
     public ArrayList<Integer> getDirection(){
-        return direction;
+        ArrayList<Integer> aux = new ArrayList();
+        for(Integer entero:direction){
+            aux.add(entero);
+        }
+        return aux;
     }
     
     public void setDirection(ArrayList<Integer> direction){

@@ -12,6 +12,9 @@ import valiente.orl2.phyton.table.Symbol;
 import valiente.orl2.phyton.error.SemanticError;
 import valiente.orl2.phyton.error.SemanticException;
 import valiente.orl2.phyton.error.ValueException;
+import valiente.orl2.phyton.specialInstructions.Continue;
+import valiente.orl2.phyton.specialInstructions.Exit;
+import valiente.orl2.phyton.specialInstructions.Return;
 import valiente.orl2.phyton.table.Parameter;
 import valiente.orl2.phyton.table.TableOfValue;
 import valiente.orl2.phyton.table.Type;
@@ -24,6 +27,7 @@ import valiente.orl2.phyton.values.Value;
  * @author camran1234
  */
 public class Function extends Instruction{
+    //Si es global
     private boolean mode;
     private Value name;
     private ArrayList<Parameter> parameters=new ArrayList();
@@ -45,13 +49,17 @@ public class Function extends Instruction{
         }
     }
     
+    public String getType(){
+        return type;
+    }
+    
     @Override
     public void execute()  throws SemanticException{
         try {
             for(int index=0; index<instructions.size(); index++){
                 instructions.get(index).execute();
             }
-            TableOfValue.deleteAmbit(this.indentation+1);
+            TableOfValue.deleteAmbit(this.indentation+1, this);
         } catch (SemanticException e) {
             if(e.isReturn()){
                 try {
@@ -60,6 +68,8 @@ public class Function extends Instruction{
                     this.value = value;
                 } catch (Exception ex) {
                 }
+            }else{
+                TableOfValue.semanticErrors.add(e.getError());
             }
         }
     }
@@ -69,22 +79,40 @@ public class Function extends Instruction{
             Type type = new Type(name.getValue(),this.type, parameters.size(), parameters, this.lookForContainer(), new ArrayList<Integer>(),
             this.getIndentation(), this);
             type.setFunction(true);
-            Symbol symbol = new Symbol(type, indentation,mode );
-            TableOfValue.addSymbol(symbol, line, column);
+            Symbol symbol = new Symbol(type, indentation,mode , line, column);
+                boolean flag=false;
+                for(int index=0; index<instructions.size(); index++){
+                    if(instructions.get(index) instanceof Return && index==instructions.size()-1){
+                        flag = true;
+                        
+                    }else if(instructions.get(index) instanceof Return && index!= instructions.size()-1){
+                        throw new Exception("Instrucciones despues de retorna");
+                    }else if(instructions.get(index) instanceof Continue){
+                        throw new Exception("Se encontro un continue y no esta dentro de un ciclo");
+                    }else if(instructions.get(index) instanceof Exit){
+                        throw new Exception("Se encontro un exit y no esta dentro de un ciclo o switch");
+                    }
+                    
+                }
+                if(flag==false && !this.type.equalsIgnoreCase("")){
+                    throw new Exception("Se esperaba un return al final");
+                } 
+                System.out.println("Agregado en Function");
+                TableOfValue.addSymbol(symbol, line, column);
+            
         } catch (Exception e) {
-            SemanticError error = new SemanticError("Funcion no declarada", getLine(), getColumn());
+            SemanticError error = new SemanticError("Funcion "+this.getName().getRawValue()+ " no declarada", getLine(), getColumn());
             error.setDescription(e.getMessage());
             TableOfValue.semanticErrors.add(error);
         }
     }
     
-    public void setValueToParameters(ArrayList<Operation> operation){
+    public void setValueToParameters(){
         for(int index=0; index<parameters.size(); index++){
-            parameters.get(index).setValue(operation.get(index));
             parameters.get(index).setFather(this);
             parameters.get(index).setIndentation(indentation+1);
             parameters.get(index).setLineColumn(line, column);
-            parameters.get(index).declarar();
+            parameters.get(index).setFunctionName(name.getRawValue());
         }
     }
     
@@ -93,6 +121,12 @@ public class Function extends Instruction{
      * @return 
      */
     public Value getValue() throws SemanticException{
+        for(int index=0; index<parameters.size(); index++){
+            parameters.get(index).declarar();
+        }
+        Pista pista = (Pista) this.lookForPista();
+        Symbol newSymbol = TableOfValue.getPistaSymbol(pista.getName(), "pista");
+        TableOfValue.setWorkingSymbol(newSymbol);
         this.execute();
         Value value = this.value;
         this.value = null;
@@ -125,17 +159,22 @@ public class Function extends Instruction{
     }
 
     public void setParameters(ArrayList<Operation> parameters) {
-        for(int index=0; index<parameters.size(); index++){
-            Value value = parameters.get(index).execute();
-            Parameter parameter = new Parameter(value);
-            this.parameters.add(parameter);
+        try {
+            for(int index=0; index<parameters.size(); index++){
+                Value value = parameters.get(index).execute();
+                Parameter parameter = new Parameter(value);
+                this.parameters.add(parameter);
+            }
+        } catch (Exception e) {
         }
+        
     }
 
     public void setParamsIndicator(VariableIndicator indicator){
         this.type = indicator.getType();
         this.dimension = indicator.getSize();
         this.mode = indicator.getGlobal();
+        setValueToParameters();
     }
     
     

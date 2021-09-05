@@ -65,6 +65,8 @@ public class Comparation {
             }
             if(variable.getValue()==null){
                 result = new Value("boolean","true",line, column);
+            }else{
+                result = new Value("boolean","false",line, column);
             }
             return new Operation(result, line, column);
         }else if(value!=null){

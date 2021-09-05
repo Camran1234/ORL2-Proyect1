@@ -13,8 +13,11 @@ import valiente.orl2.phyton.instructions.Assignment;
 import valiente.orl2.phyton.instructions.Instruction;
 import valiente.orl2.phyton.instructions.Variable;
 import valiente.orl2.phyton.values.Operation;
+import valiente.orl2.phyton.values.TypeParser;
 import valiente.orl2.phyton.values.Value;
-
+import valiente.orl2.phyton.error.SemanticError;
+import valiente.orl2.phyton.error.SemanticException;
+import valiente.orl2.phyton.instructions.Assignment;
 /**
  *
  * @author camran1234
@@ -23,9 +26,11 @@ public class Parameter {
     private String type="";
     private boolean isArray=false;
     private String id="";
-    private Operation value;
+    private Value value;
     private Instruction father;
+    private String functionName="";
     private ArrayList<Operation> dimension;
+    private int dimensiones=0;
     private int indentation=0;
     private int line, column=0;
     private Variable variable;
@@ -36,13 +41,21 @@ public class Parameter {
         this.id = id;
     }
     
+    
     public Parameter(Value value){
         this.type = value.getRawType();
         this.id = value.getRawValue();
-        if(isArray){
-            ArrayList<Operation> operations = value.getDimensions();
-            this.dimension = operations;
+        if(value.isParameter()){
+            try {
+                dimensiones = Integer.parseInt(value.getValue());
+            } catch (ValueException ex) {
+                Logger.getLogger(Parameter.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+    }
+    
+    public void setFunctionName(String name){
+        this.functionName = name;
     }
     
     public boolean compareType(String type){
@@ -76,30 +89,40 @@ public class Parameter {
     public void setIsArray(boolean isArray) {
         this.isArray = isArray;
     }
-
-    public Operation getValue() {
-        return value;
-    }
-
-    public void setValue(Operation value) {
-        this.value = value;
-    }
     
     public void declarar(){
         try {
-            Variable variable = new Variable(line, column);
-            variable.setName(id);
-            variable.setType(type);
-            variable.setDimension(dimension);
-            variable.setValue(assignment);
-            this.variable = variable;
-            variable.declarar();
-        } catch (Exception e) {
+            Value value = new TypeParser().tryParse(assignment.getValueFromOperation(), type, line, column);
+            
+            ArrayList<Operation> operaciones = new ArrayList();
+            
+            
+            
+                Variable variable = new Variable(line, column);
+                variable.setName(id);
+                variable.setType(type);
+                if(dimension!=null){
+                    variable.setDimension(dimension);
+                }
+                Assignment assignment = new Assignment(line, column);
+                assignment.setValue(new Operation(value, line, column));
+                variable.setValue(assignment);
+                variable.setDeclarado(true);
+                variable.setFather(father);
+                this.variable = variable;
+                variable.declarar();
+            
+            
+            
+        } catch (Exception ex) {
+            SemanticError error = new SemanticError("Error de asignacion", line, column);
+            error.setDescription(ex.getMessage());
+            TableOfValue.semanticErrors.add(error);
         }
     }
     
     public void setAssignment(Assignment asignacion){
-        this.assignment = assignment;
+        this.assignment = asignacion;
     }
 
     public Instruction getFather() {

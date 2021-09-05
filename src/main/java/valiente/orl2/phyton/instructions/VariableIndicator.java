@@ -16,13 +16,13 @@ import valiente.orl2.phyton.values.Value;
 public class VariableIndicator {
     boolean global=false;
     String type="";
-    ArrayList<Operation> dimension = new ArrayList();
+    //ArrayList<Operation> dimension = new ArrayList(); Depricated
     int dimensions=0;
     
     public VariableIndicator(boolean global, String type, ArrayList<Operation> dimension) {
         this.global = global;
         this.type = type;
-        this.dimension = dimension;
+       // this.dimension = dimension;
     }
 
     public void setSize(Integer enter){
@@ -49,13 +49,13 @@ public class VariableIndicator {
         this.type = type;
     }
 
-    public ArrayList<Operation> getDimension() {
-        return dimension;
-    }
-
-    public void setDimension(ArrayList<Operation> dimension) {
-        this.dimension = dimension;
-    }
+//    public ArrayList<Operation> getDimension() {
+//        return dimension;
+//    }
+//
+//    public void setDimension(ArrayList<Operation> dimension) {
+//        this.dimension = dimension;
+//    }
     
     
     

@@ -58,7 +58,7 @@ public class Mod {
                     return new Value("entero",Integer.toString(result), line, column);
             }else if(typeR.equalsIgnoreCase("caracter")){
                 int leftV = Integer.parseInt(left.getValue());
-                char rightV = left.getValue().charAt(0);
+                char rightV = right.getValue().charAt(0);
                 if(rightV==0){
                     SemanticError newError = new SemanticError("Modulo invalido",line, column);
                     newError.setDescription("No se puede aplicar modulo entre cero");

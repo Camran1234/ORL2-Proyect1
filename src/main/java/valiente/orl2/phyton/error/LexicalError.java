@@ -19,8 +19,7 @@ public class LexicalError extends Error{
     @Override
     public String getDescription(){
             StringBuilder string = new StringBuilder();
-            string.append("Erorr en el lexema: ").append(lexema);
-            string.append(", en la linea: ").append(line).append(", columna: ").append(column);
+            string.append(description).append(": ").append(lexema);
             return string.toString();
     }
 

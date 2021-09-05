@@ -16,8 +16,12 @@ import valiente.orl2.phyton.error.SyntaxError;
 import valiente.orl2.phyton.conditions.Case;
 import valiente.orl2.phyton.conditions.Default;
 import valiente.orl2.phyton.conditions.Switch;
+import valiente.orl2.phyton.error.SemanticError;
 import valiente.orl2.phyton.error.SemanticException;
+import valiente.orl2.phyton.error.ValueException;
 import valiente.orl2.phyton.specialInstructions.Exit;
+import valiente.orl2.phyton.table.TableOfValue;
+import valiente.orl2.phyton.values.Value;
 
 
 /**
@@ -25,6 +29,7 @@ import valiente.orl2.phyton.specialInstructions.Exit;
  * @author camran1234
  */
 public class Instruction {
+    public static ArrayList<SemanticError> semanticError = TableOfValue.semanticErrors;
     int indentation=0;
     int line, column=0;
     public ArrayList<Instruction> instructions = new ArrayList();
@@ -273,7 +278,7 @@ public class Instruction {
      * Busca la funcion, principal o pista que contiene esta instruccion
      * @return  
      */
-    protected Instruction lookForContainer() {
+    public Instruction lookForContainer() {
         Instruction instruction=null;
         if(this instanceof Pista || this instanceof Function || this instanceof Principal){
             return this;
@@ -313,8 +318,22 @@ public class Instruction {
         }
         return instruction;
     }
+    
+    public Instruction lookForFunction(){
+        Instruction instruction = null;
+        if(this instanceof Function){
+            return this;
+        }else{
+            instruction = father.lookForFunction();
+        }
+        return instruction;
+    }
 
     public void declarar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Value getValueSpecialFunction() throws ValueException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

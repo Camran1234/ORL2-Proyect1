@@ -5,12 +5,24 @@
  */
 package valiente.orl2.proyecto1;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
+import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 import javax.swing.text.Utilities;
 import valiente.orl2.UI.TextLineNumber;
 import valiente.orl2.phyton.error.LexicalError;
@@ -24,17 +36,78 @@ import valiente.orl2.UI.CaretControl;
 public class PhytonFrame extends javax.swing.JFrame {
     private JTextPane textPaneReferenced;
     public static JTextArea areaTexto;
-    public static JPanel errorArea;
-        
+    public JPanel errorArea;
+    String[] headers = {"No.", "TIPO","Description", "LINEA", "COLUMNA"};    
+    DefaultTableModel model = new DefaultTableModel(null, headers);
+    private JTable table = new JTable(model);
+    private JScrollPane scrollPane = new JScrollPane(table);
+     private static DefaultTableModel tableModel;
+     private static JTable newTable;
       /**
      * Creates new form PhytonFrame
      */
     public PhytonFrame() {
         initComponents();
+        newTable = table;
+        
         this.areaTexto = jTextArea1;
         this.errorArea = panelErrores;
+        tableModel = model;
+        newTable.setRowSelectionAllowed(false);
     }
 
+    public static void resetTable(){
+        int rows = tableModel.getRowCount();
+        for(int index=0; index<rows; index++){
+            tableModel.removeRow(0);
+        }
+    }
+    
+    public static void setTable(String[][] content){
+        //jTable1.removeRowSelectionInterval(0, jTable1.getRowCount());
+        
+        
+        for(int index=0; index<content.length; index++){
+            String[] aux = content[index];
+            Vector<Object> data = new Vector<Object>();
+            data.add(aux[0]);
+            data.add(aux[1]);
+            data.add(aux[2]);
+            data.add(aux[3]);
+            data.add(aux[4]);
+            tableModel.addRow(data);
+            
+        }
+        //Adjusting height
+        for (int row = 0; row < newTable.getRowCount(); row++){
+            int rowHeight = newTable.getRowHeight();
+            
+            for (int column = 0; column < newTable.getColumnCount(); column++){
+                Component comp = newTable.prepareRenderer(newTable.getCellRenderer(row, column), row, column);
+                rowHeight = Math.max(rowHeight, comp.getPreferredSize().height);
+            }
+            if(rowHeight <30){
+                rowHeight = 40;
+            }
+            System.out.println(rowHeight );
+            newTable.setRowHeight(row, rowHeight);
+        }
+        //Adjusting width
+        final TableColumnModel columnModel = newTable.getColumnModel();
+    for (int column = 0; column < newTable.getColumnCount(); column++) {
+        int width = 15; // Min width
+        for (int row = 0; row < newTable.getRowCount(); row++) {
+            TableCellRenderer renderer = newTable.getCellRenderer(row, column);
+            Component comp = newTable.prepareRenderer(renderer, row, column);
+            width = Math.max(comp.getPreferredSize().width +1 , width);
+        }
+        if(width > 300)
+            width=300;
+        columnModel.getColumn(column).setPreferredWidth(width);
+    }
+        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -63,7 +136,7 @@ public class PhytonFrame extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new java.awt.GridLayout());
 
-        jPanel2.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel2.setBackground(new java.awt.Color(102, 102, 102));
         jPanel2.setPreferredSize(new java.awt.Dimension(750, 400));
 
         textArea.setBackground(new java.awt.Color(255, 255, 255));
@@ -82,35 +155,25 @@ public class PhytonFrame extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(204, 204, 204));
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(102, 102, 102), new java.awt.Color(0, 0, 0)));
-        jPanel3.setLayout(new java.awt.GridLayout(2, 1));
+        jPanel3.setLayout(new java.awt.GridLayout(2, 0));
 
         jScrollPane2.setToolTipText("LOG");
 
+        jTextArea1.setBackground(new java.awt.Color(255, 255, 255));
         jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Source Code Pro Light", 0, 14)); // NOI18N
+        jTextArea1.setFont(new java.awt.Font("Source Code Pro Light", 1, 14)); // NOI18N
+        jTextArea1.setForeground(new java.awt.Color(0, 0, 0));
         jTextArea1.setRows(5);
         jTextArea1.setEnabled(false);
         jScrollPane2.setViewportView(jTextArea1);
 
         jPanel3.add(jScrollPane2);
 
-        panelErrores.setBackground(new java.awt.Color(204, 204, 204));
+        panelErrores.setBackground(new java.awt.Color(255, 255, 255));
         panelErrores.setForeground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout panelErroresLayout = new javax.swing.GroupLayout(panelErrores);
-        panelErrores.setLayout(panelErroresLayout);
-        panelErroresLayout.setHorizontalGroup(
-            panelErroresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 420, Short.MAX_VALUE)
-        );
-        panelErroresLayout.setVerticalGroup(
-            panelErroresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 278, Short.MAX_VALUE)
-        );
-
-        panelErrores.setVisible(false);
-
+        panelErrores.setLayout(new java.awt.BorderLayout(0, 1));
         jPanel3.add(panelErrores);
+        panelErrores.add(scrollPane);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -164,7 +227,7 @@ public class PhytonFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1070, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1103, Short.MAX_VALUE)
                     .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -174,7 +237,7 @@ public class PhytonFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 924, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -183,9 +246,13 @@ public class PhytonFrame extends javax.swing.JFrame {
 
         private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
                 try {
-                        
+                        int rows = tableModel.getRowCount();
+                        for(int index=0; index<rows; index++){
+                            tableModel.removeRow(0);
+                        }
+                        this.jTextArea1.setText("");
                         String text = textPaneReferenced.getText();
-                        text = text + "\n\n";
+                        text = text + "\n\n\n\n";
                         int totalCharacters = textPaneReferenced.getText().length(); 
                         int lineCount = (totalCharacters == 0) ? 1 : 0;
                         int offset = totalCharacters; 
@@ -194,7 +261,7 @@ public class PhytonFrame extends javax.swing.JFrame {
                                 lineCount++;
                         }
                         
-                        SyntaxError.lastLine =lineCount;
+                        SyntaxError.lastLine =lineCount-4;
                         
                         if(text.equalsIgnoreCase("")){
                                 throw new Exception("Texto vacio");

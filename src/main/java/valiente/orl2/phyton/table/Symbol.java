@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import valiente.orl2.phyton.error.SemanticError;
 import valiente.orl2.phyton.instructions.Assignment;
 import valiente.orl2.phyton.instructions.Dimension;
+import valiente.orl2.phyton.instructions.Instruction;
 import valiente.orl2.phyton.instructions.Pista;
 import valiente.orl2.phyton.values.Operation;
 import valiente.orl2.phyton.values.Value;
@@ -16,6 +17,7 @@ import valiente.orl2.phyton.values.Value;
  * @author camran1234
  */
 public class Symbol {
+    private TableOfValue tabla = new TableOfValue();
     private boolean keep=false;
     private String id="";
     private Type referencedType = null;
@@ -30,15 +32,35 @@ public class Symbol {
      * Declarar simbolo
      * @param type 
      */
-    public Symbol(Type type, int indentation, boolean keep){
+    public Symbol(Type type, int indentation, boolean keep, int line, int column){
+        
         this.ambit = indentation;
         this.referencedType = type;
+        this.id = referencedType.getId();
+        parameters = referencedType.getParameters();
+        numberParameters = referencedType.getNumberParameters();
         this.keep = keep;
+        if(type.isArray()){
+            ArrayList<Integer> dimension = type.getDimension();
+            value = new Data(type.getBase(), dimension, line, column);
+            
+        }else{
+            value = new Data(type.getBase(), "", line, column);
+        }
+        
+        
+    }
+    
+    public Data getData(){
+        return value;
     }
     
     public boolean comparePista(String pista){
-        if(pista.equalsIgnoreCase(referencedType.getId())
-                && referencedType.getValue() instanceof Pista){
+        if(referencedType.getValue() instanceof Pista || !isGlobal()){
+            return false;
+        }
+        Instruction instruction = referencedType.getValue().lookForPista();
+        if(((Pista)instruction).getName().equals(pista)){
             return true;
         }
         return false;
@@ -46,23 +68,23 @@ public class Symbol {
     
     
     public void setNewValue(Assignment assignment, boolean declarado, int line, int column){
-        int choice = assignment.selectMethod();
-        //Para asignar el valor de los arreglos
-        if(choice ==1){
-            if(declarado){
-                value.addMultipleValuesFromDimension(assignment.getDimension(), line, column);
-            }else{
-                SemanticError error = new SemanticError("Problema en asignacion", line, column);
-                error.setDescription("Solo se pueden inicializar arreglos que estan siendo declarados");
-                TableOfValue.semanticErrors.add(error);
+            int choice = assignment.selectMethod();
+            //Para asignar el valor de los arreglos
+            if(choice ==1){
+                Value valor = assignment.getValueFromOperation();    
+                if(declarado){                    
+                    value.addMultipleValuesFromDimension(assignment.getDimension(), line, column);
+                }else{
+                    value.setArrayValue(valor, assignment.getDirectionToAssign(), assignment.getMetodo(), line, column);
+                }
+
+            }else if(choice==0){
+                //Para asignar el valor de los variables
+                Value valor = assignment.getValueFromOperation();
+                value.setValue(id, valor, assignment.getMetodo(), line, column);
+            }else if(choice==2){
+                value.setValue(id, null,assignment.getMetodo(), line, column);
             }
-            
-        }else if(choice==0){
-            //Para asignar el valor de los variables
-            Value valor = assignment.getValueFromOperation();
-            value.setValue(id, valor, assignment.getMetodo(), ambit, ambit);
-        }
-        
     }
     
     public Boolean isGlobal(){
@@ -75,6 +97,18 @@ public class Symbol {
     
     public String getValueArray(ArrayList<Integer> dimension, int line, int column){
         return value.getArrayValue(dimension, line, column);
+    }
+    
+    /**
+     * Returns the size of the array
+     * @return 
+     */
+    public int getSizeArray(){
+        int size=0;
+        Data data = this.value;
+        String[] string = data.getFirstRowLength();
+        size = string.length;
+        return size;
     }
     
     /**

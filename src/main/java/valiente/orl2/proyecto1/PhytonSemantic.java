@@ -7,7 +7,9 @@ package valiente.orl2.proyecto1;
 import java.util.ArrayList;
 import valiente.orl2.phyton.error.*;
 import valiente.orl2.phyton.instructions.Instruction;
+import valiente.orl2.phyton.instructions.Pista;
 import valiente.orl2.phyton.table.TableOfValue;
+import valiente.orl2.UI.TableGenerator;
 /**
  * Clase encargada de manejar la semantica del programa
  * Se requiere de establecer las listas de errores sintacticos y lexicos
@@ -15,33 +17,49 @@ import valiente.orl2.phyton.table.TableOfValue;
  * @author camran1234
  */
 public class PhytonSemantic {
-    ArrayList<SemanticError> semanticErrors = TableOfValue.semanticErrors;
-    ArrayList<SyntaxError> syntaxErrors = TableOfValue.syntaxErrors;
-    ArrayList<LexicalError> lexicalErrors = TableOfValue.lexicalErrors;
-    boolean accesToSemantic=false;
+    //Probably the pistas
+    ArrayList<Instruction> pistas = new ArrayList();
     
-    
-    public PhytonSemantic(){
-        if(syntaxErrors.size() == 0 && lexicalErrors.size() == 0){
-            accesToSemantic=true;
-        }
-    }
+    public PhytonSemantic(){}
     
     public void execute(){
-        //Agregar de primero a la tabla de simbolos la pista que tiene el metodo principal
-    }
-    
-    public boolean setSemantic(ArrayList<Instruction> instruction) throws SemanticException{
-        if(accesToSemantic){
-            //Operate instructions
-            for(int index=0; index<instruction.size(); index++){
-                execute();
+        //declaramos primero
+        try {                    
+            for(int index=0; index<pistas.size(); index++){
+                ((Pista)pistas.get(index)).declarar();
             }
-            if(semanticErrors.size() !=0){
-                return false;
+        } catch (Exception e) {
+            SemanticError error = new SemanticError("ERROR FATAL", 0,0);
+            error.setDescription(e.getMessage());
+            TableOfValue.semanticErrors.add(error);
+        }
+        TableOfValue value = new TableOfValue();
+        if(TableOfValue.isRunable()){
+            int workingIndex=0;
+            try {
+                for(int index=0; index<pistas.size(); index++){
+                    workingIndex=index;
+                    ((Pista)pistas.get(index)).execute();
+                }
+            } catch (Exception e) {
+                SemanticError error = new SemanticError("ALERTA", pistas.get(workingIndex).getLine(),pistas.get(workingIndex).getColumn());
+                error.setDescription(e.getMessage());
+                TableOfValue.semanticErrors.add(error);
             }
         }
-        return false;
+        //Volvemos a comprobar
+        if(!TableOfValue.isRunable()){
+            TableGenerator generator = new TableGenerator();
+            generator.generarTabla();
+            
+        }else{
+            //agregar las pistas o algo asi
+        }
+        
+    }
+    
+    public void setSemantic(ArrayList<Instruction> instruction) {
+        this.pistas = instruction;
     }
     
     

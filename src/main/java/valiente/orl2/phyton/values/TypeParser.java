@@ -96,7 +96,7 @@ public class TypeParser {
         String data = value.getValue();
         if(type.equalsIgnoreCase("doble")){
             if(typeToParse.equalsIgnoreCase("doble")){
-                newValue = value;
+                newValue = new Value(type, data, line, column);
             }else if(typeToParse.equalsIgnoreCase("entero")){
                 throw new Exception("No se pudo convertir un doble a entero");
             }else if(typeToParse.equalsIgnoreCase("caracter")){
@@ -111,7 +111,7 @@ public class TypeParser {
                 double x = Double.parseDouble(data);
                 newValue = new Value("doble", Double.toString(x), line, column);
             }else if(typeToParse.equalsIgnoreCase("entero")){
-                newValue = value;
+                newValue = new Value(type, data, line, column);
             }else if(typeToParse.equalsIgnoreCase("caracter")){
                 throw new Exception("No se pudo convertir un entero a caracter");
             }else if(typeToParse.equalsIgnoreCase("boolean")){
@@ -127,7 +127,7 @@ public class TypeParser {
             }else if(typeToParse.equalsIgnoreCase("entero")){
                 newValue = new Value("entero", Integer.toString(caracter), line, column);
             }else if(typeToParse.equalsIgnoreCase("caracter")){
-                newValue = value;
+                newValue = new Value(type, data, line, column);
             }else if(typeToParse.equalsIgnoreCase("boolean")){
                 throw new Exception("No se pudo convertir un caracter a boolean");
             }else if(typeToParse.equalsIgnoreCase("cadena")){
@@ -154,7 +154,7 @@ public class TypeParser {
                 }
                 newValue = new Value("caracter", (char)(x)+"", line, column);
             }else if(typeToParse.equalsIgnoreCase("boolean")){
-                newValue = value;
+                newValue = new Value(type, data, line, column);
             }else if(typeToParse.equalsIgnoreCase("cadena")){
                 throw new Exception("No se pudo convertir un boolean a cadena");
             }
@@ -168,11 +168,76 @@ public class TypeParser {
             }else if(typeToParse.equalsIgnoreCase("boolean")){
                 throw new Exception("No se pudo convertir una cadena a boolean");
             }else if(typeToParse.equalsIgnoreCase("cadena")){
-                newValue = value;
+                newValue = new Value(type, data, line, column);
             }
         }
         
         return newValue;
+    }
+    
+    public void checkAssignation(String type, String typeToParse, int line, int column) throws Exception{
+        if(typeToParse.equalsIgnoreCase("doble")){
+            if(type.equalsIgnoreCase("doble")){
+                
+            }else if(type.equalsIgnoreCase("entero")){
+                
+            }else if(type.equalsIgnoreCase("caracter")){
+                throw new Exception("No se pudo asignar un caracter a un doble");
+            }else if(type.equalsIgnoreCase("boolean")){
+                throw new Exception("No se pudo asignar un boolean a un doble");
+            }else if(type.equalsIgnoreCase("cadena")){
+                throw new Exception("No se pudo asignar una cadena a una doble");
+            }
+        }else if(typeToParse.equalsIgnoreCase("entero")){
+            if(type.equalsIgnoreCase("doble")){
+                
+            }else if(type.equalsIgnoreCase("entero")){
+                
+            }else if(type.equalsIgnoreCase("caracter")){
+                
+            }else if(type.equalsIgnoreCase("boolean")){
+                
+            }else if(type.equalsIgnoreCase("cadena")){
+                throw new Exception("No se pudo asignar una cadena a un doble");
+            }
+        }else if(typeToParse.equalsIgnoreCase("caracter")){
+            if(type.equalsIgnoreCase("doble")){
+                throw new Exception("No se pudo asignar un doble a un caracter");
+            }else if(type.equalsIgnoreCase("entero")){
+                
+            }else if(type.equalsIgnoreCase("caracter")){
+                
+            }else if(type.equalsIgnoreCase("boolean")){
+                throw new Exception("No se pudo asignar un boolean a un caracter");
+            }else if(type.equalsIgnoreCase("cadena")){
+                throw new Exception("No se pudo asignar una cadena a un caracter");
+            }
+        }else if(typeToParse.equalsIgnoreCase("boolean")){
+            if(type.equalsIgnoreCase("doble")){
+                throw new Exception("No se pudo asignar un doble a un boolean");
+            }else if(type.equalsIgnoreCase("entero")){
+                throw new Exception("No se pudo asignar un entero a un boolean");
+            }else if(type.equalsIgnoreCase("caracter")){
+                throw new Exception("No se pudo asignar un caracter a un boolean");
+            }else if(type.equalsIgnoreCase("boolean")){
+                
+            }else if(type.equalsIgnoreCase("cadena")){
+                throw new Exception("No se pudo asignar una cadena a un boolean");
+            }
+        }else if(typeToParse.equalsIgnoreCase("cadena")){
+            if(type.equalsIgnoreCase("doble")){
+                throw new Exception("No se pudo asignar un doble a una cadena");
+            }else if(type.equalsIgnoreCase("entero")){
+                throw new Exception("No se pudo asignar un entero a una cadena");
+            }else if(type.equalsIgnoreCase("caracter")){
+                throw new Exception("No se pudo asignar un caracter a una cadena");
+            }else if(type.equalsIgnoreCase("boolean")){
+                throw new Exception("No se pudo asignar un boolean a una cadena");
+            }else if(type.equalsIgnoreCase("cadena")){
+                
+            }
+        }
+        
     }
     
     public Value tryParse(Value value, String typeToParse, int line, int column) throws Exception{
@@ -181,7 +246,7 @@ public class TypeParser {
         String data = value.getValue();
         if(typeToParse.equalsIgnoreCase("doble")){
             if(type.equalsIgnoreCase("doble")){
-                newValue = value;
+                newValue = new Value(type, data, line, column);
             }else if(type.equalsIgnoreCase("entero")){
                 newValue = new Value("doble", Integer.toString((int) Double.parseDouble(data)), line, column);
             }else if(type.equalsIgnoreCase("caracter")){
@@ -196,7 +261,7 @@ public class TypeParser {
                 double x = Double.parseDouble(data);
                 newValue = new Value("entero", Integer.toString((int)x), line, column);
             }else if(type.equalsIgnoreCase("entero")){
-                newValue = value;
+                newValue = new Value(type, data, line, column);
             }else if(type.equalsIgnoreCase("caracter")){
                 char x = data.charAt(0);
                 newValue = new Value("entero", Integer.toString((int)x), line, column);
@@ -217,7 +282,7 @@ public class TypeParser {
                 char y = (char)x;
                 newValue = new Value("caracter", y+"", line, column);
             }else if(type.equalsIgnoreCase("caracter")){
-                newValue = value;
+                newValue = new Value(type, data, line, column);
             }else if(type.equalsIgnoreCase("boolean")){
                 throw new Exception("No se pudo asignar un boolean a un caracter");
             }else if(type.equalsIgnoreCase("cadena")){
@@ -231,7 +296,7 @@ public class TypeParser {
             }else if(type.equalsIgnoreCase("caracter")){
                 throw new Exception("No se pudo asignar un caracter a un boolean");
             }else if(type.equalsIgnoreCase("boolean")){
-                newValue = value;
+                newValue = new Value(type, data, line, column);
             }else if(type.equalsIgnoreCase("cadena")){
                 throw new Exception("No se pudo asignar una cadena a un boolean");
             }
@@ -245,7 +310,7 @@ public class TypeParser {
             }else if(type.equalsIgnoreCase("boolean")){
                 throw new Exception("No se pudo asignar un boolean a una cadena");
             }else if(type.equalsIgnoreCase("cadena")){
-                newValue = value;
+                newValue = new Value(type, data, line, column);
             }
         }
         

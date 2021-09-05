@@ -21,6 +21,12 @@ public class SemanticError extends Error{
         return "";
     }
 
+    public String getDescription(){
+        StringBuilder string = new StringBuilder();
+        string.append(type).append(": ").append(description);
+        return string.toString();
+    }
+    
     public String getSolution() {
         return solution;
     }
