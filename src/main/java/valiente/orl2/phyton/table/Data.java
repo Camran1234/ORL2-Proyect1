@@ -178,14 +178,16 @@ public class Data {
     public void setValue(String name, Value value, String metodo, int line, int column){
         Symbol symbol = null;
         boolean theRightValue=false;
+        if(value!=null){
+            if(value.getRawType().equalsIgnoreCase("variable")){
+                symbol = TableOfValue.getSymbol(value.getRawValue(), "variable");
+                theRightValue = symbol.getData().isArray;
+            }
+            if(value.getDimensions().size()>0){
+                theRightValue=false;
+            }
+        }
         
-        if(value.getRawType().equalsIgnoreCase("variable")){
-            symbol = TableOfValue.getSymbol(value.getRawValue(), "variable");
-            theRightValue = symbol.getData().isArray;
-        }
-        if(value.getDimensions().size()>0){
-            theRightValue=false;
-        }
         if(isArray && !theRightValue){
             SemanticError error = new SemanticError("Arreglo requerido", line, column);
             error.setDescription("Se encontro una variable de tipo "+type);

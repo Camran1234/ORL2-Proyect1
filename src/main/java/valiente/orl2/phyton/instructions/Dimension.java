@@ -165,7 +165,7 @@ public class Dimension {
                 for(int indexAux=0; indexAux<aux.size(); indexAux++){
                         Direction direction = aux.get(indexAux);
                         //No le agregamos la direccion si este es el ultimo de la pila
-                        if(!isLast){
+                        if(dimensions.size()>1){
                             direction.pushDirection(index);
                         }
                         direcciones.add(direction);
