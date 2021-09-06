@@ -73,9 +73,16 @@ public class Pista extends Instruction{
             //Agregamos el simbolo
             TableOfValue.setWorkingSymbol(symbol);
             workingSymbol = symbol;
+            int numberPrincipal=0;
             for(int index=0; index<instructions.size(); index++){
                 if(instructions.get(index) instanceof Function || instructions.get(index) instanceof Principal || 
                         instructions.get(index) instanceof Variable){
+                    if(instructions.get(index) instanceof Principal){
+                        numberPrincipal++;
+                        if(numberPrincipal>1){
+                            throw new Exception("Solo puede existir un metodo principal por cada pista");
+                        }
+                    }
                     instructions.get(index).declarar();
                 }
             }

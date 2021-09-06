@@ -17,13 +17,12 @@ import valiente.orl2.phyton.error.ValueException;
 public class Test {
     
     public static void main (String args[]){
-        String texto = "a,2,3,4";
-        String[] array = texto.split(",");
-        
-        
-        for(String text:array){
-            System.out.println("'"+text+"'");
+        char a = 'a';
+        int b = 97;
+        if(a == b){
+            System.out.println("YES");
         }
+        System.out.println(((double)a/b)+" =" +a+", "+b);
     }
     
     public static void xD(){

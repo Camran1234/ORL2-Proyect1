@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import valiente.orl2.phyton.error.SemanticError;
+import valiente.orl2.phyton.table.Character;
 /**
  *
  * @author camran1234
@@ -120,12 +121,13 @@ public class TypeParser {
                 throw new Exception("No se pudo convertir un entero a cadena");
             }
         }else if(type.equalsIgnoreCase("caracter")){
-            int caracter = Integer.parseInt(data);
+            char aux = Character.transform(data);
+            int caracter = (int)aux;
             if(typeToParse.equalsIgnoreCase("doble")){
                 double x = (double)caracter;
                 newValue = new Value("doble",Double.toString(x), line, column);
             }else if(typeToParse.equalsIgnoreCase("entero")){
-                newValue = new Value("entero", Integer.toString(caracter), line, column);
+                newValue = new Value("entero", Integer.toString((char)caracter), line, column);
             }else if(typeToParse.equalsIgnoreCase("caracter")){
                 newValue = new Value(type, data, line, column);
             }else if(typeToParse.equalsIgnoreCase("boolean")){
@@ -263,7 +265,7 @@ public class TypeParser {
             }else if(type.equalsIgnoreCase("entero")){
                 newValue = new Value(type, data, line, column);
             }else if(type.equalsIgnoreCase("caracter")){
-                char x = data.charAt(0);
+                char x = Character.transform(data);
                 newValue = new Value("entero", Integer.toString((int)x), line, column);
             }else if(type.equalsIgnoreCase("boolean")){
                 boolean x = Boolean.parseBoolean(data);
@@ -278,8 +280,7 @@ public class TypeParser {
             if(type.equalsIgnoreCase("doble")){
                 throw new Exception("No se pudo asignar un doble a un caracter");
             }else if(type.equalsIgnoreCase("entero")){
-                int x = Integer.parseInt(data);
-                char y = (char)x;
+                char y = Character.transform(data);
                 newValue = new Value("caracter", y+"", line, column);
             }else if(type.equalsIgnoreCase("caracter")){
                 newValue = new Value(type, data, line, column);

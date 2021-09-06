@@ -6,6 +6,7 @@
 package valiente.orl2.phyton.instructions;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import valiente.orl2.phyton.conditions.Else;
 import valiente.orl2.phyton.conditions.ElseIf;
 import valiente.orl2.phyton.conditions.If;
@@ -82,6 +83,49 @@ public class Instruction {
             if(instruction instanceof If || instruction instanceof While || instruction instanceof DoWhile
                     || instruction instanceof For || instruction instanceof Switch || instruction instanceof Default
                     || instruction instanceof Case){
+                if(instruction instanceof Case){
+                     if(this instanceof Switch){
+                            Switch newSwitch = (Switch) this;
+                            newSwitch.addCase((Case) instruction);
+                        }else if(this instanceof Case){
+                            Switch newSwitch = (Switch) this.getFather();
+                            newSwitch.addCase((Case) instruction);
+                        }else{
+                            SyntaxError newError = new SyntaxError(instruction.getLine(), instruction.getColumn());
+                            newError.setType("Inicio ilegal de la expresion");
+                            newError.setDescription("Se esperaba que el caso estuviera adentro de un switch");
+                            erroresLista.add(newError);
+                            System.err.println(newError.getDescription());
+                        }
+                }else if(instruction instanceof Default){
+                    if(this instanceof Switch){
+                            Switch newSwitch = (Switch) this;
+                            newSwitch.setDefault((Default) instruction);
+                        }else if(this instanceof Case){
+                            Switch newSwitch = (Switch) this.getFather();
+                            newSwitch.setDefault((Default) instruction);
+                        }else{
+                            SyntaxError newError = new SyntaxError(instruction.getLine(), instruction.getColumn());
+                            newError.setType("Inicio ilegal de la expresion");
+                            newError.setDescription("Se esperaba que el caso estuviera adentro de un switch");
+                            erroresLista.add(newError);
+                            System.err.println(newError.getDescription());
+                        }
+                }
+                if(this instanceof Switch){
+                    if(instruction instanceof Case){
+                        
+                    }else if(instruction instanceof Default){
+                        
+                    }else{
+                        SyntaxError newError = new SyntaxError(instruction.getLine(), instruction.getColumn());
+                        newError.setType("Inicio ilegal de la expresion");
+                        newError.setDescription("Dentro de switch solo puede haber case o default");
+                        erroresLista.add(newError);
+                        System.err.println(newError.getDescription());
+                    }
+                        
+                }
                     return instruction;
             }
             return this;

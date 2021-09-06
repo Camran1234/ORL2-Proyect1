@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import valiente.orl2.phyton.error.SemanticError;
 import valiente.orl2.phyton.table.TableOfValue;
 import valiente.orl2.phyton.values.Value;
-
+import valiente.orl2.phyton.table.Character;
 /**
  *
  * @author camran1234
@@ -58,7 +58,7 @@ public class Mod {
                     return new Value("entero",Integer.toString(result), line, column);
             }else if(typeR.equalsIgnoreCase("caracter")){
                 int leftV = Integer.parseInt(left.getValue());
-                char rightV = right.getValue().charAt(0);
+                char rightV = Character.transform(right.getValue());
                 if(rightV==0){
                     SemanticError newError = new SemanticError("Modulo invalido",line, column);
                     newError.setDescription("No se puede aplicar modulo entre cero");
@@ -127,7 +127,7 @@ public class Mod {
                         return new Value("entero", Integer.toString(resultado), line, column);   
                     }                
                 }else if(typeR.equalsIgnoreCase("caracter")){
-                    char rightV = right.getValue().charAt(0);
+                    char rightV = Character.transform(right.getValue());
                     int leftParameter = 0;
                     if(leftV){
                         leftParameter++;
@@ -152,7 +152,7 @@ public class Mod {
             
             
         }else if(typeL.equalsIgnoreCase("caracter")){
-            char leftV = left.getValue().charAt(0);
+            char leftV = Character.transform(left.getValue());
             if(typeR.equalsIgnoreCase("entero")){
                 int rightV = Integer.parseInt(right.getValue());
                 if(rightV==0){
@@ -186,7 +186,7 @@ public class Mod {
                 int resultado = leftV % rightParameter;
                 return new Value("caracter",Integer.toString(resultado), line, column);
             }else if(typeR.equalsIgnoreCase("caracter")){
-                char rightV = right.getValue().charAt(0);
+                char rightV = Character.transform(right.getValue());
                 if(rightV==0){
                     SemanticError newError = new SemanticError("Division invalida",line, column);
                     newError.setDescription("No se puede dividir entre cero");

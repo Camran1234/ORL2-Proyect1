@@ -38,7 +38,7 @@ public class Reproducir extends Instruction{
             this.execute();
             return valor;
         } catch (Exception e) {
-            SemanticError error = new SemanticError("Tipos incompatibles", getLine(), getColumn);
+            SemanticError error = new SemanticError("Tipos incompatibles", getLine(), getColumn());
             error.setDescription(e.getMessage());
             TableOfValue.semanticErrors.add(error);
         }

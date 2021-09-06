@@ -63,11 +63,13 @@ public class For extends Instruction{
                         break;
                     }else{
                         paso.execute();
+                        TableOfValue.deleteAmbitBut(getIndentation()+1, this, variable.getName());
                     }
                 }
             }
             TableOfValue.deleteAmbit(getIndentation()+1, this);
         } catch (ValueException e) {
+            e.printStackTrace();
         }
          
     }

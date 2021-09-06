@@ -45,6 +45,8 @@ public class While extends Instruction{
                 } catch (LoopException e) {
                     if(!e.getMood()){
                         break;
+                    }else{
+                        TableOfValue.deleteAmbit(getIndentation()+1, this);
                     }
                 }
                 

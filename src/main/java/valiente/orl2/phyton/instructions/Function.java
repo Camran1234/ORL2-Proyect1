@@ -84,7 +84,6 @@ public class Function extends Instruction{
                 for(int index=0; index<instructions.size(); index++){
                     if(instructions.get(index) instanceof Return && index==instructions.size()-1){
                         flag = true;
-                        
                     }else if(instructions.get(index) instanceof Return && index!= instructions.size()-1){
                         throw new Exception("Instrucciones despues de retorna");
                     }else if(instructions.get(index) instanceof Continue){
@@ -126,6 +125,8 @@ public class Function extends Instruction{
         }
         Pista pista = (Pista) this.lookForPista();
         Symbol newSymbol = TableOfValue.getPistaSymbol(pista.getName(), "pista");
+        //Quitamos las variables y generamos una nueva tablad e simbolos
+        
         TableOfValue.setWorkingSymbol(newSymbol);
         this.execute();
         Value value = this.value;

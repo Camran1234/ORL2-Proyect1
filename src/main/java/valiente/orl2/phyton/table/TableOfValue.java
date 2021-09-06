@@ -311,10 +311,20 @@ public class TableOfValue {
     
     public static void forceDelete(int ambit){
         for(int index=symbols.size()-1; index>=0; index--){
-            if(symbols.get(index).getAmbit()==ambit && fromSamePista(symbols.get(index))){
+            if(ambit>=symbols.get(index).getAmbit() && fromSamePista(symbols.get(index))){
                 symbols.remove(index);
                 
             }
+        }
+    }
+    
+    /**
+     * Fuerza a introducir los simbolos de la tabla
+     * @param lista 
+     */
+    public static void forceUpdate(ArrayList<Symbol> lista){
+        for(int index=0; index<lista.size(); index++){
+            symbols.add(symbols.get(index));
         }
     }
     
@@ -339,6 +349,21 @@ public class TableOfValue {
             throw new ValueException("No se encontro un arreglo en el id referenciado","Arreglo no encontrado", line, column);
         }
         return arreglo;        
+    }
+
+    /**
+     * Devuelve una lsita con los 
+     * @param id
+     * @return 
+     */
+    public static ArrayList<Symbol> getSymbolListAfterFunctions() {
+        ArrayList<Symbol> lista = new ArrayList();
+        for(int index=0; index<symbols.size(); index++){
+            if(symbols.get(index).getAmbit()>1 && fromSamePista(symbols.get(index))){
+                lista.add(symbols.get(index));
+            }
+        }
+        return lista;
     }
 
     

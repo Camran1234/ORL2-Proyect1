@@ -7,6 +7,7 @@ package valiente.orl2.phyton.operators;
 
 import java.util.ArrayList;
 import valiente.orl2.phyton.error.SemanticError;
+import valiente.orl2.phyton.table.Character;
 import valiente.orl2.phyton.table.TableOfValue;
 import valiente.orl2.phyton.values.Value;
 
@@ -43,7 +44,7 @@ public class Addition {
                 return new Value("entero",Integer.toString(result), line, column);
             }else if(typeR.equalsIgnoreCase("caracter")){
                 int leftV = Integer.parseInt(left.getValue());
-                char rightV = right.getValue().charAt(0);
+                char rightV = Character.transform(right.getValue());
                 int result = leftV + rightV;
                 return new Value("entero",Integer.toString(result), line, column);
             }else if(typeR.equalsIgnoreCase("cadena")){
@@ -71,7 +72,7 @@ public class Addition {
                 }
                 return new Value("doble", Double.toString(leftV), line, column);
             }else if(typeR.equalsIgnoreCase("caracter")){
-                char rightV = right.getValue().charAt(0);
+                char rightV = Character.transform(right.getValue());
                 double result = leftV + rightV;
                 return new Value("doble", Double.toString(result), line, column);
             }else if(typeR.equalsIgnoreCase("cadena")){
@@ -105,7 +106,7 @@ public class Addition {
                 }
                 return new Value("entero", Integer.toString(leftParameter+rightParameter), line, column);   
             }else if(typeR.equalsIgnoreCase("caracter")){
-                char rightV = right.getValue().charAt(0);
+                char rightV = Character.transform(right.getValue());
                 int leftParameter = 0;
                 if(leftV){
                     leftParameter++;
@@ -123,7 +124,7 @@ public class Addition {
                 return new Value("cadena", result, line, column);
             }
         }else if(typeL.equalsIgnoreCase("caracter")){
-            char leftV = left.getValue().charAt(0);
+            char leftV = Character.transform(left.getValue());
             if(typeR.equalsIgnoreCase("entero")){
                 int rightV = Integer.parseInt(right.getValue());
                 int resultado = leftV + rightV;
@@ -141,7 +142,7 @@ public class Addition {
                 int resultado = leftV + rightParameter;
                 return new Value("caracter",(char)(resultado)+"", line, column);
             }else if(typeR.equalsIgnoreCase("caracter")){
-                char rightV = right.getValue().charAt(0);
+                char rightV = Character.transform(right.getValue());
                 char resultado = (char) (leftV + rightV);
                 return new Value("caracter", resultado+"", line, column);
             }else if(typeR.equalsIgnoreCase("cadena")){

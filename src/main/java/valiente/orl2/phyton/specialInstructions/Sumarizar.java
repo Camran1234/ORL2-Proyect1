@@ -66,14 +66,22 @@ public class Sumarizar extends Instruction{
                 Assignment assignment = new Assignment(getLine(), getColumn());
                 assignment.setValue(new Operation(new Value(dimension, getLine(), getColumn()), getLine(), getColumn()));
                 symbol.setNewValue(assignment, true, getLine(), getColumn());
-                String[] lista = symbol.getData().getFirstRowLength();
-                size = new Value("entero", Integer.toString(lista.length), getLine(), getColumn());
+                String[] array = symbol.getData().getArray();
+                String type = symbol.getReference().getBase();
+                calcular(array, type);
         }else{
             Symbol symbol = TableOfValue.getSymbol(value.getRawValue(), "variable");
             Data data = symbol.getData();
             String[] array = data.getArray();
             String type = symbol.getReference().getBase();
-            int isEntero=0;
+            calcular(array, type);
+        }
+        
+        
+    }
+    
+    public void calcular(String[] array, String type){
+        int isEntero=0;
             double isDouble =0;
             for(int index=0; index<array.length; index++){
                 if(array[index]==null){
@@ -111,9 +119,6 @@ public class Sumarizar extends Instruction{
             }else if(type.equalsIgnoreCase("doble")){
                 cadena = Double.toString(isDouble);
             }
-        }
-        
-        
     }
     
     @Override

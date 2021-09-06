@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import valiente.orl2.phyton.error.SemanticError;
 import valiente.orl2.phyton.table.TableOfValue;
-
+import valiente.orl2.phyton.table.Character;
 /**
  *
  * @author camran1234
@@ -30,6 +30,7 @@ public class LogicalOperator {
         try {
             parsedLeft = typeParser.parseType(left, higherType, line, column);
         } catch (Exception e) {
+            e.printStackTrace();
             SemanticError newErrors = new SemanticError("Tranformacion invalida", line, column);
             newErrors.setDescription(e.getMessage());
             TableOfValue.semanticErrors.add(newErrors);
@@ -108,46 +109,173 @@ public class LogicalOperator {
      */
     private Value Equalization(Value left, Value right, int line, int column) throws Exception{
         Value result = null;
-        if(left.getType().equalsIgnoreCase("entero") && right.getType().equalsIgnoreCase("entero")){
+        String l = left.getType();
+        String r = right.getType();
+        if(l.equalsIgnoreCase("entero")){
             int leftV = Integer.parseInt(left.getValue());
-            int rightV = Integer.parseInt(right.getValue());
-            if(leftV == rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
-            }
-        }else if(left.getType().equalsIgnoreCase("doble") && right.getType().equalsIgnoreCase("entero")){
-            double leftV = Double.parseDouble(left.getValue());
-            double rightV = Double.parseDouble(right.getValue());
-            if(leftV == rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
-            }
-        }else if(left.getType().equalsIgnoreCase("caracter") && right.getType().equalsIgnoreCase("entero")){
-            char leftV = left.getValue().charAt(0);
-            char rightV = right.getValue().charAt(0);
-            if(leftV == rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
+            
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                if(leftV == rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                if(leftV == rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                if(leftV == rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }        
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                int rex = 0;
+                if(rightV){
+                    rex = 1;
+                }
+                if(leftV == rex){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un entero con una cadena");
             }
             
-        }else if(left.getType().equalsIgnoreCase("boolean") && right.getType().equalsIgnoreCase("entero")){
-            boolean leftV = Boolean.parseBoolean(left.getValue());
-            boolean rightV = Boolean.parseBoolean(right.getValue());
-            if(leftV == rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
+        }else if(l.equalsIgnoreCase("doble")){
+            double leftV = Double.parseDouble(left.getValue());
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                if(leftV == rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                if(leftV == rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                if(leftV == rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }        
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                int rex = 0;
+                if(rightV){
+                    rex = 1;
+                }
+                if(leftV == rex){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un doble con una cadena");
             }
-        }else if(left.getType().equalsIgnoreCase("string") && right.getType().equalsIgnoreCase("entero")){
-            String leftV = left.getValue();
-            String rightV = right.getValue();
-            if(leftV.equals(rightV)){
-                result = new Value("boolean","true", line, column);
+            
+        }else if(l.equalsIgnoreCase("caracter")){
+            char leftV = Character.transform(left.getValue());
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                if(leftV == rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                if(leftV == rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                if(leftV == rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }        
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                int rex = 0;
+                if(rightV){
+                    rex = 1;
+                }
+                if(leftV == rex){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un caracter con una cadena");
+            }
+            
+        }else if(l.equalsIgnoreCase("boolean")){
+            boolean leftV = Boolean.parseBoolean(left.getValue());
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                int aux = 0;
+                if(leftV){
+                    aux=1;
+                }
+                if(aux == rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                int aux = 0;
+                if(leftV){
+                    aux=1;
+                }
+                if(aux == rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                int aux = 0;
+                if(leftV){
+                    aux=1;
+                }
+                if(aux == rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }       
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                if(leftV == rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un boolean con una cadena");
+            }
+        }else if(l.equalsIgnoreCase("cadena")){
+            if(l.equals(r)){
+                return new Value("boolean","true",line, column);
             }else{
-                result = new Value("boolean","false", line, column);
+                return new Value("boolean","false",line, column);
             }
         }
         return result;
@@ -155,46 +283,173 @@ public class LogicalOperator {
     
     private Value Differentiation(Value left, Value right, int line, int column) throws Exception{
         Value result = null;
-        if(left.getType().equalsIgnoreCase("entero") && right.getType().equalsIgnoreCase("entero")){
+        String l = left.getType();
+        String r = right.getType();
+        if(l.equalsIgnoreCase("entero")){
             int leftV = Integer.parseInt(left.getValue());
-            int rightV = Integer.parseInt(right.getValue());
-            if(leftV != rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
-            }
-        }else if(left.getType().equalsIgnoreCase("doble") && right.getType().equalsIgnoreCase("entero")){
-            double leftV = Double.parseDouble(left.getValue());
-            double rightV = Double.parseDouble(right.getValue());
-            if(leftV != rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
-            }
-        }else if(left.getType().equalsIgnoreCase("caracter") && right.getType().equalsIgnoreCase("entero")){
-            char leftV = left.getValue().charAt(0);
-            char rightV = right.getValue().charAt(0);
-            if(leftV != rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
+            
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                if(leftV != rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                if(leftV != rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                if(leftV != rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }        
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                int rex = 0;
+                if(rightV){
+                    rex = 1;
+                }
+                if(leftV != rex){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un entero con una cadena");
             }
             
-        }else if(left.getType().equalsIgnoreCase("boolean") && right.getType().equalsIgnoreCase("entero")){
-            boolean leftV = Boolean.parseBoolean(left.getValue());
-            boolean rightV = Boolean.parseBoolean(right.getValue());
-            if(leftV != rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
+        }else if(l.equalsIgnoreCase("doble")){
+            double leftV = Double.parseDouble(left.getValue());
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                if(leftV != rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                if(leftV != rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                if(leftV != rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }        
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                int rex = 0;
+                if(rightV){
+                    rex = 1;
+                }
+                if(leftV != rex){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un doble con una cadena");
             }
-        }else if(left.getType().equalsIgnoreCase("string") && right.getType().equalsIgnoreCase("entero")){
-            String leftV = left.getValue();
-            String rightV = right.getValue();
-            if(!leftV.equals(rightV)){
-                result = new Value("boolean","true", line, column);
+            
+        }else if(l.equalsIgnoreCase("caracter")){
+            char leftV = Character.transform(left.getValue());
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                if(leftV != rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                if(leftV != rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                if(leftV != rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }        
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                int rex = 0;
+                if(rightV){
+                    rex = 1;
+                }
+                if(leftV != rex){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un caracter con una cadena");
+            }
+            
+        }else if(l.equalsIgnoreCase("boolean")){
+            boolean leftV = Boolean.parseBoolean(left.getValue());
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                int aux = 0;
+                if(leftV){
+                    aux=1;
+                }
+                if(aux != rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                int aux = 0;
+                if(leftV){
+                    aux=1;
+                }
+                if(aux != rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                int aux = 0;
+                if(leftV){
+                    aux=1;
+                }
+                if(aux != rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }       
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                if(leftV != rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un boolean con una cadena");
+            }
+        }else if(l.equalsIgnoreCase("cadena")){
+            if(!l.equals(r)){
+                return new Value("boolean","true",line, column);
             }else{
-                result = new Value("boolean","false", line, column);
+                return new Value("boolean","false",line, column);
             }
         }
         return result;
@@ -203,86 +458,330 @@ public class LogicalOperator {
     private Value MoreThan(Value left, Value right, int line, int column) throws Exception{
         
         Value result = null;
-        if(left.getType().equalsIgnoreCase("entero") && right.getType().equalsIgnoreCase("entero")){
+         String l = left.getType();
+        String r = right.getType();
+        if(l.equalsIgnoreCase("entero")){
             int leftV = Integer.parseInt(left.getValue());
-            int rightV = Integer.parseInt(right.getValue());
-            if(leftV > rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
-            }
-        }else if(left.getType().equalsIgnoreCase("doble") && right.getType().equalsIgnoreCase("entero")){
-            double leftV = Double.parseDouble(left.getValue());
-            double rightV = Double.parseDouble(right.getValue());
-            if(leftV > rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
-            }
-        }else if(left.getType().equalsIgnoreCase("caracter") && right.getType().equalsIgnoreCase("entero")){
-            char leftV = left.getValue().charAt(0);
-            char rightV = right.getValue().charAt(0);
-            if(leftV > rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
+            
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                if(leftV > rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                if(leftV > rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                if(leftV > rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }        
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                int rex = 0;
+                if(rightV){
+                    rex = 1;
+                }
+                if(leftV > rex){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un entero con cadena ");
             }
             
-        }else if(left.getType().equalsIgnoreCase("boolean") && right.getType().equalsIgnoreCase("entero")){
-            throw new Exception("No se puede comparar dos booleanos con el operador >");
-        }else if(left.getType().equalsIgnoreCase("string") && right.getType().equalsIgnoreCase("entero")){
-            String leftV = left.getValue();
-            String rightV = right.getValue();
-            int leftChar = leftV.length();
-            int rightChar = rightV.length();
-            if(leftChar > rightChar){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
+        }else if(l.equalsIgnoreCase("doble")){
+            double leftV = Double.parseDouble(left.getValue());
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                if(leftV > rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                if(leftV > rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                if(leftV > rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }        
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                int rex = 0;
+                if(rightV){
+                    rex = 1;
+                }
+                if(leftV > rex){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un doble con una cadena");
             }
+            
+        }else if(l.equalsIgnoreCase("caracter")){
+            char leftV = Character.transform(left.getValue());
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                if(leftV > rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                if(leftV > rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                if(leftV > rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }        
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                int rex = 0;
+                if(rightV){
+                    rex = 1;
+                }
+                if(leftV > rex){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un caracter con una cadena");
+            }
+            
+        }else if(l.equalsIgnoreCase("boolean")){
+            boolean leftV = Boolean.parseBoolean(left.getValue());
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                int aux = 0;
+                if(leftV){
+                    aux=1;
+                }
+                if(aux > rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                int aux = 0;
+                if(leftV){
+                    aux=1;
+                }
+                if(aux > rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                int aux = 0;
+                if(leftV){
+                    aux=1;
+                }
+                if(aux > rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }       
+            }else if(r.equalsIgnoreCase("boolean")){
+                throw new Exception("No se puede comparar un booleano con un booleano");
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un boolean con una cadena");
+            }
+        }else if(l.equalsIgnoreCase("cadena")){
+            throw new Exception("No se puede aplicar > a cadena");
         }
         return result;
     }
     
     private Value EqualMoreThan(Value left, Value right, int line, int column) throws Exception{
         Value result = null;
-        if(left.getType().equalsIgnoreCase("entero") && right.getType().equalsIgnoreCase("entero")){
+         String l = left.getType();
+        String r = right.getType();
+        if(l.equalsIgnoreCase("entero")){
             int leftV = Integer.parseInt(left.getValue());
-            int rightV = Integer.parseInt(right.getValue());
-            if(leftV >= rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
-            }
-        }else if(left.getType().equalsIgnoreCase("doble") && right.getType().equalsIgnoreCase("entero")){
-            double leftV = Double.parseDouble(left.getValue());
-            double rightV = Double.parseDouble(right.getValue());
-            if(leftV >= rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
-            }
-        }else if(left.getType().equalsIgnoreCase("caracter") && right.getType().equalsIgnoreCase("entero")){
-            char leftV = left.getValue().charAt(0);
-            char rightV = right.getValue().charAt(0);
-            if(leftV >= rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
+            
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                if(leftV >= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                if(leftV >= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                if(leftV >= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }        
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                int rex = 0;
+                if(rightV){
+                    rex = 1;
+                }
+                if(leftV >= rex){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un entero con una cadena");
             }
             
-        }else if(left.getType().equalsIgnoreCase("boolean") && right.getType().equalsIgnoreCase("entero")){
-            throw new Exception("No se puede comparar dos booleanos con el operador >=");
-        }else if(left.getType().equalsIgnoreCase("string") && right.getType().equalsIgnoreCase("entero")){
-            String leftV = left.getValue();
-            String rightV = right.getValue();
-            int leftChar = leftV.length();
-            int rightChar = rightV.length();
-            if(leftChar >= rightChar){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
+        }else if(l.equalsIgnoreCase("doble")){
+            double leftV = Double.parseDouble(left.getValue());
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                if(leftV >= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                if(leftV >= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                if(leftV >= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }        
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                int rex = 0;
+                if(rightV){
+                    rex = 1;
+                }
+                if(leftV >= rex){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un doble con una cadena");
             }
+            
+        }else if(l.equalsIgnoreCase("caracter")){
+            char leftV = Character.transform(left.getValue());
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                if(leftV >= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                if(leftV >= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                if(leftV >= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }        
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                int rex = 0;
+                if(rightV){
+                    rex = 1;
+                }
+                if(leftV >= rex){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un caracter con una cadena");
+            }
+            
+        }else if(l.equalsIgnoreCase("boolean")){
+            boolean leftV = Boolean.parseBoolean(left.getValue());
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                int aux = 0;
+                if(leftV){
+                    aux=1;
+                }
+                if(aux >= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                int aux = 0;
+                if(leftV){
+                    aux=1;
+                }
+                if(aux >= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                int aux = 0;
+                if(leftV){
+                    aux=1;
+                }
+                if(aux >= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }       
+            }else if(r.equalsIgnoreCase("boolean")){
+                throw new Exception("No se puede comparar un booleano con un booleano");
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un con una cadena");
+            }
+        }else if(l.equalsIgnoreCase("cadena")){
+            throw new Exception("No se puede aplicar >= a cadena");
         }
         return result;
     }
@@ -290,86 +789,330 @@ public class LogicalOperator {
     private Value LesserThan(Value left, Value right, int line, int column) throws Exception{
     
         Value result = null;
-        if(left.getType().equalsIgnoreCase("entero") && right.getType().equalsIgnoreCase("entero")){
+         String l = left.getType();
+        String r = right.getType();
+        if(l.equalsIgnoreCase("entero")){
             int leftV = Integer.parseInt(left.getValue());
-            int rightV = Integer.parseInt(right.getValue());
-            if(leftV < rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
-            }
-        }else if(left.getType().equalsIgnoreCase("doble") && right.getType().equalsIgnoreCase("entero")){
-            double leftV = Double.parseDouble(left.getValue());
-            double rightV = Double.parseDouble(right.getValue());
-            if(leftV < rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
-            }
-        }else if(left.getType().equalsIgnoreCase("caracter") && right.getType().equalsIgnoreCase("entero")){
-            char leftV = left.getValue().charAt(0);
-            char rightV = right.getValue().charAt(0);
-            if(leftV < rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
+            
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                if(leftV < rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                if(leftV < rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                if(leftV < rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }        
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                int rex = 0;
+                if(rightV){
+                    rex = 1;
+                }
+                if(leftV < rex){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un entero con una cadena");
             }
             
-        }else if(left.getType().equalsIgnoreCase("boolean") && right.getType().equalsIgnoreCase("entero")){
-            throw new Exception("No se puede comparar dos booleanos con el operador <");
-        }else if(left.getType().equalsIgnoreCase("string") && right.getType().equalsIgnoreCase("entero")){
-            String leftV = left.getValue();
-            String rightV = right.getValue();
-            int leftChar = leftV.length();
-            int rightChar = rightV.length();
-            if(leftChar < rightChar){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
+        }else if(l.equalsIgnoreCase("doble")){
+            double leftV = Double.parseDouble(left.getValue());
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                if(leftV < rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                if(leftV < rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                if(leftV < rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }        
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                int rex = 0;
+                if(rightV){
+                    rex = 1;
+                }
+                if(leftV < rex){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un doble con una cadena");
             }
+            
+        }else if(l.equalsIgnoreCase("caracter")){
+            char leftV = Character.transform(left.getValue());
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                if(leftV < rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                if(leftV < rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                if(leftV < rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }        
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                int rex = 0;
+                if(rightV){
+                    rex = 1;
+                }
+                if(leftV < rex){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un caracter con una cadena");
+            }
+            
+        }else if(l.equalsIgnoreCase("boolean")){
+            boolean leftV = Boolean.parseBoolean(left.getValue());
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                int aux = 0;
+                if(leftV){
+                    aux=1;
+                }
+                if(aux < rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                int aux = 0;
+                if(leftV){
+                    aux=1;
+                }
+                if(aux < rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                int aux = 0;
+                if(leftV){
+                    aux=1;
+                }
+                if(aux < rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }       
+            }else if(r.equalsIgnoreCase("boolean")){
+                throw new Exception("No se puede comparar un booleano con un booleano");
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar con una cadena");
+            }
+        }else if(l.equalsIgnoreCase("cadena")){
+            throw new Exception("No se puede aplicar < a cadena");
         }
         return result;
     }
     
     private Value EqualLesserThan(Value left, Value right, int line, int column) throws Exception{
         Value result = null;
-        if(left.getType().equalsIgnoreCase("entero") && right.getType().equalsIgnoreCase("entero")){
+         String l = left.getType();
+        String r = right.getType();
+        if(l.equalsIgnoreCase("entero")){
             int leftV = Integer.parseInt(left.getValue());
-            int rightV = Integer.parseInt(right.getValue());
-            if(leftV <= rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
-            }
-        }else if(left.getType().equalsIgnoreCase("doble") && right.getType().equalsIgnoreCase("entero")){
-            double leftV = Double.parseDouble(left.getValue());
-            double rightV = Double.parseDouble(right.getValue());
-            if(leftV <= rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
-            }
-        }else if(left.getType().equalsIgnoreCase("caracter") && right.getType().equalsIgnoreCase("entero")){
-            char leftV = left.getValue().charAt(0);
-            char rightV = right.getValue().charAt(0);
-            if(leftV <= rightV){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
+            
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                if(leftV <= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                if(leftV <= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                if(leftV <= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }        
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                int rex = 0;
+                if(rightV){
+                    rex = 1;
+                }
+                if(leftV <= rex){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un entero con una cadena");
             }
             
-        }else if(left.getType().equalsIgnoreCase("boolean") && right.getType().equalsIgnoreCase("entero")){
-            throw new Exception("No se puede comparar dos booleanos con el operador <=");
-        }else if(left.getType().equalsIgnoreCase("string") && right.getType().equalsIgnoreCase("entero")){
-            String leftV = left.getValue();
-            String rightV = right.getValue();
-            int leftChar = leftV.length();
-            int rightChar = rightV.length();
-            if(leftChar <= rightChar){
-                result = new Value("boolean","true", line, column);
-            }else{
-                result = new Value("boolean","false", line, column);
+        }else if(l.equalsIgnoreCase("doble")){
+            double leftV = Double.parseDouble(left.getValue());
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                if(leftV <= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                if(leftV <= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                if(leftV <= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }        
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                int rex = 0;
+                if(rightV){
+                    rex = 1;
+                }
+                if(leftV <= rex){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un doble con una cadena");
             }
+            
+        }else if(l.equalsIgnoreCase("caracter")){
+            char leftV = Character.transform(left.getValue());
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                if(leftV <= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                if(leftV <= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                if(leftV <= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }        
+            }else if(r.equalsIgnoreCase("boolean")){
+                boolean rightV = Boolean.parseBoolean(right.getValue());
+                int rex = 0;
+                if(rightV){
+                    rex = 1;
+                }
+                if(leftV <= rex){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar un caracter con una cadena");
+            }
+            
+        }else if(l.equalsIgnoreCase("boolean")){
+            boolean leftV = Boolean.parseBoolean(left.getValue());
+            if(r.equalsIgnoreCase("entero")){
+                int rightV = Integer.parseInt(right.getValue());                
+                int aux = 0;
+                if(leftV){
+                    aux=1;
+                }
+                if(aux <= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("doble")){
+                double rightV = Double.parseDouble(right.getValue());
+                int aux = 0;
+                if(leftV){
+                    aux=1;
+                }
+                if(aux <= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }
+            }else if(r.equalsIgnoreCase("caracter")){
+                char rightV = Character.transform(right.getValue());
+                int aux = 0;
+                if(leftV){
+                    aux=1;
+                }
+                if(aux <= rightV){
+                    return new Value("boolean","true", line, column);
+                }else{
+                    return new Value("boolean","false", line, column);
+                }       
+            }else if(r.equalsIgnoreCase("boolean")){
+                throw new Exception("No se puede comparar un booleano con un booleano");
+            }else if(r.equalsIgnoreCase("cadena")){
+                throw new Exception("No se puede comparar con una cadena");
+            }
+        }else if(l.equalsIgnoreCase("cadena")){
+            throw new Exception("No se puede aplicar <= a cadena");
         }
         return result;
     }

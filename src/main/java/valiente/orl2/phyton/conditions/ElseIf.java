@@ -17,7 +17,6 @@ import valiente.orl2.phyton.table.TableOfValue;
  * @author camran1234
  */
 public class ElseIf extends If{
-    Condition condition;
 
     public ElseIf(Condition condition, int line, int column){
         super(line, column);

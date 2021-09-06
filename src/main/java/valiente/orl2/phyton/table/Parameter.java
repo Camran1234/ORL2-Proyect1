@@ -92,9 +92,9 @@ public class Parameter {
     
     public void declarar(){
         try {
-            Value value = new TypeParser().tryParse(assignment.getValueFromOperation(), type, line, column);
+            Value value = assignment.getValueFromOperation();
+            value = new TypeParser().tryParse(value, type, line, column);
             
-            ArrayList<Operation> operaciones = new ArrayList();
             
             
             

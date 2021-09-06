@@ -70,7 +70,7 @@ public class If extends Instruction{
                     }
                 }
                 TableOfValue.deleteAmbit(getIndentation()+1, this);
-            }else if(condition.execute().execute().getValue().equalsIgnoreCase("false")){
+            }else{
                 boolean founded=false;
                 for(int index=0; index<elseifs.size(); index++){
                     if(elseifs.get(index).getCondition().execute().execute().getValue().equalsIgnoreCase("true")){

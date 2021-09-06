@@ -49,7 +49,9 @@ public class ThrowFunction extends Instruction{
             assignment.setValue(parameters.get(index));
             asignaciones.add(assignment);
         }
+        ArrayList<Symbol> lista = TableOfValue.getSymbolListAfterFunctions();
         
+        //Eliminamos todas las variables debajo de als funciones
         function.setAssignments(asignaciones);
         this.value = function.getValue();
         TableOfValue.setWorkingSymbol(previousSymbol);

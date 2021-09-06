@@ -23,7 +23,7 @@ import valiente.orl2.phyton.operators.Substraction;
  * @author camran1234
  */
 public class Data {
-    
+    private ArrayList<SemanticError> errores = TableOfValue.semanticErrors;
     private String type="";
     private String value=null;
     private String[] array;
@@ -144,19 +144,41 @@ public class Data {
             TableOfValue.semanticErrors.add(error);
         }else{
             try {
-                int direction = calculateDirection(dimension);
-                Value result =null;
-                if(metodo.equalsIgnoreCase("+=")){
-                    result = new Addition().MakeAddition(new Value(type, this.value, line, column), value, line, column);
-                    result = new TypeParser().tryParse(value, type, line, column);
-                    array[direction] = result.getRawValue();
-                }else if(metodo.equalsIgnoreCase("=")){
-                    result = value;
-                    result = new TypeParser().tryParse(value, type, line, column);
-                    
-                    array[direction] = result.getRawValue();
-                }else if(metodo.equalsIgnoreCase("++")||metodo.equalsIgnoreCase("--")){
-                    increm(metodo, direction, line, column);
+                if(dimension.size()==0){
+                    //Comparamos los tamanios y si son iguales solo asignamos el arreglo
+                    ArrayList<Integer> thisDimension = this.dimension;
+                    Symbol symbol = TableOfValue.getSymbol(value.getRawValue(), "variable");
+                    ArrayList<Integer> referencedDimension = symbol.getReference().getDimension();
+                    if(thisDimension.size() == referencedDimension.size()){
+                        for(int index=0; index<thisDimension.size(); index++){
+                            if(!(thisDimension.get(index) == referencedDimension.get(index))){
+                                throw new Exception("No se pudo asignar el arreglo por dimensiones diferentes");
+                            }
+                        }
+                        //Igualamos los arreglos siempre comparando los tipos
+                        if(this.type.equalsIgnoreCase(symbol.getReference().getBase())){
+                            this.array = symbol.getArray();
+                        }else{
+                            throw new Exception("Los arreglos son de diferentes tipos se esperaba "+this.type);
+                        }
+                    }else{
+                        throw new Exception("No se pudo asignar el arreglo por dimensiones diferentes");
+                    }
+                            
+                }else{
+                    int direction = calculateDirection(dimension);
+                    Value result =null;
+                    if(metodo.equalsIgnoreCase("+=")){
+                        result = new Addition().MakeAddition(new Value(type, this.value, line, column), value, line, column);
+                        result = new TypeParser().tryParse(value, type, line, column);
+                        array[direction] = result.getRawValue();
+                    }else if(metodo.equalsIgnoreCase("=")){
+                        result = value;
+                        result = new TypeParser().tryParse(value, type, line, column);                    
+                        array[direction] = result.getRawValue();
+                    }else if(metodo.equalsIgnoreCase("++")||metodo.equalsIgnoreCase("--")){
+                        increm(metodo, direction, line, column);
+                    }
                 }
                 
                 
