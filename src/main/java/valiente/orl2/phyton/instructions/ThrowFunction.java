@@ -39,6 +39,7 @@ public class ThrowFunction extends Instruction{
      */
     public void execute() throws SemanticException{
         Symbol previousSymbol = TableOfValue.getWorkingSymbol();
+        Instruction container = TableOfValue.getContainer();
         Function function = (Function) TableOfValue.getFunctionOfSymbol(id, parameters);
         if(function==null){
             throw new SemanticException("No se encontro la funcion", "funcion no declarada", line, column);
@@ -55,6 +56,7 @@ public class ThrowFunction extends Instruction{
         function.setAssignments(asignaciones);
         this.value = function.getValue();
         TableOfValue.setWorkingSymbol(previousSymbol);
+        TableOfValue.setContainer(container);
     }
     
     public Value getValue(){

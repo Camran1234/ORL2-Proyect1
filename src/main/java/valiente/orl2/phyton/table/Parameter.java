@@ -93,6 +93,7 @@ public class Parameter {
     
     public void declarar(){
         try {
+            TableOfValue.setWorkingInParameter(true);
             Value value = assignment.getValueFromOperation();
                 Variable variable = new Variable(line, column);
                 variable.setName(id);
@@ -120,7 +121,7 @@ public class Parameter {
                 variable.setFather(father);
                 this.variable = variable;
                 variable.declarar();
-            
+                TableOfValue.setWorkingInParameter(false);
             
             
         } catch (Exception ex) {

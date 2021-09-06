@@ -76,7 +76,7 @@ public class Pista extends Instruction{
             int numberPrincipal=0;
             for(int index=0; index<instructions.size(); index++){
                 if(instructions.get(index) instanceof Function || instructions.get(index) instanceof Principal || 
-                        instructions.get(index) instanceof Variable){
+                        instructions.get(index) instanceof VariableChunk){
                     if(instructions.get(index) instanceof Principal){
                         numberPrincipal++;
                         if(numberPrincipal>1){

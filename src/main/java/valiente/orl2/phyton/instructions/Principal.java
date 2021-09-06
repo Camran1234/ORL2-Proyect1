@@ -28,6 +28,7 @@ public class Principal extends Instruction{
     @Override
     public void execute() throws SemanticException{
         try {
+            TableOfValue.setContainer(this);
             for(int index=0; index<instructions.size(); index++){
                 instructions.get(index).execute();
             }
@@ -35,11 +36,13 @@ public class Principal extends Instruction{
         } catch (SemanticException e) {
             e.checkErrorAmbit();
         }
+        TableOfValue.setContainer(null);
         
     }
     
     @Override
     public void declarar(){
+        TableOfValue.setContainer(this);
         Type type = new Type("Principal","",0, new ArrayList<Parameter>(), getFather(), new ArrayList<Integer>(), getIndentation(), this);
         Symbol symbol = new Symbol(type, getIndentation(), false, line, column);
         boolean flag=false;
@@ -60,7 +63,7 @@ public class Principal extends Instruction{
             TableOfValue.semanticErrors.add(error);
         }
         
-        
+        TableOfValue.setContainer(null);
     }
     
 }

@@ -41,6 +41,15 @@ public class VariableChunk extends Instruction{
         }
     }
     
+    
+    public void declarar() {
+        for(int index=0; index< variables.size(); index++){
+            variables.get(index).setFather(father);
+            variables.get(index).setIndentation(indentation);
+            variables.get(index).declarar();
+        }
+    }
+    
     public boolean isGlobal(){
         return variables.get(0).getMode();
     }

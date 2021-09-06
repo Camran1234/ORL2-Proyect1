@@ -26,7 +26,9 @@ public class TableOfValue {
     private static ArrayList<Symbol> symbols = new ArrayList();
     //Pista que estamos trabajando
     private static Symbol workingSymbol = null;
-    
+    //Instruccion contenedora
+    private static Instruction container = null;
+    private static boolean workingParameter=false;
     /**
      * Reinicia los valores de la lista
      */
@@ -37,6 +39,37 @@ public class TableOfValue {
         symbols = new ArrayList();
         workingSymbol = null;
         TableOfType.reset();
+    }
+    
+    public static void setContainer(Instruction instruction){
+        TableOfValue.container = instruction;
+    }
+    
+    public static Instruction getContainer(){
+        return container;
+    }
+    
+    public static void setWorkingInParameter(boolean flag){
+        TableOfValue.workingParameter = flag;
+    }
+    
+    public static boolean checkContainer(Symbol symbol){
+        if(workingParameter){
+            return true;
+        }
+        if(container!=null){
+            Instruction referencedSymbol = symbol.getReference().getValue().lookForContainer();
+            Instruction auxiliar = container;
+            
+            if(referencedSymbol instanceof Pista){            
+                auxiliar = auxiliar.lookForPista();                
+            }            
+            if(referencedSymbol.equals(container)){            
+                return true;                
+            }
+        }
+        
+        return false;
     }
     
     public static boolean isRunable(){
@@ -200,7 +233,7 @@ public class TableOfValue {
         for(int index=symbols.size()-1; index>=0; index--){
             if(symbols.get(index).getId().equalsIgnoreCase(id) &&
                     symbols.get(index).getCategory().equalsIgnoreCase(categoria)){
-                if(fromSamePista(symbols.get(index))){
+                if(fromSamePista(symbols.get(index)) && checkContainer(symbols.get(index))){
                     return symbols.get(index);
                 }
             }
@@ -226,7 +259,12 @@ public class TableOfValue {
                 if(id.equalsIgnoreCase(symbols.get(index).getId()) && category.equalsIgnoreCase(symbols.get(index).getCategory())){
                     //En teoria lanza el error siempre que sea de la misma pista, no toma en cuenta las extendidas
                     if(fromSamePista(symbols.get(index))){
-                        flag = true;
+                        if(checkContainer(symbols.get(index))){                        
+                            flag = true;
+                        }
+                        if(workingParameter){
+                            flag=false;
+                        }
                     }
                 }
             }
@@ -250,12 +288,12 @@ public class TableOfValue {
      */
     public static String findTypeSymbol(String id, int line, int column) throws ValueException{
         for(int index=symbols.size()-1; index>=0; index--){
-            if(symbols.get(index).getId().equalsIgnoreCase(id) && fromSamePista(symbols.get(index))){
+            if(symbols.get(index).getId().equalsIgnoreCase(id) && fromSamePista(symbols.get(index)) && checkContainer(symbols.get(index)) ){
                 return symbols.get(index).getType();
             }
         }
         for(int index=symbols.size()-1; index>=0; index--){
-            if(symbols.get(index).getId().equalsIgnoreCase(id) && checkExtendeds(symbols.get(index))){
+            if(symbols.get(index).getId().equalsIgnoreCase(id) && checkExtendeds(symbols.get(index)) ){
                 return symbols.get(index).getType();
             }
         }
@@ -273,7 +311,7 @@ public class TableOfValue {
             }
         }
         for(int index=symbols.size()-1; index>=0; index--){
-            if(symbols.get(index).getId().equalsIgnoreCase(id) && symbols.get(index).isArray() && checkExtendeds(symbols.get(index))){
+            if(symbols.get(index).getId().equalsIgnoreCase(id) && symbols.get(index).isArray() ){
                 if(symbols.get(index).getReference().getDimension().size()>0){
                     return true;
                 }else{
@@ -313,14 +351,14 @@ public class TableOfValue {
     public static String getArrayValue(String id, ArrayList<Operation> dimension, int line, int column) throws ValueException{
         for(int index=symbols.size()-1; index>=0; index--){
             if(symbols.get(index).getId().equalsIgnoreCase(id) && symbols.get(index).getCategory().equalsIgnoreCase("variable")
-                    && fromSamePista(symbols.get(index))){
+                    && fromSamePista(symbols.get(index)) && checkContainer(symbols.get(index))){
                 ArrayList<Integer> direction = getDimensionParams(dimension);
                 return symbols.get(index).getValueArray(direction, line, column);
             }
         }
         for(int index=symbols.size()-1; index>=0; index--){
             if(symbols.get(index).getId().equalsIgnoreCase(id) && symbols.get(index).getCategory().equalsIgnoreCase("variable")
-                    && checkExtendeds(symbols.get(index))){
+                    && checkExtendeds(symbols.get(index)) ){
                 ArrayList<Integer> direction = getDimensionParams(dimension);
                 return symbols.get(index).getValueArray(direction, line, column);
             }
@@ -339,7 +377,7 @@ public class TableOfValue {
     public static String getValue(String id, int line, int column) throws ValueException{
         for(int index = symbols.size()-1; index>=0; index-- ){
             if(symbols.get(index).getId().equalsIgnoreCase(id) && symbols.get(index).getCategory().equalsIgnoreCase("variable")
-                    && fromSamePista(symbols.get(index))){
+                    && fromSamePista(symbols.get(index)) && checkContainer(symbols.get(index))){
                 return symbols.get(index).getValue();
             }
         }

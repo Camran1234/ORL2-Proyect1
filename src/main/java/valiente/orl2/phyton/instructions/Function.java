@@ -56,6 +56,7 @@ public class Function extends Instruction{
     @Override
     public void execute()  throws SemanticException{
         try {
+        TableOfValue.setContainer(this);
             for(int index=0; index<instructions.size(); index++){
                 instructions.get(index).execute();
             }
@@ -72,10 +73,12 @@ public class Function extends Instruction{
                 TableOfValue.semanticErrors.add(e.getError());
             }
         }
+        TableOfValue.setContainer(null);
     }
     @Override
     public void declarar(){
         try {
+            TableOfValue.setContainer(this);
             Type type = new Type(name.getValue(),this.type, parameters.size(), parameters, this.lookForContainer(), new ArrayList<Integer>(),
             this.getIndentation(), this);
             type.setFunction(true);
@@ -104,6 +107,7 @@ public class Function extends Instruction{
             error.setDescription(e.getMessage());
             TableOfValue.semanticErrors.add(error);
         }
+        TableOfValue.setContainer(null);
     }
     
     public void setValueToParameters(){
@@ -120,6 +124,7 @@ public class Function extends Instruction{
      * @return 
      */
     public Value getValue() throws SemanticException{
+        TableOfValue.setContainer(this);
         for(int index=0; index<parameters.size(); index++){
             parameters.get(index).declarar();
         }
