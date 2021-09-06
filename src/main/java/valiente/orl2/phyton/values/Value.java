@@ -91,6 +91,10 @@ import valiente.orl2.phyton.table.TableOfValue;
         this.column = column;
     }
     
+    public void setSizeDimension(int dimension){
+        this.sizeDimensions = dimension;
+    }
+    
     public ArrayList<Operation> getDimensions(){
         return this.dimension;
     }
@@ -136,6 +140,10 @@ import valiente.orl2.phyton.table.TableOfValue;
         }
     }
 
+    public int getSizeDimension(){
+        return sizeDimensions;
+    }
+    
     public void setType(String type) {
         this.type = type;
     }
@@ -151,8 +159,10 @@ import valiente.orl2.phyton.table.TableOfValue;
         
         if(type.equalsIgnoreCase("variable")){
             if(TableOfValue.isArray(value)){
-                if(dimension.size()>0){
+                if(this.dimension.size()>0){
                     return TableOfValue.getArrayValue(value, dimension, line, column);
+                }else if(sizeDimensions>0){
+                    
                 }else{
                     String tipo = getType();
                     if(tipo.equalsIgnoreCase("caracter")){

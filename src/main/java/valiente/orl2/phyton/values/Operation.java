@@ -66,6 +66,10 @@ public class Operation {
         return isArray;
     }
     
+    public Value getValue(){
+        return value;
+    }
+    
     public Value execute(){
         try {
             if(leftValue!=null && rightValue!=null){

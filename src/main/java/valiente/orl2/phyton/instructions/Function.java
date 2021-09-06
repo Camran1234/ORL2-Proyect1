@@ -161,6 +161,7 @@ public class Function extends Instruction{
 
     public void setParameters(ArrayList<Operation> parameters) {
         try {
+            ArrayList<Integer> referenceToArray = new ArrayList();
             for(int index=0; index<parameters.size(); index++){
                 Value value = parameters.get(index).execute();
                 Parameter parameter = new Parameter(value);

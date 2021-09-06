@@ -18,6 +18,7 @@ import valiente.orl2.phyton.values.Value;
 import valiente.orl2.phyton.error.SemanticError;
 import valiente.orl2.phyton.error.SemanticException;
 import valiente.orl2.phyton.instructions.Assignment;
+import valiente.orl2.phyton.instructions.Dimension;
 /**
  *
  * @author camran1234
@@ -93,17 +94,25 @@ public class Parameter {
     public void declarar(){
         try {
             Value value = assignment.getValueFromOperation();
-            value = new TypeParser().tryParse(value, type, line, column);
-            
-            
-            
-            
                 Variable variable = new Variable(line, column);
                 variable.setName(id);
                 variable.setType(type);
-                if(dimension!=null){
-                    variable.setDimension(dimension);
+                if(dimensiones>0){
+                    ArrayList<Integer> enteros = TableOfValue.getSymbol(value.getRawValue(), value.getRawType()).getReference().getDimension();
+                    ArrayList<Operation> operations  = new ArrayList();
+                    for(int index=0; index<enteros.size(); index++){
+                        String valor = Integer.toString(enteros.get(index));
+                        Value newValue = new Value("entero", valor , line, column);
+                        Operation op = new Operation(newValue, line, column);
+                        operations.add(op);
+                    }
+                    variable.setDimension(operations);
+                }else{
+                    if(dimension!=null){
+                        variable.setDimension(dimension);
+                    }
                 }
+                
                 Assignment assignment = new Assignment(line, column);
                 assignment.setValue(new Operation(value, line, column));
                 variable.setValue(assignment);

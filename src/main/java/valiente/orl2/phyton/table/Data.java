@@ -143,43 +143,21 @@ public class Data {
             error.setDescription("Se encontro un arreglo");
             TableOfValue.semanticErrors.add(error);
         }else{
-            try {
-                if(dimension.size()==0){
-                    //Comparamos los tamanios y si son iguales solo asignamos el arreglo
-                    ArrayList<Integer> thisDimension = this.dimension;
-                    Symbol symbol = TableOfValue.getSymbol(value.getRawValue(), "variable");
-                    ArrayList<Integer> referencedDimension = symbol.getReference().getDimension();
-                    if(thisDimension.size() == referencedDimension.size()){
-                        for(int index=0; index<thisDimension.size(); index++){
-                            if(!(thisDimension.get(index) == referencedDimension.get(index))){
-                                throw new Exception("No se pudo asignar el arreglo por dimensiones diferentes");
-                            }
-                        }
-                        //Igualamos los arreglos siempre comparando los tipos
-                        if(this.type.equalsIgnoreCase(symbol.getReference().getBase())){
-                            this.array = symbol.getArray();
-                        }else{
-                            throw new Exception("Los arreglos son de diferentes tipos se esperaba "+this.type);
-                        }
-                    }else{
-                        throw new Exception("No se pudo asignar el arreglo por dimensiones diferentes");
-                    }
-                            
-                }else{
-                    int direction = calculateDirection(dimension);
-                    Value result =null;
-                    if(metodo.equalsIgnoreCase("+=")){
-                        result = new Addition().MakeAddition(new Value(type, this.value, line, column), value, line, column);
-                        result = new TypeParser().tryParse(value, type, line, column);
-                        array[direction] = result.getRawValue();
-                    }else if(metodo.equalsIgnoreCase("=")){
-                        result = value;
-                        result = new TypeParser().tryParse(value, type, line, column);                    
-                        array[direction] = result.getRawValue();
-                    }else if(metodo.equalsIgnoreCase("++")||metodo.equalsIgnoreCase("--")){
-                        increm(metodo, direction, line, column);
-                    }
+            try {                                 
+                int direction = calculateDirection(dimension);                
+                Value result =null;                
+                if(metodo.equalsIgnoreCase("+=")){                
+                    result = new Addition().MakeAddition(new Value(type, this.value, line, column), value, line, column);                    
+                    result = new TypeParser().tryParse(value, type, line, column);                    
+                    array[direction] = result.getRawValue();                    
+                }else if(metodo.equalsIgnoreCase("=")){                
+                    result = value;                    
+                    result = new TypeParser().tryParse(value, type, line, column);                                        
+                    array[direction] = result.getRawValue();                    
+                }else if(metodo.equalsIgnoreCase("++")||metodo.equalsIgnoreCase("--")){                
+                    increm(metodo, direction, line, column);                    
                 }
+                
                 
                 
             } catch (Exception e) {
@@ -198,28 +176,85 @@ public class Data {
      * @param column 
      */
     public void setValue(String name, Value value, String metodo, int line, int column){
-        if(isArray){
+        Symbol symbol = null;
+        boolean theRightValue=false;
+        
+        if(value.getRawType().equalsIgnoreCase("variable")){
+            symbol = TableOfValue.getSymbol(value.getRawValue(), "variable");
+            theRightValue = symbol.getData().isArray;
+        }
+        if(value.getDimensions().size()>0){
+            theRightValue=false;
+        }
+        if(isArray && !theRightValue){
             SemanticError error = new SemanticError("Arreglo requerido", line, column);
             error.setDescription("Se encontro una variable de tipo "+type);
             TableOfValue.semanticErrors.add(error);
         }else{
             try {
-                if(metodo.equalsIgnoreCase("+=")){
-                    Addition addition = new Addition();
-                    Value asignacion = addition.MakeAddition(new Value(type, this.value, line, column), value, line, column);
-                    TypeParser typeParser = new TypeParser();
-                    asignacion = typeParser.tryParse(asignacion, type, line, column);
-                    this.value = asignacion.getRawValue();
-                }else if(metodo.equalsIgnoreCase("=")){
-                    Value asignacion=value;
-                    if(value.getRawType().equalsIgnoreCase("specialFunction")){
-                        asignacion = value.getRefinatedValue();
+                if(theRightValue){
+                    if(metodo.equalsIgnoreCase("=")){
+                        
+                        if(symbol.getReference().getBase().equalsIgnoreCase(this.type)){
+                            ArrayList<Integer> thisDimension = this.dimension;
+                            ArrayList<Integer> referencedDimension = symbol.getReference().getDimension();
+                            if(thisDimension.size() == referencedDimension.size()){
+                                for(int index=0; index<thisDimension.size(); index++){
+                                    if(!(thisDimension.get(index) == referencedDimension.get(index))){
+                                        throw new Exception("No se pudo asignar el arreglo por dimensiones diferentes");
+                                    }
+                                }
+                                //Igualamos los arreglos siempre comparando los tipos
+                                if(this.type.equalsIgnoreCase(symbol.getReference().getBase())){
+                                    this.array = symbol.getArray();
+                                }else{
+                                    throw new Exception("Los arreglos son de diferentes tipos se esperaba "+this.type);
+                                }
+                            }else{
+                                throw new Exception("No se pudo asignar el arreglo por dimensiones diferentes");
+                            }
+                        }else{
+                            if(symbol.getReference().getBase().equalsIgnoreCase("caracter") && this.type.equalsIgnoreCase("cadena")){
+                                StringBuilder string = new StringBuilder();
+                                String[] arreglo = symbol.getArray();
+                                for(int index=0; index<arreglo.length; index++){
+                                    if(arreglo[index]==null){
+                                        continue;
+                                    }
+                                    string.append(arreglo[index]);
+                                }
+                                this.value = string.toString();
+                            }else{
+                                SemanticError error = new SemanticError("Tipos Incompatibles", line, column);
+                                error.setDescription("La igualacion es de tipos diferentes entre los arreglos");
+                                TableOfValue.semanticErrors.add(error);
+                            }
+                            
+                        }
+                    }else{
+                        SemanticError error = new SemanticError("Igualacion requerida", line, column);
+                        error.setDescription("En igualacion de un arreglo a otro arreglo directamente solo se puede igualar no sumar");
+                        TableOfValue.semanticErrors.add(error);
                     }
-                    asignacion = new TypeParser().tryParse(asignacion, type, line, column);
-                    this.value = asignacion.getRawValue();
-                }else if(metodo.equalsIgnoreCase("++") || metodo.equalsIgnoreCase("--")){
-                    increm(metodo, line, column);
+                }else{
+                    if(metodo.equalsIgnoreCase("+=")){
+                        Addition addition = new Addition();
+                        Value asignacion = addition.MakeAddition(new Value(type, this.value, line, column), value, line, column);
+                        TypeParser typeParser = new TypeParser();
+                        asignacion = typeParser.tryParse(asignacion, type, line, column);
+                        this.value = asignacion.getRawValue();
+                    }else if(metodo.equalsIgnoreCase("=")){
+                        Value asignacion=value;
+                        if(value.getRawType().equalsIgnoreCase("specialFunction")){
+                            asignacion = value.getRefinatedValue();
+                        }
+                        asignacion = new TypeParser().tryParse(asignacion, type, line, column);
+                        this.value = asignacion.getRawValue();
+                    }else if(metodo.equalsIgnoreCase("++") || metodo.equalsIgnoreCase("--")){
+                        increm(metodo, line, column);
+                    }
                 }
+                
             } catch (Exception e) {
                 SemanticError error = new SemanticError("Tipos incompatibles", line, column);
                 error.setDescription(e.getMessage());

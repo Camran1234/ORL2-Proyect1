@@ -245,6 +245,7 @@ public class TypeParser {
     public Value tryParse(Value value, String typeToParse, int line, int column) throws Exception{
         Value newValue=null;
         String type = value.getType();
+        
         String data = value.getValue();
         if(typeToParse.equalsIgnoreCase("doble")){
             if(type.equalsIgnoreCase("doble")){

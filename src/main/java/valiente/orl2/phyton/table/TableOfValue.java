@@ -75,6 +75,16 @@ public class TableOfValue {
     }
     
     
+    public static boolean checkExtendeds(Symbol symbol){
+        boolean flag=false;
+        Instruction actualPista = workingSymbol.getReference().getValue().lookForPista();
+        Instruction instructionReferenced = symbol.getReference().getValue();
+        if(!(actualPista == instructionReferenced.lookForPista())){
+            flag = isExtendedFromMainPista((Pista)actualPista, instructionReferenced);
+        }
+        return flag;
+    }
+    
     /**
      * Comprueba que el simbolo enviado pertenece al contexto de la pista actual
      * @param symbol
@@ -89,7 +99,7 @@ public class TableOfValue {
         if(actualPista == instructionReferenced.lookForPista()){
             flag = true;
         }else{
-            flag = isExtendedFromMainPista((Pista)actualPista, instructionReferenced);
+            //flag = isExtendedFromMainPista((Pista)actualPista, instructionReferenced);
         }
         return flag;
     }
@@ -149,6 +159,25 @@ public class TableOfValue {
                 }
             }
         }
+        //Comprobando las partes extendidas
+        for(int index=0; index<symbols.size(); index++){
+            String name = symbols.get(index).getId();
+            String category = symbols.get(index).getCategory();
+            int parametros = symbols.get(index).getNumberParameters();
+            
+            if(name.equalsIgnoreCase(id) && category.equalsIgnoreCase("function")){
+                if(parametros==operation.size()){
+                    ArrayList<Parameter> parameter = symbols.get(index).getParameters();
+                    if(compareParameters(parameter, operation)){
+                        if(checkExtendeds(symbols.get(index))){
+                            symbols.get(index);
+                            return symbols.get(index).getReference().getValue();
+                        }
+                    }
+                }
+            }
+        }
+        
         return null;
     }
     
@@ -172,8 +201,16 @@ public class TableOfValue {
             if(symbols.get(index).getId().equalsIgnoreCase(id) &&
                     symbols.get(index).getCategory().equalsIgnoreCase(categoria)){
                 if(fromSamePista(symbols.get(index))){
-                    symbol = symbols.get(index);
-                    break;
+                    return symbols.get(index);
+                }
+            }
+        }
+        //Comprobando las partes extendidas
+        for(int index=symbols.size()-1; index>=0; index--){
+            if(symbols.get(index).getId().equalsIgnoreCase(id) &&
+                    symbols.get(index).getCategory().equalsIgnoreCase(categoria)){
+                if(checkExtendeds(symbols.get(index))){
+                    return symbols.get(index);
                 }
             }
         }
@@ -187,6 +224,7 @@ public class TableOfValue {
             boolean flag=false;
             for(int index=symbols.size()-1; index>=0; index--){
                 if(id.equalsIgnoreCase(symbols.get(index).getId()) && category.equalsIgnoreCase(symbols.get(index).getCategory())){
+                    //En teoria lanza el error siempre que sea de la misma pista, no toma en cuenta las extendidas
                     if(fromSamePista(symbols.get(index))){
                         flag = true;
                     }
@@ -216,12 +254,26 @@ public class TableOfValue {
                 return symbols.get(index).getType();
             }
         }
+        for(int index=symbols.size()-1; index>=0; index--){
+            if(symbols.get(index).getId().equalsIgnoreCase(id) && checkExtendeds(symbols.get(index))){
+                return symbols.get(index).getType();
+            }
+        }
         throw new ValueException("No se encontro ningun simbolo con identificador "+id,"Simbolo no encontrado", line, column);
     }
     
     public static boolean isArray(String id){
         for(int index=symbols.size()-1; index>=0; index--){
             if(symbols.get(index).getId().equalsIgnoreCase(id) && symbols.get(index).isArray() && fromSamePista(symbols.get(index))){
+                if(symbols.get(index).getReference().getDimension().size()>0){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        }
+        for(int index=symbols.size()-1; index>=0; index--){
+            if(symbols.get(index).getId().equalsIgnoreCase(id) && symbols.get(index).isArray() && checkExtendeds(symbols.get(index))){
                 if(symbols.get(index).getReference().getDimension().size()>0){
                     return true;
                 }else{
@@ -266,6 +318,13 @@ public class TableOfValue {
                 return symbols.get(index).getValueArray(direction, line, column);
             }
         }
+        for(int index=symbols.size()-1; index>=0; index--){
+            if(symbols.get(index).getId().equalsIgnoreCase(id) && symbols.get(index).getCategory().equalsIgnoreCase("variable")
+                    && checkExtendeds(symbols.get(index))){
+                ArrayList<Integer> direction = getDimensionParams(dimension);
+                return symbols.get(index).getValueArray(direction, line, column);
+            }
+        }
         return null;
     }
     
@@ -284,6 +343,12 @@ public class TableOfValue {
                 return symbols.get(index).getValue();
             }
         }
+        for(int index = symbols.size()-1; index>=0; index-- ){
+            if(symbols.get(index).getId().equalsIgnoreCase(id) && symbols.get(index).getCategory().equalsIgnoreCase("variable")
+                    && checkExtendeds(symbols.get(index))){
+                return symbols.get(index).getValue();
+            }
+        }
         throw new ValueException("No se encontro ningun simbolo con identificador"+id,"Simbolo no encontrado", line, column);
     }
     
@@ -295,6 +360,7 @@ public class TableOfValue {
         for(int index=symbols.size()-1; index>=0; index--){
             if(symbols.get(index).getAmbit()==ambit && !symbols.get(index).isGlobal()
                     && fromSamePista(symbols.get(index)) && symbols.get(index).getReference().getValue().lookForContainer().equals(container.lookForContainer()) ){
+                //Solo eliminamos los de la pista que estemos trabajando
                 symbols.remove(index);
             }
         }
