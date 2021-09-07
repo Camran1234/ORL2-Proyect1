@@ -3,7 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import java.awt.Component;
+import java.io.File;
 import java.util.ArrayList;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import valiente.orl2.phyton.instructions.Function;
 import valiente.orl2.phyton.instructions.Instruction;
 import valiente.orl2.phyton.conditions.ElseIf;
@@ -17,12 +21,34 @@ import valiente.orl2.phyton.error.ValueException;
 public class Test {
     
     public static void main (String args[]){
-        char a = 'a';
-        int b = 97;
-        if(a == b){
-            System.out.println("YES");
+        
+        String text = "Hola Mundo";
+        StringBuilder string = new StringBuilder(text);
+        for(int index=0; index<4; index++){
+            string.deleteCharAt(string.length()-1);
         }
-        System.out.println(((double)a/b)+" =" +a+", "+b);
+        System.out.println(string.toString());
+        /*int n = JOptionPane.showConfirmDialog(
+                            null, "Would you like green eggs and ham?",
+                            "An Inane Question",
+                            JOptionPane.YES_NO_OPTION);
+        if (n == JOptionPane.YES_OPTION) {
+
+        } else if (n == JOptionPane.NO_OPTION) {
+
+        } else {
+
+        }*/
+        
+        /*String directory="./data/archivo";
+        String fileName = "save.bin";
+        File file = new File(directory);
+        File file2 = new File(directory+"/"+fileName);
+        if(!file.exists()){
+            file.mkdirs();
+            System.out.println("Creating");
+        }
+        System.out.println(file.getAbsolutePath());*/
     }
     
     public static void xD(){

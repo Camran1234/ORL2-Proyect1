@@ -8,10 +8,12 @@ package valiente.orl2.phyton.specialInstructions;
 import valiente.orl2.phyton.error.SemanticError;
 import valiente.orl2.phyton.error.ValueException;
 import valiente.orl2.phyton.instructions.Instruction;
+import valiente.orl2.phyton.instructions.Pista;
 import valiente.orl2.phyton.table.TableOfValue;
 import valiente.orl2.phyton.values.Operation;
 import valiente.orl2.phyton.values.TypeParser;
 import valiente.orl2.phyton.values.Value;
+import valiente.orl2.reproduccion.Reproduccion;
 /**
  *
  * @author camran1234
@@ -27,13 +29,60 @@ public class Reproducir extends Instruction{
     }
 
     public void execute(){
-        /*empty*/
+        Value newNota = nota.execute();            
+        Value newOctava = octava.execute();        
+        Value newTiempo = milisegundos.execute();        
+        Value newCanal = canal.execute();
+        String valorNota = "";
+        String valorOctava = "";
+        String valorTiempo = "";
+        String valorCanal= "";
+        try {
+            if(!newNota.getRawType().equalsIgnoreCase("nota")){
+                throw new ValueException("Se esperaba que se asignara una nota a reproducir", "Tipos incompatibles", newNota.getLine(), newNota.getColumn());
+            }
+            valorNota = newNota.getRawValue();
+        } catch (ValueException e) {
+        }
+        try {
+            if(!newOctava.getType().equalsIgnoreCase("entero")){
+                throw new ValueException("Se esperaba que se asignara un entero a reproducir", "Tipos incompatibles", newOctava.getLine(), newOctava.getColumn());
+            }
+            valorOctava = newOctava.getValue();
+        } catch (ValueException e) {
+        }
+        try {
+            if(!newTiempo.getType().equalsIgnoreCase("entero")){
+                throw new ValueException("Se esperaba que se asignara un entero a reproducir", "Tipos incompatibles", newTiempo.getLine(), newTiempo.getColumn());
+            }
+            valorTiempo = newTiempo.getValue();
+        } catch (ValueException e) {
+        }
+        try {
+            if(!newCanal.getType().equalsIgnoreCase("entero")){
+                throw new ValueException("Se esperaba que se asignara un entero a reproducir", "Tipos incompatibles", newCanal.getLine(), newCanal.getColumn());
+            }
+            valorCanal = newCanal.getValue();
+        } catch (ValueException e) {
+        }
+        
+        try {
+            Pista newPista = (Pista)TableOfValue.getWorkingSymbol().getReference().getValue();
+            //Asignamos los valores de reproduccion
+            Reproduccion reproduccion = new Reproduccion(valorNota, Integer.parseInt(valorOctava), Integer.parseInt(valorTiempo), Integer.parseInt(valorCanal), 
+            getLine(), getColumn());
+            newPista.setSonido(reproduccion);
+        } catch (ValueException e) {
+        }
+        
+        
+        
     }
     
     @Override
     public Value getValueSpecialFunction(){
-        Value valor = milisegundos.execute();
         try {
+            Value valor = milisegundos.execute();
             valor = new TypeParser().tryParse(valor, "entero", getLine(), getColumn());
             this.execute();
             return valor;

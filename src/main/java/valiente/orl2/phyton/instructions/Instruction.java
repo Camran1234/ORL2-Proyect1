@@ -5,6 +5,7 @@
  */
 package valiente.orl2.phyton.instructions;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import valiente.orl2.phyton.conditions.Else;

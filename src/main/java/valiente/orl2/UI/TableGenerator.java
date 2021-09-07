@@ -21,14 +21,17 @@ import valiente.orl2.proyecto1.PhytonFrame;
  * @author camran1234
  */
 public class TableGenerator {
-    private ArrayList<LexicalError> lexicalErrors = TableOfValue.lexicalErrors;
-    private ArrayList<SyntaxError> syntaxErrors = TableOfValue.syntaxErrors;
-    private ArrayList<SemanticError> semanticErrors = TableOfValue.semanticErrors;
+    private ArrayList<LexicalError> lexicalErrors = new ArrayList();
+    private ArrayList<SyntaxError> syntaxErrors = new ArrayList();
+    private ArrayList<SemanticError> semanticErrors = new ArrayList();
     
     private static int numberErrors=0;
     
-    public TableGenerator(){
+    public TableGenerator(ArrayList<LexicalError> lexicalErrors, ArrayList<SyntaxError> syntaxErrors, ArrayList<SemanticError> semanticErrors){
         this.numberErrors=0;
+        this.lexicalErrors = lexicalErrors;
+        this.syntaxErrors = syntaxErrors;
+        this.semanticErrors = semanticErrors;
     }
     
     public void addLexicalErrors(ArrayList<ArrayList<String>> errores){

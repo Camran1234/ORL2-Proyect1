@@ -23,11 +23,25 @@ public class SyntaxError extends Error{
     
     public SyntaxError(String type,String tokenError, int line, int column) {
         super(type, line, column);
+        if(line==-1){
+            setLine(lastLine);
+        }
+        if(column==-1){
+            setColumn(lastColumn);
+        }
+        
         this.tokenError = tokenError;
     }
     
     public SyntaxError( int line, int column){
         super(line, column);
+        if(line==-1){
+            setLine(lastLine);
+        }
+        if(column==-1){
+            setColumn(lastColumn);
+        }
+        
     }
     
     @Override

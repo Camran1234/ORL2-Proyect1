@@ -14,6 +14,8 @@ import valiente.orl2.phyton.table.TableOfValue;
 import valiente.orl2.phyton.table.Type;
 import valiente.orl2.phyton.values.Operation;
 import valiente.orl2.phyton.values.Value;
+import valiente.orl2.reproduccion.Reproduccion;
+import valiente.orl2.reproduccion.PistaReproduccion;
 
 /**
  *
@@ -23,11 +25,20 @@ public class Pista extends Instruction{
     String nombre;
     ArrayList<Operation> extendeds;
     Symbol workingSymbol=null;
+    PistaReproduccion reproductor = new PistaReproduccion();
     
     public Pista(int line, int column){
         super(line, column);
     }
 
+    public void setSonido(Reproduccion reproduccion){
+        reproductor.addNewSonido(reproduccion);
+    }
+    
+    public PistaReproduccion getSonido(){
+        return reproductor;
+    }
+    
     public String getName() {
         return nombre;
     }
