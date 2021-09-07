@@ -42,21 +42,7 @@ public class PlayList implements Serializable{
     public void compareList(ArrayList<ListaReproduccion> listaReproduccion, ArrayList<PistaReproduccion> pistas){
         //Comprobamos semanticamente los parametros
         for(ListaReproduccion lista:listaReproduccion){
-            try {
-                compareNombre(lista);
-                comparePistas(lista, pistas);
-            } catch (ListaException e) {
-                ListaAnalyzer.semanticErrors.add(e.getError());
-            }
-            
-        }
-    }
-
-    private void compareNombre(ListaReproduccion lista) throws ListaException{
-        for(ListaReproduccion list:listas){
-            if(list.getNombre().equals(lista.getNombre())){
-                throw new ListaException("Nombre repetido","Cambiar de nombre a la lista "+list.getNombre(), lista.getLine(), lista.getColumn());
-            }
+            comparePistas(lista, pistas);
         }
     }
 

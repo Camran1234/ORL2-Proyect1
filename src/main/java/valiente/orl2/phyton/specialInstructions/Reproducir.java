@@ -48,6 +48,10 @@ public class Reproducir extends Instruction{
             if(!newOctava.getType().equalsIgnoreCase("entero")){
                 throw new ValueException("Se esperaba que se asignara un entero a reproducir", "Tipos incompatibles", newOctava.getLine(), newOctava.getColumn());
             }
+            int valor = Integer.parseInt(newOctava.getValue());
+            if(valor<=0 && valor>=8){
+               throw new ValueException("Se esperaba que se asignara la octava en un rango de 0 a 8", "Rango superior", newOctava.getLine(), newOctava.getColumn());
+            }
             valorOctava = newOctava.getValue();
         } catch (ValueException e) {
         }
@@ -56,6 +60,9 @@ public class Reproducir extends Instruction{
                 throw new ValueException("Se esperaba que se asignara un entero a reproducir", "Tipos incompatibles", newTiempo.getLine(), newTiempo.getColumn());
             }
             valorTiempo = newTiempo.getValue();
+            if(Integer.parseInt(valorTiempo)<0){
+               throw new ValueException("Se esperaba un entero positivo en tiempo", "Entero positivo esperado", newOctava.getLine(), newOctava.getColumn()); 
+            }
         } catch (ValueException e) {
         }
         try {
@@ -63,6 +70,9 @@ public class Reproducir extends Instruction{
                 throw new ValueException("Se esperaba que se asignara un entero a reproducir", "Tipos incompatibles", newCanal.getLine(), newCanal.getColumn());
             }
             valorCanal = newCanal.getValue();
+            if(Integer.parseInt(valorCanal)<0){
+               throw new ValueException("Se esperaba un entero positivo en el canal", "Entero positivo esperado", newOctava.getLine(), newOctava.getColumn()); 
+            }
         } catch (ValueException e) {
         }
         

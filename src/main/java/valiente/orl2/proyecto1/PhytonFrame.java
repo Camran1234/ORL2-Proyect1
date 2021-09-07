@@ -13,6 +13,9 @@ import static java.awt.PageAttributes.ColorType.COLOR;
 import java.awt.Toolkit;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.File;
 import java.util.Vector;
 import javax.swing.JFileChooser;
 import static javax.swing.JFileChooser.APPROVE_OPTION;
@@ -57,6 +60,9 @@ public class PhytonFrame extends javax.swing.JFrame {
      private static DefaultTableModel tableModel;
      private static JTable newTable;
      public static boolean compile=false;
+     private String path="";
+    private boolean guardado = false;
+    private String nombreArchivo;
       /**
      * Creates new form PhytonFrame
      */
@@ -70,6 +76,25 @@ public class PhytonFrame extends javax.swing.JFrame {
         this.errorArea = panelErrores;
         tableModel = model;
         newTable.setRowSelectionAllowed(false);
+        textPaneReferenced.addKeyListener(new KeyListener() {
+
+        @Override
+        public void keyTyped(KeyEvent arg0) {
+            guardado = false;
+        }
+
+        @Override
+        public void keyReleased(KeyEvent arg0) {
+            //empty
+
+        }
+
+        @Override
+        public void keyPressed(KeyEvent arg0) {
+            //emty
+
+        }
+});
     }
 
     public static void resetTable(){
@@ -152,6 +177,7 @@ public class PhytonFrame extends javax.swing.JFrame {
         panelLenguaje = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
+        labelNombre = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1250, 1000));
@@ -205,7 +231,7 @@ public class PhytonFrame extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 536, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 628, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -219,7 +245,7 @@ public class PhytonFrame extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 868, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(textField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -233,6 +259,7 @@ public class PhytonFrame extends javax.swing.JFrame {
         jToolBar1.setForeground(new java.awt.Color(153, 153, 153));
         jToolBar1.setRollover(true);
         jToolBar1.setEnabled(false);
+        jToolBar1.setPreferredSize(new java.awt.Dimension(614, 32));
         jToolBar1.setOpaque(true);
         jToolBar1.setBackground(Color.WHITE);
 
@@ -329,6 +356,9 @@ public class PhytonFrame extends javax.swing.JFrame {
             }
         });
 
+        labelNombre.setFont(new java.awt.Font("Noto Sans CJK JP Thin", 1, 14)); // NOI18N
+        labelNombre.setForeground(new java.awt.Color(0, 0, 0));
+
         javax.swing.GroupLayout panelLenguajeLayout = new javax.swing.GroupLayout(panelLenguaje);
         panelLenguaje.setLayout(panelLenguajeLayout);
         panelLenguajeLayout.setHorizontalGroup(
@@ -338,14 +368,18 @@ public class PhytonFrame extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(399, Short.MAX_VALUE))
+                .addGap(42, 42, 42)
+                .addComponent(labelNombre)
+                .addContainerGap(289, Short.MAX_VALUE))
         );
         panelLenguajeLayout.setVerticalGroup(
             panelLenguajeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLenguajeLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(panelLenguajeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(panelLenguajeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(labelNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
@@ -385,58 +419,110 @@ public class PhytonFrame extends javax.swing.JFrame {
         }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-         try{
+        if(path.equalsIgnoreCase("")){
+            try{
             String path="";
-            JFileChooser fileOpener = new JFileChooser();
-            fileOpener.addChoosableFileFilter(new FileNameExtensionFilter("txt","txt"));
-            fileOpener.setAcceptAllFileFilterUsed(false);
-            int seleccion = fileOpener.showOpenDialog(this);
-            if(seleccion == APPROVE_OPTION){
-                path = fileOpener.getSelectedFile().getPath();
-                FileManager manager = new FileManager();
-                String text = textPaneReferenced.getText();
-                manager.createFile(path, text);
+                JFileChooser fileOpener = new JFileChooser();
+                fileOpener.addChoosableFileFilter(new FileNameExtensionFilter("txt","txt"));
+                fileOpener.setAcceptAllFileFilterUsed(false);
+                int seleccion = fileOpener.showOpenDialog(this);
+                if(seleccion == APPROVE_OPTION){
+                    path = fileOpener.getSelectedFile().getPath();
+                    FileManager manager = new FileManager();
+                    String text = textPaneReferenced.getText();
+                    manager.createFile(path, text);
+                    this.guardado = true;
+                    this.path = path;
+                    File file = new File(path);
+                    this.nombreArchivo = file.getName();
+                    labelNombre.setText(nombreArchivo);
+                }
+
+            }catch(Throwable e){
+                e.printStackTrace();
             }
-            
-        }catch(Throwable e){
-            e.printStackTrace();
+        } else{
+            FileManager manager = new FileManager();
+            String text = textPaneReferenced.getText();                    
+            manager.createFile(path, text);            
+            this.guardado = true;
+            JOptionPane.showMessageDialog(this, "Archivo Guardado", "",JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        try{
-            String path="";
-            JFileChooser fileOpener = new JFileChooser();
-            fileOpener.setAcceptAllFileFilterUsed(false);
-            int seleccion = fileOpener.showOpenDialog(this);
-            if(seleccion == APPROVE_OPTION){
-                path = fileOpener.getSelectedFile().getPath();
-                FileManager manager = new FileManager();
-                String text = manager.downloadFile(path);
-                textPaneReferenced.setText(text);
+    public boolean youSure(){
+        if(guardado){
+            guardado = false;
+            return true;
+        }else{
+            if(!textPaneReferenced.getText().equalsIgnoreCase("")){
+                int n = JOptionPane.showConfirmDialog(
+                                PhytonFrame.frame, "No has guardado tu archivo, si no lo has guardado se perderan tus datos,\n ¿Deseas continuar?",
+                                "ALERTA",
+                                JOptionPane.YES_NO_OPTION);                    
+                if (n == JOptionPane.YES_OPTION) {        
+                    guardado = false;
+                    return true;
+                } else if (n == JOptionPane.NO_OPTION) {
+                    return false;
+                }
             }
-            
-        }catch(Throwable e){
-            e.printStackTrace();
         }
+        return true;
+    }
+    
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        if(youSure()){
+            try{
+                String path="";
+                JFileChooser fileOpener = new JFileChooser();
+                fileOpener.setAcceptAllFileFilterUsed(false);
+                int seleccion = fileOpener.showOpenDialog(this);
+                if(seleccion == APPROVE_OPTION){
+                    path = fileOpener.getSelectedFile().getPath();
+                    FileManager manager = new FileManager();
+                    String text = manager.downloadFile(path);
+                    textPaneReferenced.setText(text);
+                    this.path = path;
+                    this.guardado=true;
+                    File file = new File(path);
+                    this.nombreArchivo = file.getName();
+                    labelNombre.setText(nombreArchivo);
+                }
+
+            }catch(Throwable e){
+                e.printStackTrace();
+            }
+        }
+        
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-         try{
-            String path="";
-            JFileChooser fileOpener = new JFileChooser();
-            fileOpener.addChoosableFileFilter(new FileNameExtensionFilter("txt","txt"));
-            fileOpener.setAcceptAllFileFilterUsed(false);
-            int seleccion = fileOpener.showOpenDialog(this);
-            if(seleccion == APPROVE_OPTION){
-                path = fileOpener.getSelectedFile().getPath();
-                FileManager manager = new FileManager();
-                manager.createFile(path, "");
+        if(youSure()){ 
+                try{
+                    String path="";
+                    JFileChooser fileOpener = new JFileChooser();
+                    fileOpener.addChoosableFileFilter(new FileNameExtensionFilter("txt","txt"));
+                    fileOpener.setAcceptAllFileFilterUsed(false);
+                    int seleccion = fileOpener.showOpenDialog(this);
+                    if(seleccion == APPROVE_OPTION){
+                        path = fileOpener.getSelectedFile().getPath();
+                        FileManager manager = new FileManager();
+                        manager.createFile(path, "");
+                        textPaneReferenced.setText("");
+                        this.path = path;
+                        this.guardado = true;
+                        File file = new File(path);
+                        this.nombreArchivo = file.getName();
+                        labelNombre.setText(nombreArchivo);
+                    }
+
+                }catch(Throwable e){
+                    e.printStackTrace();
+                }
             }
-            
-        }catch(Throwable e){
-            e.printStackTrace();
-        }
+        
+        
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void generarPistas(boolean mode){
@@ -568,6 +654,7 @@ public class PhytonFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JLabel labelNombre;
     private javax.swing.JPanel panelErrores;
     private javax.swing.JPanel panelLenguaje;
     private javax.swing.JTextArea textArea;

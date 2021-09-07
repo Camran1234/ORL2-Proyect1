@@ -46,9 +46,9 @@ public class PlaySyntax extends java_cup.runtime.lr_parser {
     "\004\000\002\012\006\000\002\012\006\000\002\012\006" +
     "\000\002\012\006\000\002\013\005\000\002\013\005\000" +
     "\002\013\005\000\002\013\005\000\002\013\003\000\002" +
-    "\013\003\000\002\011\005\000\002\011\005\000\002\004" +
-    "\005\000\002\004\005\000\002\004\005\000\002\005\005" +
-    "\000\002\005\005\000\002\005\005\000\002\006\005\000" +
+    "\013\003\000\002\011\005\000\002\011\005\000\002\011" +
+    "\005\000\002\004\005\000\002\004\005\000\002\004\005" +
+    "\000\002\005\005\000\002\005\005\000\002\005\005\000" +
     "\002\006\005\000\002\006\005\000\002\007\004\000\002" +
     "\007\004\000\002\010\005\000\002\010\005\000\002\010" +
     "\002\000\002\003\003\000\002\003\003" });
@@ -59,13 +59,13 @@ public class PlaySyntax extends java_cup.runtime.lr_parser {
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\144\000\006\003\005\020\004\001\002\000\006\003" +
-    "\143\004\013\001\002\000\006\003\012\004\013\001\002" +
+    "\000\142\000\006\003\005\020\004\001\002\000\006\003" +
+    "\141\004\013\001\002\000\006\003\012\004\013\001\002" +
     "\000\004\002\010\001\002\000\004\002\000\001\002\000" +
-    "\004\002\001\001\002\000\004\021\141\001\002\000\004" +
-    "\022\136\001\002\000\006\003\015\022\014\001\002\000" +
+    "\004\002\001\001\002\000\004\021\137\001\002\000\004" +
+    "\022\134\001\002\000\006\003\015\022\014\001\002\000" +
     "\006\003\017\020\016\001\002\000\006\003\017\020\016" +
-    "\001\002\000\006\003\133\005\040\001\002\000\006\003" +
+    "\001\002\000\006\003\131\005\040\001\002\000\006\003" +
     "\037\005\040\001\002\000\010\003\ufff5\021\ufff5\023\022" +
     "\001\002\000\006\003\ufff9\021\ufff9\001\002\000\006\003" +
     "\023\004\024\001\002\000\004\022\033\001\002\000\006" +
@@ -76,57 +76,55 @@ public class PlaySyntax extends java_cup.runtime.lr_parser {
     "\003\ufff8\021\ufff8\001\002\000\006\003\017\020\016\001" +
     "\002\000\010\003\ufff5\021\ufff5\023\022\001\002\000\006" +
     "\003\ufff7\021\ufff7\001\002\000\010\003\ufff3\021\ufff3\023" +
-    "\ufff3\001\002\000\004\022\127\001\002\000\006\003\042" +
-    "\022\041\001\002\000\006\003\124\013\123\001\002\000" +
+    "\ufff3\001\002\000\004\022\125\001\002\000\006\003\042" +
+    "\022\041\001\002\000\006\003\122\013\121\001\002\000" +
     "\004\013\043\001\002\000\010\003\045\021\047\023\044" +
-    "\001\002\000\012\003\051\006\053\007\050\010\055\001" +
+    "\001\002\000\012\003\051\006\053\007\050\010\056\001" +
     "\002\000\010\003\uffe9\021\uffe9\023\uffe9\001\002\000\010" +
     "\003\uffef\021\uffef\023\uffef\001\002\000\010\003\uffe8\021" +
-    "\uffe8\023\uffe8\001\002\000\006\003\117\022\116\001\002" +
+    "\uffe8\023\uffe8\001\002\000\006\003\115\022\114\001\002" +
     "\000\010\003\045\021\047\023\044\001\002\000\010\003" +
-    "\045\021\047\023\044\001\002\000\006\003\106\022\105" +
+    "\045\021\047\023\044\001\002\000\006\003\104\022\103" +
     "\001\002\000\010\003\045\021\047\023\044\001\002\000" +
-    "\006\003\061\022\060\001\002\000\010\003\045\021\047" +
-    "\023\044\001\002\000\010\003\uffeb\021\uffeb\023\uffeb\001" +
-    "\002\000\006\003\064\015\063\001\002\000\006\003\064" +
-    "\015\063\001\002\000\010\003\uffe6\021\uffe6\023\uffe6\001" +
-    "\002\000\006\003\065\014\066\001\002\000\006\003\065" +
-    "\014\066\001\002\000\010\003\uffd8\016\uffd8\023\071\001" +
-    "\002\000\010\003\uffd8\016\uffd8\023\071\001\002\000\004" +
-    "\016\070\001\002\000\010\003\uffde\021\uffde\023\uffde\001" +
-    "\002\000\006\003\073\014\074\001\002\000\006\003\uffdc" +
-    "\016\uffdc\001\002\000\010\003\uffd8\016\uffd8\023\071\001" +
-    "\002\000\010\003\uffd8\016\uffd8\023\071\001\002\000\006" +
-    "\003\uffda\016\uffda\001\002\000\006\003\uffd9\016\uffd9\001" +
-    "\002\000\006\003\uffdb\016\uffdb\001\002\000\006\003\101" +
-    "\016\102\001\002\000\010\003\uffdd\021\uffdd\023\uffdd\001" +
-    "\002\000\010\003\uffdf\021\uffdf\023\uffdf\001\002\000\010" +
-    "\003\uffe7\021\uffe7\023\uffe7\001\002\000\010\003\uffed\021" +
-    "\uffed\023\uffed\001\002\000\010\003\112\011\110\012\111" +
-    "\001\002\000\006\011\110\012\111\001\002\000\010\003" +
-    "\uffe1\021\uffe1\023\uffe1\001\002\000\010\003\uffd7\021\uffd7" +
-    "\023\uffd7\001\002\000\010\003\uffd6\021\uffd6\023\uffd6\001" +
-    "\002\000\010\003\uffe0\021\uffe0\023\uffe0\001\002\000\010" +
-    "\003\uffe2\021\uffe2\023\uffe2\001\002\000\010\003\uffec\021" +
-    "\uffec\023\uffec\001\002\000\010\003\uffea\021\uffea\023\uffea" +
-    "\001\002\000\010\003\121\011\110\012\111\001\002\000" +
-    "\006\011\110\012\111\001\002\000\010\003\uffe4\021\uffe4" +
-    "\023\uffe4\001\002\000\010\003\uffe3\021\uffe3\023\uffe3\001" +
-    "\002\000\010\003\uffe5\021\uffe5\023\uffe5\001\002\000\010" +
-    "\003\045\021\047\023\044\001\002\000\010\003\045\021" +
-    "\047\023\044\001\002\000\010\003\uffee\021\uffee\023\uffee" +
-    "\001\002\000\010\003\ufff1\021\ufff1\023\ufff1\001\002\000" +
-    "\004\013\130\001\002\000\010\003\045\021\047\023\044" +
-    "\001\002\000\010\003\ufff0\021\ufff0\023\ufff0\001\002\000" +
-    "\010\003\ufff4\021\ufff4\023\ufff4\001\002\000\012\003\ufff2" +
-    "\021\ufff2\022\127\023\ufff2\001\002\000\010\003\ufff5\021" +
-    "\ufff5\023\022\001\002\000\006\003\ufffb\021\ufffb\001\002" +
-    "\000\006\003\017\020\016\001\002\000\010\003\ufff5\021" +
-    "\ufff5\023\022\001\002\000\006\003\ufffa\021\ufffa\001\002" +
-    "\000\004\002\ufffe\001\002\000\006\003\145\021\146\001" +
-    "\002\000\006\021\144\022\136\001\002\000\004\002\ufffc" +
-    "\001\002\000\004\002\ufffd\001\002\000\004\002\uffff\001" +
-    "\002" });
+    "\010\003\045\021\047\023\044\001\002\000\006\003\060" +
+    "\022\057\001\002\000\006\003\100\015\062\001\002\000" +
+    "\004\015\062\001\002\000\010\003\uffe6\021\uffe6\023\uffe6" +
+    "\001\002\000\006\003\063\014\064\001\002\000\010\003" +
+    "\uffd8\016\uffd8\023\070\001\002\000\010\003\uffd8\016\uffd8" +
+    "\023\070\001\002\000\006\003\066\016\067\001\002\000" +
+    "\010\003\uffdd\021\uffdd\023\uffdd\001\002\000\010\003\uffde" +
+    "\021\uffde\023\uffde\001\002\000\006\003\072\014\073\001" +
+    "\002\000\006\003\uffdc\016\uffdc\001\002\000\010\003\uffd8" +
+    "\016\uffd8\023\070\001\002\000\010\003\uffd8\016\uffd8\023" +
+    "\070\001\002\000\006\003\uffda\016\uffda\001\002\000\006" +
+    "\003\uffd9\016\uffd9\001\002\000\006\003\uffdb\016\uffdb\001" +
+    "\002\000\010\003\uffe7\021\uffe7\023\uffe7\001\002\000\010" +
+    "\003\uffe5\021\uffe5\023\uffe5\001\002\000\010\003\uffeb\021" +
+    "\uffeb\023\uffeb\001\002\000\010\003\uffed\021\uffed\023\uffed" +
+    "\001\002\000\010\003\110\011\106\012\107\001\002\000" +
+    "\006\011\106\012\107\001\002\000\010\003\uffe0\021\uffe0" +
+    "\023\uffe0\001\002\000\010\003\uffd7\021\uffd7\023\uffd7\001" +
+    "\002\000\010\003\uffd6\021\uffd6\023\uffd6\001\002\000\010" +
+    "\003\uffdf\021\uffdf\023\uffdf\001\002\000\010\003\uffe1\021" +
+    "\uffe1\023\uffe1\001\002\000\010\003\uffec\021\uffec\023\uffec" +
+    "\001\002\000\010\003\uffea\021\uffea\023\uffea\001\002\000" +
+    "\010\003\117\011\106\012\107\001\002\000\006\011\106" +
+    "\012\107\001\002\000\010\003\uffe3\021\uffe3\023\uffe3\001" +
+    "\002\000\010\003\uffe2\021\uffe2\023\uffe2\001\002\000\010" +
+    "\003\uffe4\021\uffe4\023\uffe4\001\002\000\010\003\045\021" +
+    "\047\023\044\001\002\000\010\003\045\021\047\023\044" +
+    "\001\002\000\010\003\uffee\021\uffee\023\uffee\001\002\000" +
+    "\010\003\ufff1\021\ufff1\023\ufff1\001\002\000\004\013\126" +
+    "\001\002\000\010\003\045\021\047\023\044\001\002\000" +
+    "\010\003\ufff0\021\ufff0\023\ufff0\001\002\000\010\003\ufff4" +
+    "\021\ufff4\023\ufff4\001\002\000\012\003\ufff2\021\ufff2\022" +
+    "\125\023\ufff2\001\002\000\010\003\ufff5\021\ufff5\023\022" +
+    "\001\002\000\006\003\ufffb\021\ufffb\001\002\000\006\003" +
+    "\017\020\016\001\002\000\010\003\ufff5\021\ufff5\023\022" +
+    "\001\002\000\006\003\ufffa\021\ufffa\001\002\000\004\002" +
+    "\ufffe\001\002\000\006\003\143\021\144\001\002\000\006" +
+    "\021\142\022\134\001\002\000\004\002\ufffc\001\002\000" +
+    "\004\002\ufffd\001\002\000\004\002\uffff\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -134,11 +132,11 @@ public class PlaySyntax extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\144\000\006\002\005\017\006\001\001\000\004\015" +
-    "\141\001\001\000\004\015\010\001\001\000\002\001\001" +
+    "\000\142\000\006\002\005\017\006\001\001\000\004\015" +
+    "\137\001\001\000\004\015\010\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\002\001\001\000\002\001\001\000\004\014\133\001\001" +
-    "\000\004\014\017\001\001\000\004\012\131\001\001\000" +
+    "\002\001\001\000\002\001\001\000\004\014\131\001\001" +
+    "\000\004\014\017\001\001\000\004\012\127\001\001\000" +
     "\004\012\035\001\001\000\004\016\020\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
     "\001\000\004\014\030\001\001\000\004\014\026\001\001" +
@@ -147,31 +145,30 @@ public class PlaySyntax extends java_cup.runtime.lr_parser {
     "\000\004\016\034\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\004\013\045\001\001\000\010\004" +
-    "\051\005\053\011\055\001\001\000\002\001\001\000\002" +
+    "\051\005\053\011\054\001\001\000\002\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\004\013" +
-    "\114\001\001\000\004\013\113\001\001\000\002\001\001" +
-    "\000\004\013\103\001\001\000\002\001\001\000\004\013" +
-    "\056\001\001\000\002\001\001\000\004\006\102\001\001" +
-    "\000\004\006\061\001\001\000\002\001\001\000\004\007" +
-    "\077\001\001\000\004\007\066\001\001\000\004\010\076" +
-    "\001\001\000\004\010\071\001\001\000\002\001\001\000" +
-    "\002\001\001\000\002\001\001\000\002\001\001\000\004" +
-    "\010\075\001\001\000\004\010\074\001\001\000\002\001" +
-    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\002\001\001\000\004\003\112\001\001\000\004\003\106" +
+    "\112\001\001\000\004\013\111\001\001\000\002\001\001" +
+    "\000\004\013\101\001\001\000\004\013\100\001\001\000" +
+    "\002\001\001\000\004\006\076\001\001\000\004\006\060" +
+    "\001\001\000\002\001\001\000\004\007\064\001\001\000" +
+    "\004\010\075\001\001\000\004\010\070\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
-    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "\000\002\001\001\000\004\003\121\001\001\000\004\003" +
-    "\117\001\001\000\002\001\001\000\002\001\001\000\002" +
-    "\001\001\000\004\013\125\001\001\000\004\013\124\001" +
-    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "\000\004\013\130\001\001\000\002\001\001\000\002\001" +
-    "\001\000\002\001\001\000\004\016\134\001\001\000\002" +
-    "\001\001\000\004\014\136\001\001\000\004\016\137\001" +
-    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\001\000\002\001\001\000\004\010\074\001\001\000\004" +
+    "\010\073\001\001\000\002\001\001\000\002\001\001\000" +
+    "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
+    "\001\001\000\002\001\001\000\004\003\110\001\001\000" +
+    "\004\003\104\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\002\001\001" });
+    "\002\001\001\000\002\001\001\000\004\003\117\001\001" +
+    "\000\004\003\115\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\004\013\123\001\001\000\004" +
+    "\013\122\001\001\000\002\001\001\000\002\001\001\000" +
+    "\002\001\001\000\004\013\126\001\001\000\002\001\001" +
+    "\000\002\001\001\000\002\001\001\000\004\016\132\001" +
+    "\001\000\002\001\001\000\004\014\134\001\001\000\004" +
+    "\016\135\001\001\000\002\001\001\000\002\001\001\000" +
+    "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
+    "\001\001\000\002\001\001" });
 
   /** Access to <code>reduce_goto</code> table. */
   public short[][] reduce_table() {return _reduce_table;}
@@ -402,7 +399,20 @@ class CUP$PlaySyntax$actions {
           case 7: // productions ::= error SEMI_COLON parameters productions_re 
             {
               ArrayList<ListaReproduccion> RESULT =null;
+		int pleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).left;
+		int pright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).right;
+		ListaReproduccion p = (ListaReproduccion)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).value;
+		int prleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).left;
+		int prright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).right;
+		ArrayList<ListaReproduccion> pr = (ArrayList<ListaReproduccion>)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.peek()).value;
 		parser.report_error("Se esperaba la palabra Lista ","Inicio ilegal de la expresion");
+                 if(p!=null){
+                        if(pr!=null){
+                            pr.add(p); 
+                        }  
+                    }
+                    RESULT = pr;
+            
               CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("productions",11, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-3)), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
             }
           return CUP$PlaySyntax$result;
@@ -411,7 +421,20 @@ class CUP$PlaySyntax$actions {
           case 8: // productions ::= LISTA error parameters productions_re 
             {
               ArrayList<ListaReproduccion> RESULT =null;
+		int pleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).left;
+		int pright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).right;
+		ListaReproduccion p = (ListaReproduccion)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).value;
+		int prleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).left;
+		int prright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).right;
+		ArrayList<ListaReproduccion> pr = (ArrayList<ListaReproduccion>)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.peek()).value;
 		parser.report_error("Se esperaba \":\" ","Inicio ilegal de la expresion");
+                 if(p!=null){
+                        if(pr!=null){
+                            pr.add(p); 
+                        }  
+                    }
+                    RESULT = pr;
+            
               CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("productions",11, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-3)), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
             }
           return CUP$PlaySyntax$result;
@@ -483,7 +506,10 @@ class CUP$PlaySyntax$actions {
           case 14: // parameters ::= error status 
             {
               ListaReproduccion RESULT =null;
-		parser.report_error("Se esperaba \"{\" ","Inicio ilegal de la expresion");
+		int sleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).left;
+		int sright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).right;
+		ListaReproduccion s = (ListaReproduccion)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.peek()).value;
+		parser.report_error("Se esperaba \"{\" ","Inicio ilegal de la expresion"); RESULT=s;
               CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("parameters",10, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
             }
           return CUP$PlaySyntax$result;
@@ -525,7 +551,22 @@ class CUP$PlaySyntax$actions {
           case 17: // status ::= error SEMI_COLON STRING new_status 
             {
               ListaReproduccion RESULT =null;
+		int strleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).left;
+		int strright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).right;
+		Object str = (Object)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).value;
+		int nleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).left;
+		int nright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).right;
+		ListaReproduccion n = (ListaReproduccion)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.peek()).value;
 		parser.report_error("Se esperaba la palabra: nombre ","Inicio ilegal de la expresion");
+            if(str!=null){
+                    if(n!=null){
+                        String newString = str.toString();
+                        newString = newString.substring(1, newString.length()-1);
+                        n.setNombre(newString,cur_token.left, cur_token.right);
+                    }
+                }
+                RESULT = n;
+        
               CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("status",8, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-3)), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
             }
           return CUP$PlaySyntax$result;
@@ -534,7 +575,22 @@ class CUP$PlaySyntax$actions {
           case 18: // status ::= NOMBRE error STRING new_status 
             {
               ListaReproduccion RESULT =null;
+		int strleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).left;
+		int strright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).right;
+		Object str = (Object)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).value;
+		int nleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).left;
+		int nright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).right;
+		ListaReproduccion n = (ListaReproduccion)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.peek()).value;
 		parser.report_error("Se esperaba \":\" ","Inicio ilegal de la expresion");
+            if(str!=null){
+                    if(n!=null){
+                        String newString = str.toString();
+                        newString = newString.substring(1, newString.length()-1);
+                        n.setNombre(newString,cur_token.left, cur_token.right);
+                    }
+                }
+                RESULT = n;
+        
               CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("status",8, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-3)), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
             }
           return CUP$PlaySyntax$result;
@@ -543,7 +599,10 @@ class CUP$PlaySyntax$actions {
           case 19: // status ::= NOMBRE SEMI_COLON error new_status 
             {
               ListaReproduccion RESULT =null;
-		parser.report_error("Se esperaba el nombre de la pista en comillas dobles","String esperado");
+		int nleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).left;
+		int nright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).right;
+		ListaReproduccion n = (ListaReproduccion)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.peek()).value;
+		parser.report_error("Se esperaba el nombre de la pista en comillas dobles","String esperado"); RESULT=n;
               CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("status",8, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-3)), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
             }
           return CUP$PlaySyntax$result;
@@ -618,7 +677,10 @@ class CUP$PlaySyntax$actions {
           case 23: // new_status ::= COMA error new_status 
             {
               ListaReproduccion RESULT =null;
-		parser.report_error("No se menciono el parametro de la lista","Parametros mal declarados");
+		int nleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).left;
+		int nright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).right;
+		ListaReproduccion n = (ListaReproduccion)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.peek()).value;
+		parser.report_error("No se menciono el parametro de la lista","Parametros mal declarados"); RESULT=n;
               CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("new_status",9, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-2)), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
             }
           return CUP$PlaySyntax$result;
@@ -660,13 +722,25 @@ class CUP$PlaySyntax$actions {
           case 27: // pista ::= PISTA error look_pista 
             {
               ArrayList<String> RESULT =null;
-		parser.report_error("Se esperaba \":\" ","Inicio ilegal de la expresion");
+		int eleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).right;
+		ArrayList<String> e = (ArrayList<String>)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.peek()).value;
+		parser.report_error("Se esperaba \":\" ","Inicio ilegal de la expresion"); RESULT =e;
               CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("pista",7, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-2)), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
             }
           return CUP$PlaySyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 28: // circular ::= CIRCULAR SEMI_COLON options 
+          case 28: // pista ::= PISTA SEMI_COLON error 
+            {
+              ArrayList<String> RESULT =null;
+		parser.report_error("Se esperaba pistas adentro de los corchetes ","Inicio ilegal de la expresion");
+              CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("pista",7, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-2)), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
+            }
+          return CUP$PlaySyntax$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 29: // circular ::= CIRCULAR SEMI_COLON options 
             {
               Boolean RESULT =null;
 		int opleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).left;
@@ -678,16 +752,19 @@ class CUP$PlaySyntax$actions {
           return CUP$PlaySyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 29: // circular ::= CIRCULAR error options 
+          case 30: // circular ::= CIRCULAR error options 
             {
               Boolean RESULT =null;
-		parser.report_error("Se esperaba \":\" ","Inicio ilegal de la expresion");
+		int opleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).left;
+		int opright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).right;
+		Boolean op = (Boolean)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.peek()).value;
+		parser.report_error("Se esperaba \":\" ","Inicio ilegal de la expresion"); RESULT=op;
               CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("circular",2, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-2)), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
             }
           return CUP$PlaySyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 30: // circular ::= CIRCULAR SEMI_COLON error 
+          case 31: // circular ::= CIRCULAR SEMI_COLON error 
             {
               Boolean RESULT =null;
 		parser.report_error("Se esperaba la palbra: \"true\" o \"false\" ","Opciones invalidas");
@@ -696,7 +773,7 @@ class CUP$PlaySyntax$actions {
           return CUP$PlaySyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 31: // random ::= RANDOM SEMI_COLON options 
+          case 32: // random ::= RANDOM SEMI_COLON options 
             {
               Boolean RESULT =null;
 		int opleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).left;
@@ -708,16 +785,19 @@ class CUP$PlaySyntax$actions {
           return CUP$PlaySyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 32: // random ::= RANDOM error options 
+          case 33: // random ::= RANDOM error options 
             {
               Boolean RESULT =null;
-		parser.report_error("Se esperaba \":\" ","Inicio ilegal de la expresion");
+		int opleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).left;
+		int opright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).right;
+		Boolean op = (Boolean)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.peek()).value;
+		parser.report_error("Se esperaba \":\" ","Inicio ilegal de la expresion"); RESULT=op;
               CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("random",3, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-2)), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
             }
           return CUP$PlaySyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 33: // random ::= RANDOM SEMI_COLON error 
+          case 34: // random ::= RANDOM SEMI_COLON error 
             {
               Boolean RESULT =null;
 		parser.report_error("Se esperaba la palbra: \"true\" o \"false\" ","Opciones invalidas");
@@ -726,7 +806,7 @@ class CUP$PlaySyntax$actions {
           return CUP$PlaySyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 34: // look_pista ::= OPEN_BRACKET pistas CLOSE_BRACKET 
+          case 35: // look_pista ::= OPEN_BRACKET pistas CLOSE_BRACKET 
             {
               ArrayList<String> RESULT =null;
 		int eleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).left;
@@ -738,19 +818,13 @@ class CUP$PlaySyntax$actions {
           return CUP$PlaySyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 35: // look_pista ::= error pistas CLOSE_BRACKET 
-            {
-              ArrayList<String> RESULT =null;
-		parser.report_error("Se esperaba \"[\" ","Inicio ilegal de la expresion");
-              CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("look_pista",4, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-2)), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
-            }
-          return CUP$PlaySyntax$result;
-
-          /*. . . . . . . . . . . . . . . . . . . .*/
           case 36: // look_pista ::= OPEN_BRACKET pistas error 
             {
               ArrayList<String> RESULT =null;
-		parser.report_error("Se esperaba \"]\" ","Inicio ilegal de la expresion");
+		int eleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).right;
+		ArrayList<String> e = (ArrayList<String>)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).value;
+		parser.report_error("Se esperaba \"]\" ","Inicio ilegal de la expresion"); RESULT =e;
               CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("look_pista",4, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-2)), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
             }
           return CUP$PlaySyntax$result;
@@ -779,7 +853,12 @@ class CUP$PlaySyntax$actions {
           case 38: // pistas ::= error pistas_re 
             {
               ArrayList<String> RESULT =null;
+		int pileft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).left;
+		int piright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).right;
+		ArrayList<String> pi = (ArrayList<String>)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.peek()).value;
 		parser.report_error("Se esperaba un identificador ","Nombre esperado");
+            RESULT = pi;
+        
               CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("pistas",5, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
             }
           return CUP$PlaySyntax$result;
@@ -809,7 +888,10 @@ class CUP$PlaySyntax$actions {
           case 40: // pistas_re ::= COMA error pistas_re 
             {
               ArrayList<String> RESULT =null;
-		parser.report_error("Se esperaba un identificador ","Nombre esperado");
+		int pileft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).left;
+		int piright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).right;
+		ArrayList<String> pi = (ArrayList<String>)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.peek()).value;
+		parser.report_error("Se esperaba un identificador ","Nombre esperado"); RESULT = pi;
               CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("pistas_re",6, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-2)), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
             }
           return CUP$PlaySyntax$result;

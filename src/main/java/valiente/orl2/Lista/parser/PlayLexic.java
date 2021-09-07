@@ -67,10 +67,10 @@ public class PlayLexic implements java_cup.runtime.Scanner {
 
   private static final String ZZ_CMAP_BLOCKS_PACKED_0 =
     "\11\0\1\1\1\2\1\0\1\1\1\3\22\0\1\1"+
-    "\1\0\1\4\1\0\1\5\7\0\1\6\3\0\12\5"+
-    "\1\7\6\0\2\10\1\11\2\10\1\12\5\10\1\13"+
-    "\1\10\1\14\1\10\1\15\1\10\1\16\1\10\1\17"+
-    "\6\10\1\20\1\10\1\21\3\10\1\22\1\23\1\24"+
+    "\1\0\1\4\11\0\1\5\3\0\12\6\1\7\6\0"+
+    "\2\10\1\11\2\10\1\12\5\10\1\13\1\10\1\14"+
+    "\1\10\1\15\1\10\1\16\1\10\1\17\6\10\1\20"+
+    "\1\0\1\21\1\0\1\6\1\0\1\22\1\23\1\24"+
     "\1\25\1\26\1\12\2\10\1\27\2\10\1\30\1\31"+
     "\1\32\1\33\1\15\1\10\1\34\1\35\1\36\1\37"+
     "\5\10\1\40\1\41\1\42\u0182\0";
@@ -132,8 +132,8 @@ public class PlayLexic implements java_cup.runtime.Scanner {
 
   private static final String ZZ_ROWMAP_PACKED_0 =
     "\0\0\0\43\0\43\0\106\0\151\0\43\0\43\0\214"+
-    "\0\257\0\322\0\365\0\u0118\0\u013b\0\u015e\0\u0181\0\214"+
-    "\0\214\0\43\0\43\0\43\0\151\0\43\0\u01a4\0\u01c7"+
+    "\0\257\0\322\0\365\0\u0118\0\u013b\0\u015e\0\u0181\0\43"+
+    "\0\43\0\43\0\43\0\43\0\151\0\43\0\u01a4\0\u01c7"+
     "\0\u01ea\0\u020d\0\u0230\0\u0253\0\u0276\0\u0299\0\u02bc\0\u02df"+
     "\0\u0302\0\u0325\0\u0348\0\u036b\0\u038e\0\u03b1\0\u03d4\0\u03f7"+
     "\0\u041a\0\u043d\0\214\0\u0460\0\214\0\214\0\u0483\0\u04a6"+
@@ -163,45 +163,44 @@ public class PlayLexic implements java_cup.runtime.Scanner {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\2\2\3\1\4\1\5\1\2\1\6\1\7\1\10"+
+    "\1\2\2\3\1\4\1\5\1\6\1\2\1\7\1\10"+
     "\1\11\1\12\1\13\1\14\1\15\1\16\1\17\1\20"+
     "\1\21\2\10\1\11\3\10\1\13\1\10\1\14\1\10"+
     "\1\16\1\10\1\17\1\10\1\22\1\23\1\24\45\0"+
-    "\1\3\40\0\4\25\1\26\36\25\5\0\1\10\2\0"+
-    "\30\10\1\0\1\10\6\0\1\10\2\0\17\10\1\27"+
-    "\10\10\1\0\1\10\6\0\1\10\2\0\12\10\1\30"+
-    "\15\10\1\0\1\10\6\0\1\10\2\0\17\10\1\31"+
-    "\10\10\1\0\1\10\6\0\1\10\2\0\23\10\1\32"+
-    "\4\10\1\0\1\10\6\0\1\10\2\0\17\10\1\33"+
-    "\10\10\1\0\1\10\6\0\1\10\2\0\12\10\1\34"+
-    "\15\10\1\0\1\10\6\0\1\10\2\0\24\10\1\35"+
-    "\3\10\1\0\1\10\6\0\1\10\2\0\24\10\1\36"+
-    "\3\10\1\0\1\10\6\0\1\10\2\0\20\10\1\37"+
-    "\7\10\1\0\1\10\6\0\1\10\2\0\25\10\1\40"+
-    "\2\10\1\0\1\10\6\0\1\10\2\0\21\10\1\41"+
-    "\6\10\1\0\1\10\6\0\1\10\2\0\25\10\1\42"+
-    "\2\10\1\0\1\10\6\0\1\10\2\0\22\10\1\43"+
-    "\5\10\1\0\1\10\6\0\1\10\2\0\27\10\1\44"+
-    "\1\0\1\10\6\0\1\10\2\0\14\10\1\45\13\10"+
-    "\1\0\1\10\6\0\1\10\2\0\25\10\1\46\2\10"+
-    "\1\0\1\10\6\0\1\10\2\0\26\10\1\47\1\10"+
-    "\1\0\1\10\6\0\1\10\2\0\13\10\1\50\14\10"+
-    "\1\0\1\10\6\0\1\10\2\0\26\10\1\51\1\10"+
-    "\1\0\1\10\6\0\1\10\2\0\15\10\1\52\12\10"+
-    "\1\0\1\10\6\0\1\10\2\0\16\10\1\53\11\10"+
-    "\1\0\1\10\6\0\1\10\2\0\27\10\1\54\1\0"+
-    "\1\10\6\0\1\10\2\0\16\10\1\55\11\10\1\0"+
-    "\1\10\6\0\1\10\2\0\12\10\1\56\15\10\1\0"+
-    "\1\10\6\0\1\10\2\0\24\10\1\57\3\10\1\0"+
-    "\1\10\6\0\1\10\2\0\12\10\1\60\15\10\1\0"+
-    "\1\10\6\0\1\10\2\0\23\10\1\61\4\10\1\0"+
-    "\1\10\6\0\1\10\2\0\20\10\1\62\7\10\1\0"+
-    "\1\10\6\0\1\10\2\0\16\10\1\63\11\10\1\0"+
-    "\1\10\6\0\1\10\2\0\25\10\1\64\2\10\1\0"+
-    "\1\10\6\0\1\10\2\0\21\10\1\65\6\10\1\0"+
-    "\1\10\6\0\1\10\2\0\12\10\1\66\15\10\1\0"+
-    "\1\10\6\0\1\10\2\0\24\10\1\67\3\10\1\0"+
-    "\1\10\1\0";
+    "\1\3\40\0\4\25\1\26\36\25\6\0\1\10\1\0"+
+    "\10\10\2\0\16\10\11\0\1\10\1\0\10\10\2\0"+
+    "\5\10\1\27\10\10\11\0\1\10\1\0\10\10\2\0"+
+    "\1\30\15\10\11\0\1\10\1\0\10\10\2\0\5\10"+
+    "\1\31\10\10\11\0\1\10\1\0\10\10\2\0\11\10"+
+    "\1\32\4\10\11\0\1\10\1\0\10\10\2\0\5\10"+
+    "\1\33\10\10\11\0\1\10\1\0\10\10\2\0\1\34"+
+    "\15\10\11\0\1\10\1\0\10\10\2\0\12\10\1\35"+
+    "\3\10\11\0\1\10\1\0\10\10\2\0\12\10\1\36"+
+    "\3\10\11\0\1\10\1\0\10\10\2\0\6\10\1\37"+
+    "\7\10\11\0\1\10\1\0\10\10\2\0\13\10\1\40"+
+    "\2\10\11\0\1\10\1\0\10\10\2\0\7\10\1\41"+
+    "\6\10\11\0\1\10\1\0\10\10\2\0\13\10\1\42"+
+    "\2\10\11\0\1\10\1\0\10\10\2\0\10\10\1\43"+
+    "\5\10\11\0\1\10\1\0\10\10\2\0\15\10\1\44"+
+    "\11\0\1\10\1\0\10\10\2\0\2\10\1\45\13\10"+
+    "\11\0\1\10\1\0\10\10\2\0\13\10\1\46\2\10"+
+    "\11\0\1\10\1\0\10\10\2\0\14\10\1\47\1\10"+
+    "\11\0\1\10\1\0\10\10\2\0\1\10\1\50\14\10"+
+    "\11\0\1\10\1\0\10\10\2\0\14\10\1\51\1\10"+
+    "\11\0\1\10\1\0\10\10\2\0\3\10\1\52\12\10"+
+    "\11\0\1\10\1\0\10\10\2\0\4\10\1\53\11\10"+
+    "\11\0\1\10\1\0\10\10\2\0\15\10\1\54\11\0"+
+    "\1\10\1\0\10\10\2\0\4\10\1\55\11\10\11\0"+
+    "\1\10\1\0\10\10\2\0\1\56\15\10\11\0\1\10"+
+    "\1\0\10\10\2\0\12\10\1\57\3\10\11\0\1\10"+
+    "\1\0\10\10\2\0\1\60\15\10\11\0\1\10\1\0"+
+    "\10\10\2\0\11\10\1\61\4\10\11\0\1\10\1\0"+
+    "\10\10\2\0\6\10\1\62\7\10\11\0\1\10\1\0"+
+    "\10\10\2\0\4\10\1\63\11\10\11\0\1\10\1\0"+
+    "\10\10\2\0\13\10\1\64\2\10\11\0\1\10\1\0"+
+    "\10\10\2\0\7\10\1\65\6\10\11\0\1\10\1\0"+
+    "\10\10\2\0\1\66\15\10\11\0\1\10\1\0\10\10"+
+    "\2\0\12\10\1\67\3\10\3\0";
 
   private static int [] zzUnpackTrans() {
     int [] result = new int[1330];
@@ -247,7 +246,7 @@ public class PlayLexic implements java_cup.runtime.Scanner {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\2\11\2\1\2\11\12\1\3\11\1\0\1\11"+
+    "\1\0\2\11\2\1\2\11\10\1\5\11\1\0\1\11"+
     "\41\1";
 
   private static int [] zzUnpackAttribute() {
@@ -756,112 +755,112 @@ public class PlayLexic implements java_cup.runtime.Scanner {
             // fall through
           case 20: break;
           case 3:
-            { if(error==null){ return new Symbol(COMA, yyline+1, yycolumn+1, yytext());}else{
+            { System.out.println(yytext()); if(error==null){ return new Symbol(COMA, yyline+1, yycolumn+1, yytext());}else{
             error.setLexema(yytext());
         }
             }
             // fall through
           case 21: break;
           case 4:
-            { if(error==null){ return new Symbol(SEMI_COLON, yyline+1, yycolumn+1, yytext());}else{
+            { System.out.println(yytext()); if(error==null){ return new Symbol(SEMI_COLON, yyline+1, yycolumn+1, yytext());}else{
             error.setLexema(yytext());
         }
             }
             // fall through
           case 22: break;
           case 5:
-            { if(error==null){ return new Symbol(SIMBOLO, yyline+1, yycolumn+1, yytext());}else{
+            { System.out.println("SIMBOLO: "+yytext()); if(error==null){ return new Symbol(SIMBOLO, yyline+1, yycolumn+1, yytext());}else{
             error.setLexema(yytext());
         }
             }
             // fall through
           case 23: break;
           case 6:
-            { if(error==null){ return new Symbol(OPEN_BRACKET, yyline+1, yycolumn+1, yytext());}else{
+            { System.out.println(yytext()); if(error==null){ return new Symbol(OPEN_BRACKET, yyline+1, yycolumn+1, yytext());}else{
             error.setLexema(yytext());
         }
             }
             // fall through
           case 24: break;
           case 7:
-            { if(error==null){ return new Symbol(CLOSE_BRACKET, yyline+1, yycolumn+1, yytext());}else{
+            { System.out.println(yytext()); if(error==null){ return new Symbol(CLOSE_BRACKET, yyline+1, yycolumn+1, yytext());}else{
             error.setLexema(yytext());
         }
             }
             // fall through
           case 25: break;
           case 8:
-            { if(error==null){ return new Symbol(OPEN_CURLY, yyline+1, yycolumn+1, yytext());}else{
+            { System.out.println(yytext()); if(error==null){ return new Symbol(OPEN_CURLY, yyline+1, yycolumn+1, yytext());}else{
             error.setLexema(yytext());
         }
             }
             // fall through
           case 26: break;
           case 9:
-            { if(error==null){ return new Symbol(PIPE, yyline+1, yycolumn+1, yytext());}else{
+            { System.out.println(yytext()); if(error==null){ return new Symbol(PIPE, yyline+1, yycolumn+1, yytext());}else{
             error.setLexema(yytext());
         }
             }
             // fall through
           case 27: break;
           case 10:
-            { if(error==null){ return new Symbol(CLOSE_CURLY, yyline+1, yycolumn+1, yytext());}else{
+            { System.out.println(yytext()); if(error==null){ return new Symbol(CLOSE_CURLY, yyline+1, yycolumn+1, yytext());}else{
             error.setLexema(yytext());
         }
             }
             // fall through
           case 28: break;
           case 11:
-            { if(error==null){ return new Symbol(STRING, yyline+1, yycolumn+1, yytext());}else{
+            { System.out.println(yytext()); if(error==null){ return new Symbol(STRING, yyline+1, yycolumn+1, yytext());}else{
             error.setLexema(yytext());
         }
             }
             // fall through
           case 29: break;
           case 12:
-            { if(error==null){ return new Symbol(TRUE, yyline+1, yycolumn+1, yytext());}else{
+            { System.out.println(yytext()); if(error==null){ return new Symbol(TRUE, yyline+1, yycolumn+1, yytext());}else{
             error.setLexema(yytext());
         }
             }
             // fall through
           case 30: break;
           case 13:
-            { if(error==null){ return new Symbol(FALSE, yyline+1, yycolumn+1, yytext());}else{
+            { System.out.println(yytext()); if(error==null){ return new Symbol(FALSE, yyline+1, yycolumn+1, yytext());}else{
             error.setLexema(yytext());
         }
             }
             // fall through
           case 31: break;
           case 14:
-            { if(error==null){ return new Symbol(LISTA, yyline+1, yycolumn+1, yytext());}else{
+            { System.out.println(yytext()); if(error==null){ return new Symbol(LISTA, yyline+1, yycolumn+1, yytext());}else{
             error.setLexema(yytext());
         }
             }
             // fall through
           case 32: break;
           case 15:
-            { if(error==null){ return new Symbol(NOMBRE, yyline+1, yycolumn+1, yytext());}else{
+            { System.out.println(yytext()); if(error==null){ return new Symbol(NOMBRE, yyline+1, yycolumn+1, yytext());}else{
             error.setLexema(yytext());
         }
             }
             // fall through
           case 33: break;
           case 16:
-            { if(error==null){ return new Symbol(PISTA, yyline+1, yycolumn+1, yytext());}else{
+            { System.out.println(yytext()); if(error==null){ return new Symbol(PISTA, yyline+1, yycolumn+1, yytext());}else{
             error.setLexema(yytext());
         }
             }
             // fall through
           case 34: break;
           case 17:
-            { if(error==null){ return new Symbol(RANDOM, yyline+1, yycolumn+1, yytext());}else{
+            { System.out.println(yytext()); if(error==null){ return new Symbol(RANDOM, yyline+1, yycolumn+1, yytext());}else{
             error.setLexema(yytext());
         }
             }
             // fall through
           case 35: break;
           case 18:
-            { if(error==null){ return new Symbol(CIRCULAR, yyline+1, yycolumn+1, yytext());}else{
+            { System.out.println(yytext()); if(error==null){ return new Symbol(CIRCULAR, yyline+1, yycolumn+1, yytext());}else{
             error.setLexema(yytext());
         }
             }

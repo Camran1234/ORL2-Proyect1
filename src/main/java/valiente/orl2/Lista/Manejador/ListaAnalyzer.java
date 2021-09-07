@@ -52,9 +52,12 @@ public class ListaAnalyzer {
             syntaxErrors = syntax.getList();
             PlayList list = syntax.getLista();
             Central central = new Central();
-            PlayList localList = central.getPlayList();
-            ArrayList<PistaReproduccion> pistas = central.getPistas();
-            localList.compareList(list.getlistas(), pistas);
+            try {
+                PlayList localList = central.getPlayList();
+                ArrayList<PistaReproduccion> pistas = central.getPistas();
+                localList.compareList(list.getlistas(), pistas);
+            } catch (Exception e) {
+            }
             
             if(!isRunable()){
                 TableGenerator generator = new TableGenerator(lexicalErrors, syntaxErrors, semanticErrors);
