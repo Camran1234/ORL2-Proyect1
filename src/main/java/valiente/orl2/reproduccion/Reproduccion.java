@@ -62,5 +62,39 @@ public class Reproduccion implements Serializable{
         }
         return false;
     }
+
+    public String getNotaMusical() {
+        return notaMusical;
+    }
+
+    public void setNotaMusical(String notaMusical) {
+        this.notaMusical = notaMusical;
+    }
+
+    public int getOctava() {
+        return octava;
+    }
+
+    public void setOctava(int octava) {
+        this.octava = octava;
+    }
+
+    public int getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(int duracion) {
+        this.duracion = duracion;
+    }
+
+    public int getCanal() {
+        return canal;
+    }
+
+    public void setCanal(int canal) {
+        this.canal = canal;
+    }
+    
+    
     
 }

@@ -57,3 +57,104 @@ public class Test {
     
     
 }
+
+/*/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author camran1234
+ */
+/*
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
+
+public class Tone extends Thread{
+    public static boolean reproducir = false;
+    public Tone(){
+        
+    }
+    @Override
+    public void run() {
+        try {
+            final AudioFormat af =
+                    new AudioFormat(Note.FREQUENCY, 8, 1, true, true);
+            
+            SourceDataLine line = AudioSystem.getSourceDataLine(af);
+            line.open(af, Note.FREQUENCY);
+            line.start();
+            for  (Note n : Note.values()) {
+                System.out.println(n);
+                play(line, Note.Do, 500);
+                //play(line, Note.REST, 10);
+            }
+            line.drain();
+            line.close();
+        } catch (LineUnavailableException ex) {
+            Logger.getLogger(Tone.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    public static void main(String[] args) throws LineUnavailableException {
+        final AudioFormat af =
+            new AudioFormat(Note.FREQUENCY, 8, 1, true, true);
+        
+        SourceDataLine line = AudioSystem.getSourceDataLine(af);
+        line.open(af, Note.FREQUENCY);
+        line.start();
+        for  (Note n : Note.values()) {
+            System.out.println(n);
+            play(line, n, 500);
+            //play(line, Note.REST, 10);
+        }
+        line.drain();
+        line.close();
+    }
+
+    private static void play(SourceDataLine line, Note note, int ms) {
+        ms = Math.min(ms, Note.SECONDS * 1000);
+        int length = Note.FREQUENCY * ms / 1000;
+        int count = line.write(note.data(), 0, length);
+    }
+}
+
+enum Note {
+
+    REST, Do, Re, Mi, Fa, Sol, La, Si, Do$, Re$, Mi$, Fa$, Sol$, La$, Si$;
+    public final int FREQUENCY = 158; // ~16KHz
+    public final int SECONDS = 2;
+    private byte[] sin = new byte[SECONDS * FREQUENCY];
+
+    Note() {
+        int n = this.ordinal();
+        if (n > 0) {
+            double exp = ((double) n - 1) / 12d;
+            double f = 440d * Math.pow(2d, exp);
+            for (int i = 0; i < sin.length; i++) {
+                double period = (double)FREQUENCY / f;
+                double angle = 2.0 * Math.PI * i / period;
+                sin[i] = (byte)(Math.sin(angle) * 127f);
+            }
+        }
+    }
+
+    public byte[] data() {
+        return sin;
+    }
+    
+    public int getSeconds(){
+        
+    }
+}
+
+
+    
+*/

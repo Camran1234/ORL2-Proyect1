@@ -26,7 +26,7 @@ public class Pista extends Instruction{
     ArrayList<Operation> extendeds;
     Symbol workingSymbol=null;
     PistaReproduccion reproductor = new PistaReproduccion();
-    
+    Symbol symbol;
     public Pista(int line, int column){
         super(line, column);
     }
@@ -65,11 +65,13 @@ public class Pista extends Instruction{
 
     public void execute() throws SemanticException{
         try {
+            TableOfValue.setWorkingSymbol(symbol);
             for(int index=0; index<instructions.size(); index++){
                 if(instructions.get(index) instanceof Principal){
                     instructions.get(index).execute();
                 }
             }
+            TableOfValue.setWorkingSymbol(null);
         } catch (SemanticException e) {
             
         }
@@ -81,6 +83,7 @@ public class Pista extends Instruction{
             Type type = new Type(nombre, "pista", 0, new ArrayList<Parameter>(), this, new ArrayList<Integer>(), getIndentation(), this);
             Symbol symbol = new Symbol(type, 0, true, line, column);
             TableOfValue.addSymbol(symbol, line, column);
+            this.symbol = symbol;
             //Agregamos el simbolo
             TableOfValue.setWorkingSymbol(symbol);
             workingSymbol = symbol;

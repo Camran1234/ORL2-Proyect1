@@ -43,6 +43,15 @@ public class ListaReproduccion implements Serializable{
         return text;
     }
     
+    public void deletePista(String namePista){
+        for(int index=0; index<pistas.size(); index++){
+            if(pistas.get(index).equals(namePista)){
+                pistas.remove(index);
+                break;
+            }
+        }
+    }
+    
     private void addError(String description, int line, int column){
         SemanticError error = new SemanticError("Valor repetido", line, column);
         error.setDescription(description);

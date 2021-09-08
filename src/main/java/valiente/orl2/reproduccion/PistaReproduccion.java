@@ -31,6 +31,14 @@ public class PistaReproduccion implements Serializable{
         return text;
     }
     
+    public int getDuracionTotal(){
+        int total=0;
+        for(Reproduccion sonido:sonidos){
+            total += sonido.getDuracion();
+        }
+        return total;
+    }
+    
     public ArrayList<Reproduccion> getSonidos() {
         return sonidos;
     }

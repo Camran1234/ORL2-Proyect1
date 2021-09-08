@@ -39,6 +39,94 @@ public class Central implements Serializable{
         return playList;
     }
     
+    /**
+     * Funcion para eliminar pista devuelve true si elimino la pista, devuelve false si no logro eliminar la pista
+     * @param nombrePista
+     * @return 
+     */
+    public boolean deletePista(String nombrePista){
+        for(int index=0; index<pistas.size(); index++){
+            PistaReproduccion pista = pistas.get(index);
+            if(pista.getName().equals(nombrePista)){
+                pistas.remove(index);
+                removePistaFromListas(nombrePista);
+                uploadChanges();
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Busca eliminar la pista de todas las listas
+     * @param nombrePista 
+     */
+    private void removePistaFromListas(String nombrePista){    
+        ArrayList<ListaReproduccion> listas = playList.getlistas();
+        for(ListaReproduccion lista:listas){
+            lista.deletePista(nombrePista);
+        }
+    }
+    
+    /**
+     * Funcion para eliminar una lista devuevle true si elimino la pi
+     * @param nombreLista
+     * @return 
+     */
+    public boolean deleteLista(String nombreLista){
+        ArrayList<ListaReproduccion> listas = playList.getlistas();
+        for(int index=0; index<listas.size(); index++){
+            ListaReproduccion lista = listas.get(index);
+            if(lista.getNombre().equals(nombreLista)){
+                listas.remove(index);
+                uploadChanges();
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Obtiene el codigo de la pista indicada
+     * @param nombre
+     * @return 
+     */
+    public String getTextPista(String nombre){
+        String resultado="";
+        try {
+            for(PistaReproduccion pista:pistas){
+                if(pista.getName().equals(nombre)){
+                    resultado = pista.getText();
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultado;
+    }
+    
+    
+    /**
+     * Obtiene el codigo de la lista indicada
+     * @param nombre
+     * @return 
+     */
+    public String getTextLista(String nombre){
+        String resultado ="";
+        ArrayList<ListaReproduccion> listas = playList.getlistas();
+        try {
+            for(ListaReproduccion lista: listas){
+                if(lista.getNombre().equals(nombre)){
+                    resultado = lista.getText();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultado;
+    }
+    
     public void updateListas(PlayList list){
         ArrayList<ListaReproduccion> listaReproduccion = list.getlistas();
         tryAddList(listaReproduccion);
@@ -47,7 +135,7 @@ public class Central implements Serializable{
     
     public void tryAddList(ArrayList<ListaReproduccion> lista){
         ArrayList<ListaReproduccion> localLista = playList.getlistas();
-        ArrayList<ListaReproduccion> newList = new ArrayList();
+        ArrayList<ListaReproduccion> aux = new ArrayList();
         for(int index=0; index<lista.size(); index++){
             String nameLista = lista.get(index).getNombre();
             boolean flag=false;
@@ -55,18 +143,33 @@ public class Central implements Serializable{
                 if(nameLista.equals(localLista.get(indexLista).getNombre())){
                     boolean entry=confirmRewrite(nameLista,"lista");                     
                     if(entry){
-                        newList.add(lista.get(index));
+                        aux.add(lista.get(index));
                     }else{
-                        newList.add(localLista.get(index));
+                        aux.add(localLista.get(indexLista));
                     }
                     flag=true;
                 }
             }
             if(!flag){
-                newList.add(lista.get(index));
+                aux.add(lista.get(index));
             }
         }
-        this.playList.setLista(lista);
+        //Agregamos los valores viejos
+        for(int index=0; index<localLista.size(); index++){
+            String name = localLista.get(index).getNombre();
+            boolean flag=false;
+            for(int indexPista=0; indexPista<aux.size(); indexPista++){
+                String newListaName = aux.get(indexPista).getNombre();
+                if(name.equals(newListaName)){
+                    flag=true;
+                }
+            }
+            if(!flag){
+                aux.add(localLista.get(index));
+            }
+        }
+        
+        this.playList.setLista(aux);
     }
     
     /**
@@ -99,26 +202,41 @@ public class Central implements Serializable{
 
     
     public void tryAddPista(ArrayList<PistaReproduccion> list){
-        ArrayList<PistaReproduccion> newList = new ArrayList();
+        ArrayList<PistaReproduccion> newLista = new ArrayList();
+        //Agregamos los valores nuevos
         for(int index=0; index<list.size(); index++){
             String namePista = list.get(index).getName();
-            boolean flag=false;
+            boolean flag = false;
             for(int indexPista=0; indexPista<pistas.size(); indexPista++){
                 if(namePista.equals(pistas.get(indexPista).getName())){
                     boolean entry=confirmRewrite(namePista,"Pista");                     
                     if(entry){
-                        newList.add(list.get(index));
+                        newLista.add(list.get(index));
                     }else{
-                        newList.add(pistas.get(index));
+                        newLista.add(pistas.get(indexPista));
                     }
                     flag=true;
                 }
             }
             if(!flag){
-                newList.add(list.get(index));
+                newLista.add(list.get(index));
             }
         }
-        this.pistas = newList;
+        //Agregamos los valores viejos
+        for(int index=0; index<pistas.size(); index++){
+            String name = pistas.get(index).getName();
+            boolean flag=false;
+            for(int indexPista=0; indexPista<newLista.size(); indexPista++){
+                String newListaName = newLista.get(indexPista).getName();
+                if(name.equals(newListaName)){
+                    flag=true;
+                }
+            }
+            if(!flag){
+                newLista.add(pistas.get(index));
+            }
+        }
+        pistas = newLista;
     }
     
     
@@ -151,7 +269,7 @@ public class Central implements Serializable{
         if(fileExist()){              
             try(ObjectInputStream inPutStream = new ObjectInputStream(new FileInputStream(path))){
                 Object lista = inPutStream.readObject();
-                this.pistas = ((Central)lista).getPistas(); ;
+                this.pistas = ((Central)lista).getPistas(); 
                 this.playList = ((Central)lista).getPlayList();
             }catch(Exception e){
                 JOptionPane.showMessageDialog(PhytonFrame.frame, "Error archivos corruptos, no se pudo recuperar");
@@ -162,6 +280,10 @@ public class Central implements Serializable{
         }
     }
     
+    /**
+     * Son las canciones en general
+     * @return 
+     */
     public ArrayList<PistaReproduccion> getPistas(){
         return this.pistas;
     }

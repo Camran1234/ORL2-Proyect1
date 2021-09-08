@@ -77,6 +77,7 @@ public class Reproducir extends Instruction{
         }
         
         try {
+            TableOfValue table= new TableOfValue();
             Pista newPista = (Pista)TableOfValue.getWorkingSymbol().getReference().getValue();
             //Asignamos los valores de reproduccion
             Reproduccion reproduccion = new Reproduccion(valorNota, Integer.parseInt(valorOctava), Integer.parseInt(valorTiempo), Integer.parseInt(valorCanal), 
