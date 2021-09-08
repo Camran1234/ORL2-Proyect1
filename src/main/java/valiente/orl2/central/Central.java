@@ -57,6 +57,25 @@ public class Central implements Serializable{
         return false;
     }
     
+    public PistaReproduccion getPistaReproduccion(String nombrePista){
+        for(PistaReproduccion pista:pistas){
+            if(pista.getName().equals(nombrePista)){
+                return pista;
+            }
+        }
+        return null;
+    }
+    
+    public ListaReproduccion getListaReproduccion(String nombreLista){
+        
+        for(ListaReproduccion lista:playList.getlistas()){
+            if(lista.getNombre().equals(nombreLista)){
+                return lista;
+            }
+        }
+        return null;
+    }
+    
     /**
      * Busca eliminar la pista de todas las listas
      * @param nombrePista 

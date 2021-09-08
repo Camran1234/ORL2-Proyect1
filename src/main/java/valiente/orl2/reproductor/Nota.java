@@ -37,7 +37,7 @@ public final class Nota{
     private int selectedItem =0;
     private int octava=0;
     
-    public Nota(int selectedITem, int octava){
+    public Nota(int selectedItem, int octava){
         this.selectedItem=selectedItem;
         this.octava=octava;
     }
@@ -101,7 +101,7 @@ public final class Nota{
                 8,  // sample size in bits
                 2,  // channels
                 true,  // signed
-                false  // bigendian
+                true  // bigendian
                 );    
         int maxVol = 127;
         //agregamos los bits del sonido

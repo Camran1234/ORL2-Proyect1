@@ -16,6 +16,8 @@ import javax.swing.event.ListSelectionListener;
 import valiente.orl2.central.Central;
 import valiente.orl2.reproduccion.ListaReproduccion;
 import valiente.orl2.reproduccion.PistaReproduccion;
+import valiente.orl2.reproductor.Reproductor;
+import valiente.orl2.reproductor.Sound;
 /**
  *
  * @author camran1234
@@ -23,6 +25,7 @@ import valiente.orl2.reproduccion.PistaReproduccion;
 public class ListasUI extends javax.swing.JFrame {
 
     private Central central ;
+    private Reproductor reproductor;
     private PhytonFrame frame;
     public static String actualPista="";
     public static String actualLista="";
@@ -44,6 +47,7 @@ public class ListasUI extends javax.swing.JFrame {
     }
     
     public void initAll(){
+        reproductor = null;
         central = new Central();
         this.actualPista = "";
         this.actualLista = "";
@@ -82,7 +86,10 @@ public class ListasUI extends javax.swing.JFrame {
             lmDuration.removeAllElements();
             for(PistaReproduccion pista:pistas){
                 lmPistas.addElement(pista.getName());
-                lmDuration.addElement(pista.getDuracionTotal());
+                int duracion = pista.getDuracionTotal()/1000;
+                int minutos = duracion/60;
+                int segundos = (duracion%60)*60;
+                lmDuration.addElement(minutos+":"+duracion);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -129,16 +136,25 @@ public class ListasUI extends javax.swing.JFrame {
         lmPlayList.removeAllElements();
         ArrayList<ListaReproduccion> listas = central.getPlayList().getlistas();
         ArrayList<String> pistas = new ArrayList();
+        String isRandom = "[NO ES RANDOM]";
+        String isCircular = "[NO ES CIRCULAR]";
         for(ListaReproduccion lista: listas){
             if(playListName.equals(lista.getNombre())){
                 pistas = lista.getPistas();
+                if(lista.getCircular()){
+                    isCircular = "[ES CIRCULAR]";
+                }
+                if(lista.getRandom()){
+                    isRandom = "[ES RANDOM]";
+                }
                 break;
             }
         }
         for(String pista:pistas){
             lmPlayList.addElement(pista);
         }
-        
+        lmPlayList.addElement(isRandom);
+        lmPlayList.addElement(isCircular);
     }
     
     /**
@@ -160,10 +176,10 @@ public class ListasUI extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
+        butonDetenerPista = new javax.swing.JButton();
         buttonModificarPista = new javax.swing.JButton();
         buttonElimnarPista = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        butonReproducirPista = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -175,7 +191,7 @@ public class ListasUI extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         buttonModificarLista = new javax.swing.JButton();
         buttonEliminarLista = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
+        buttonReproducirLista = new javax.swing.JButton();
         jToolBar1 = new javax.swing.JToolBar();
         jButton1 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
@@ -239,10 +255,15 @@ public class ListasUI extends javax.swing.JFrame {
         jPanel5.setBackground(new java.awt.Color(51, 51, 51));
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153), 5));
 
-        jButton2.setBackground(new java.awt.Color(255, 0, 0));
-        jButton2.setFont(new java.awt.Font("Noto Sans CJK JP Thin", 1, 14)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("PARAR");
+        butonDetenerPista.setBackground(new java.awt.Color(255, 0, 0));
+        butonDetenerPista.setFont(new java.awt.Font("Noto Sans CJK JP Thin", 1, 14)); // NOI18N
+        butonDetenerPista.setForeground(new java.awt.Color(255, 255, 255));
+        butonDetenerPista.setText("PARAR");
+        butonDetenerPista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                butonDetenerPistaActionPerformed(evt);
+            }
+        });
 
         buttonModificarPista.setBackground(new java.awt.Color(0, 153, 0));
         buttonModificarPista.setFont(new java.awt.Font("Noto Sans CJK JP Thin", 1, 14)); // NOI18N
@@ -264,10 +285,15 @@ public class ListasUI extends javax.swing.JFrame {
             }
         });
 
-        jButton5.setBackground(new java.awt.Color(51, 51, 255));
-        jButton5.setFont(new java.awt.Font("Noto Sans CJK JP Thin", 1, 14)); // NOI18N
-        jButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jButton5.setText("REPRODUCIR");
+        butonReproducirPista.setBackground(new java.awt.Color(51, 51, 255));
+        butonReproducirPista.setFont(new java.awt.Font("Noto Sans CJK JP Thin", 1, 14)); // NOI18N
+        butonReproducirPista.setForeground(new java.awt.Color(255, 255, 255));
+        butonReproducirPista.setText("REPRODUCIR");
+        butonReproducirPista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                butonReproducirPistaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -279,9 +305,9 @@ public class ListasUI extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(buttonElimnarPista)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(butonReproducirPista, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(butonDetenerPista, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -291,8 +317,8 @@ public class ListasUI extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonModificarPista)
                     .addComponent(buttonElimnarPista)
-                    .addComponent(jButton5)
-                    .addComponent(jButton2))
+                    .addComponent(butonReproducirPista)
+                    .addComponent(butonDetenerPista))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
@@ -348,6 +374,11 @@ public class ListasUI extends javax.swing.JFrame {
         jButton6.setFont(new java.awt.Font("Noto Sans CJK JP Thin", 1, 14)); // NOI18N
         jButton6.setForeground(new java.awt.Color(255, 255, 255));
         jButton6.setText("PARAR");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         buttonModificarLista.setBackground(new java.awt.Color(0, 153, 0));
         buttonModificarLista.setFont(new java.awt.Font("Noto Sans CJK JP Thin", 1, 14)); // NOI18N
@@ -369,10 +400,15 @@ public class ListasUI extends javax.swing.JFrame {
             }
         });
 
-        jButton9.setBackground(new java.awt.Color(51, 51, 255));
-        jButton9.setFont(new java.awt.Font("Noto Sans CJK JP Thin", 1, 14)); // NOI18N
-        jButton9.setForeground(new java.awt.Color(255, 255, 255));
-        jButton9.setText("REPRODUCIR");
+        buttonReproducirLista.setBackground(new java.awt.Color(51, 51, 255));
+        buttonReproducirLista.setFont(new java.awt.Font("Noto Sans CJK JP Thin", 1, 14)); // NOI18N
+        buttonReproducirLista.setForeground(new java.awt.Color(255, 255, 255));
+        buttonReproducirLista.setText("REPRODUCIR");
+        buttonReproducirLista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonReproducirListaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -384,7 +420,7 @@ public class ListasUI extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(buttonEliminarLista)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE)
-                .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(buttonReproducirLista, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -396,7 +432,7 @@ public class ListasUI extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonModificarLista)
                     .addComponent(buttonEliminarLista)
-                    .addComponent(jButton9)
+                    .addComponent(buttonReproducirLista)
                     .addComponent(jButton6))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
@@ -518,7 +554,13 @@ public class ListasUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
+        try {
+            if(reproductor!=null){
+                reproductor.deleteChannels();
+                reproductor.interrupt();
+            }
+        } catch (Exception e) {
+        }
         this.setVisible(false);
         frame.setVisible(true);
         try {
@@ -548,6 +590,7 @@ public class ListasUI extends javax.swing.JFrame {
         }else{
             frame.modificarValorLista(central.getTextLista(actualLista), actualLista);
             frame.setVisible(true);
+            this.setVisible(false);
             try {
                 clearLists();
             } catch (Exception e) {
@@ -572,6 +615,129 @@ public class ListasUI extends javax.swing.JFrame {
             removeFromListas();
         }
     }//GEN-LAST:event_buttonEliminarListaActionPerformed
+
+    private void butonReproducirPistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butonReproducirPistaActionPerformed
+        if(actualPista.equalsIgnoreCase("")){
+            JOptionPane.showMessageDialog(this, "Selecciona una lista primero","Lista no disponible",JOptionPane.WARNING_MESSAGE);
+        }else{
+            if(reproductor==null){
+                try {
+                    reproductor = new Reproductor(actualPista);
+                    Thread.sleep(50);
+                } catch (Exception e) {
+                }
+            }
+            if(reproductor.reproduciendo){                    
+                if(!reproductor.getCancionActual().equals(actualPista)){                
+                    //Cargamos la nueva cancion y corremos             
+                    try {
+                        
+                        reproductor.deleteChannels();reproductor.interrupt();
+                        reproductor = new Reproductor(actualPista);
+                        Thread.sleep(50);
+                    } catch (Exception e) {
+                    }
+                    PistaReproduccion pista = central.getPistaReproduccion(actualPista);                    
+                    reproductor.deleteChannels();
+                    reproductor.generateChannels(pista);                    
+                    reproductor.runSong();                                    
+                }else{
+                    reproductor.startRe();
+                    if(!reproductor.reproduciendo){
+                        try {
+                            reproductor.deleteChannels();reproductor.interrupt();
+                            reproductor = new Reproductor(actualPista);
+                            Thread.sleep(50);
+                        } catch (Exception e) {
+                        }
+                        PistaReproduccion pista = central.getPistaReproduccion(actualPista);                    
+                        reproductor.deleteChannels();
+                        reproductor.generateChannels(pista);                    
+                        reproductor.runSong();                                    
+                    }
+                }
+            }else{            
+                //Cargamos la nueva cancion y corremos                    
+                    try {
+                        reproductor.deleteChannels();reproductor.interrupt();
+                        reproductor = new Reproductor(actualPista);
+                        Thread.sleep(50);
+                    } catch (Exception e) {
+                    }
+                    PistaReproduccion pista = central.getPistaReproduccion(actualPista);                    
+                    reproductor.deleteChannels();
+                    reproductor.generateChannels(pista);                    
+                    reproductor.runSong();                    
+            }   
+        }
+    }//GEN-LAST:event_butonReproducirPistaActionPerformed
+
+    private void butonDetenerPistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butonDetenerPistaActionPerformed
+        if(reproductor!=null){
+            Sound.reproducir=false;
+        }
+    }//GEN-LAST:event_butonDetenerPistaActionPerformed
+
+    private void buttonReproducirListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonReproducirListaActionPerformed
+                
+        if(actualLista.equalsIgnoreCase("")){
+            JOptionPane.showMessageDialog(this, "Selecciona una lista primero","Lista no disponible",JOptionPane.WARNING_MESSAGE);
+        }else{
+            if(reproductor==null){
+                try {
+                    reproductor = new Reproductor(actualLista);
+                    Thread.sleep(50);
+                } catch (Exception e) {
+                }
+                
+            }
+            if(reproductor.reproduciendo){                    
+                if(!reproductor.getCancionActual().equals(actualLista)){                
+                    //Cargamos la nueva cancion y corremos             
+                    try {
+                        reproductor.deleteChannels();reproductor.interrupt();
+                        reproductor = new Reproductor(actualLista);
+                        Thread.sleep(50);
+                    } catch (Exception e) {
+                    }
+                    ListaReproduccion lista = central.getListaReproduccion(actualLista);                    
+                    reproductor.generateListas(lista, central);
+                    reproductor.start();
+                    
+                }else{
+                    reproductor.startRe();
+                    if(!reproductor.reproduciendo){
+                        try {
+                        reproductor.deleteChannels();reproductor.interrupt();
+                        reproductor = new Reproductor(actualLista);
+                        Thread.sleep(50);
+                    } catch (Exception e) {
+                    }
+                    ListaReproduccion lista = central.getListaReproduccion(actualLista);                    
+                    reproductor.generateListas(lista, central);
+                    reproductor.start();                                 
+                    }
+                }
+            }else{            
+                //Cargamos la nueva cancion y corremos                    
+                try {
+                        reproductor.deleteChannels();reproductor.interrupt();
+                        reproductor = new Reproductor(actualLista);
+                        Thread.sleep(50);
+                    } catch (Exception e) {
+                    }
+                    ListaReproduccion lista = central.getListaReproduccion(actualLista);                    
+                    reproductor.generateListas(lista, central);
+                    reproductor.start();
+            }   
+        }
+    }//GEN-LAST:event_buttonReproducirListaActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        if(reproductor!=null){
+            Sound.reproducir=false;
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -609,15 +775,15 @@ public class ListasUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton butonDetenerPista;
+    private javax.swing.JButton butonReproducirPista;
     private javax.swing.JButton buttonEliminarLista;
     private javax.swing.JButton buttonElimnarPista;
     private javax.swing.JButton buttonModificarLista;
     private javax.swing.JButton buttonModificarPista;
+    private javax.swing.JButton buttonReproducirLista;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -23,6 +23,7 @@ import javax.sound.sampled.SourceDataLine;
 public class Channel extends Thread{
     private ArrayList<Sound> sounds = new ArrayList();
     private int noChannel=0;
+    public boolean closed=false;
     
     public Channel(int noChannel){
         this.noChannel = noChannel;
@@ -30,23 +31,40 @@ public class Channel extends Thread{
     
     @Override
     public void run(){
-        for(int index=0; index<sounds.size(); index++){
-            try {
+        try {
+            for(int index=0; index<sounds.size(); index++){
                 //Empezamos una cancion por cancion
                 Sound sound = sounds.get(index);
                 sound.start();
                 sound.join();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Channel.class.getName()).log(Level.SEVERE, null, ex);
             }
+            closed=true;
+        } catch (InterruptedException ex) {  
+            closed=true;
+            System.out.println(ex.getMessage());
+            Logger.getLogger(Channel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
     
     public void addSound(Sound sound){
         this.sounds.add(sound);
     }
     
+    public boolean isClosed(){
+        return closed;
+    }
+    
     public int getCanal(){
         return noChannel;
+    }
+
+    /**
+     * Calla a todos de este canal
+     */
+    void shutUp() {
+        for(Sound sound:sounds){
+            sound.shutUp();
+        }
     }
 }

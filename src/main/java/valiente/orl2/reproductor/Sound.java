@@ -18,7 +18,8 @@ public class Sound extends Thread{
     private Clock clock;
     //Variable que nos indicara si reproducimos los sonidos
     public static boolean reproducir=false;
-    
+    private boolean clockStarted=false;
+    public boolean finished = false;
     
     public Sound(Clip clip, int duration){
         this.clip = clip;
@@ -27,25 +28,45 @@ public class Sound extends Thread{
     
     
     @Override
-    public void run(){
-        while(true){            
-            try {
-                if(reproducir){
-                    clip.setFramePosition(0);
-                    clip.loop( Clip.LOOP_CONTINUOUSLY );
+    public void run(){         
+        try {
+            if(reproducir){
+                clip.setFramePosition(0);
+                clip.loop( Clip.LOOP_CONTINUOUSLY );
+                
+                if(!clockStarted){
                     //Empezzamos el reloj
+                    clockStarted=true;
                     clock.start();
-                }else{
-                    clip.stop();
                 }
+            }else{
+                clip.stop();
+            }
+            while(Reproductor.play){
                 if(clock.finished()){
                     break;
                 }
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.sleep(1);
             }
+            finished=true;
+            clip.stop();
+            clip.close();
+        } catch (InterruptedException ex) {
+            finished=true;
+            clip.stop();
+            clip.close();
+            Logger.getLogger(Sound.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
+                
+    }
+
+    void shutUp() {
+        this.clip.stop();
+        clip.close();
+        clock.shutUp();
+        clip=null;
+        
     }
 
 }

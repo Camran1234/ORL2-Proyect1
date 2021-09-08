@@ -121,7 +121,7 @@ public class ListaReproduccion implements Serializable{
 
     public void setRandom(Boolean random, int line, int column) {
         if(this.random==null){
-            this.circular = circular;
+            this.random = random;
         }else{
             addError("Opcion colocada en random: "+Boolean.toString(circular), line, column);
         }

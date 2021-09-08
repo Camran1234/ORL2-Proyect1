@@ -33,8 +33,28 @@ public class PistaReproduccion implements Serializable{
     
     public int getDuracionTotal(){
         int total=0;
+        ArrayList<Integer> canales = new ArrayList();
+        ArrayList<Integer> duracionCanal = new ArrayList();        
         for(Reproduccion sonido:sonidos){
-            total += sonido.getDuracion();
+            int canal = sonido.getCanal();
+            boolean flag=false;
+            for(int index=0; index<canales.size(); index++){
+                int entero = canales.get(index);
+                if(entero==canal){
+                    flag=true;
+                    duracionCanal.add(index, duracionCanal.get(index)+sonido.getDuracion());
+                }
+            }
+            if(!flag){
+               canales.add(canal);
+               duracionCanal.add(sonido.getDuracion());
+            }
+        }
+        
+        for(Integer entero:duracionCanal){
+            if(total<entero){
+                total = entero;
+            }
         }
         return total;
     }

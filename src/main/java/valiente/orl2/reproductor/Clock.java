@@ -20,6 +20,7 @@ public class Clock extends Thread{
     private int maxTime=0;
     private Clip clip;
     private boolean finished=false;
+    private boolean apagado=false;
     
     public Clock(Clip clip, int time){
         maxTime=time;
@@ -28,27 +29,46 @@ public class Clock extends Thread{
     
     @Override
     public void run(){
-        while(true){
+        while(Reproductor.play){
             try {
                 if(Sound.reproducir){
                     if(timeLapsed>=maxTime){                
                         break;                    
                     }                
-                    Thread.sleep(100);                
-                    timeLapsed+=100;
+                    if(apagado){
+                       clip.loop( Clip.LOOP_CONTINUOUSLY ); 
+                    }
+                    apagado=false;
+                    Thread.sleep(10);                
+                    timeLapsed+=10;
                 }else{
-                    Thread.sleep(100);
+                    apagado=true;
+                    clip.stop();
+                    Thread.sleep(10);
                 }
             } catch (InterruptedException e) {
+                finished=true;
+                clip.stop();
+                clip.close();
                 e.printStackTrace();
             }
         }
-        clip.stop();
-        finished=true;
+        try {
+            clip.stop();
+            clip.close();
+            finished=true;
+        } catch (Exception e) {
+        }
     }
     
     public boolean finished(){
-        return finished();
+        return finished;
+    }
+
+    void shutUp() {
+        this.clip.stop();
+        this.clip.close();
+        clip=null;
     }
     
 }

@@ -268,9 +268,9 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="buttonElimnarPista" min="-2" max="-2" attributes="0"/>
                               <EmptySpace pref="135" max="32767" attributes="0"/>
-                              <Component id="jButton5" min="-2" pref="140" max="-2" attributes="0"/>
+                              <Component id="butonReproducirPista" min="-2" pref="140" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jButton2" min="-2" pref="140" max="-2" attributes="0"/>
+                              <Component id="butonDetenerPista" min="-2" pref="140" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -282,8 +282,8 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="buttonModificarPista" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="buttonElimnarPista" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButton5" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="butonReproducirPista" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="butonDetenerPista" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace pref="17" max="32767" attributes="0"/>
                           </Group>
@@ -291,7 +291,7 @@
                     </DimensionLayout>
                   </Layout>
                   <SubComponents>
-                    <Component class="javax.swing.JButton" name="jButton2">
+                    <Component class="javax.swing.JButton" name="butonDetenerPista">
                       <Properties>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="0" green="0" red="ff" type="rgb"/>
@@ -304,6 +304,9 @@
                         </Property>
                         <Property name="text" type="java.lang.String" value="PARAR"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="butonDetenerPistaActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="buttonModificarPista">
                       <Properties>
@@ -339,7 +342,7 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonElimnarPistaActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton5">
+                    <Component class="javax.swing.JButton" name="butonReproducirPista">
                       <Properties>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="ff" green="33" red="33" type="rgb"/>
@@ -352,6 +355,9 @@
                         </Property>
                         <Property name="text" type="java.lang.String" value="REPRODUCIR"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="butonReproducirPistaActionPerformed"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -533,7 +539,7 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="buttonEliminarLista" min="-2" max="-2" attributes="0"/>
                               <EmptySpace pref="135" max="32767" attributes="0"/>
-                              <Component id="jButton9" min="-2" pref="140" max="-2" attributes="0"/>
+                              <Component id="buttonReproducirLista" min="-2" pref="140" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jButton6" min="-2" pref="140" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -547,7 +553,7 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="buttonModificarLista" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="buttonEliminarLista" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButton9" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="buttonReproducirLista" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jButton6" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace pref="17" max="32767" attributes="0"/>
@@ -569,6 +575,9 @@
                         </Property>
                         <Property name="text" type="java.lang.String" value="PARAR"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton6ActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="buttonModificarLista">
                       <Properties>
@@ -604,7 +613,7 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonEliminarListaActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton9">
+                    <Component class="javax.swing.JButton" name="buttonReproducirLista">
                       <Properties>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="ff" green="33" red="33" type="rgb"/>
@@ -617,6 +626,9 @@
                         </Property>
                         <Property name="text" type="java.lang.String" value="REPRODUCIR"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonReproducirListaActionPerformed"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
