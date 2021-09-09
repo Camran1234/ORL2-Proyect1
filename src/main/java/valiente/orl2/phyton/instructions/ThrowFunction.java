@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import valiente.orl2.phyton.conditions.Condition;
+import valiente.orl2.phyton.error.SemanticError;
 import valiente.orl2.phyton.error.SemanticException;
 import valiente.orl2.phyton.error.ValueException;
 import valiente.orl2.phyton.table.Symbol;
@@ -53,8 +54,21 @@ public class ThrowFunction extends Instruction{
         //ArrayList<Symbol> lista = TableOfValue.getSymbolListAfterFunctions();
         
         //Eliminamos todas las variables debajo de als funciones
-        function.setAssignments(asignaciones);
-        this.value = function.getValue();
+        try {
+            function.setAssignments(asignaciones);
+            
+            if(function.getType().equalsIgnoreCase("void")){
+                function.declararParametros();
+                function.execute();
+            }else{                
+                this.value = function.getValue();
+            }
+        } catch (SemanticException e) {
+            SemanticError error = new SemanticError("Error en funcion", line, column);
+            error.setDescription(e.getMessage());
+            TableOfValue.semanticErrors.add(error);
+        }
+        
         TableOfValue.setWorkingSymbol(previousSymbol);
         TableOfValue.setContainer(container);
     }

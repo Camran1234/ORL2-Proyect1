@@ -31,9 +31,9 @@ public class Comparation {
         this.column = column;
     }
     
-    public Comparation(boolean unary, Comparation comparation, int line, int column){
+    public Comparation(boolean unary, Operation value, int line, int column){
         this.unary = unary;
-        this.comparation = comparation;
+        this.value = value;
         this.line= line;
         this.column = column;
     }
@@ -61,7 +61,7 @@ public class Comparation {
             Value variable = comparation.execute().execute();
             Value result = null;
             if(!variable.getRawType().equalsIgnoreCase("variable")){
-                throw new ValueException("El valor referenciado no es una variable","Operador nulo mal establecido", line, column);
+                
             }
             if(variable.getValue()==null){
                 result = new Value("boolean","true",line, column);
@@ -70,9 +70,20 @@ public class Comparation {
             }
             return new Operation(result, line, column);
         }else if(value!=null){
-            return value;
+            Operation operation = value;
+            Value valor = operation.execute();
+            if(unary){
+                if(valor.getRawType().equalsIgnoreCase("variable")==false){
+                    throw new ValueException("El valor referenciado no es una variable","Operador nulo mal establecido", line, column);
+                }
+                if(valor.getValue()==null){
+                    operation = new Operation(new Value("boolean","true", value.getLine(), value.getColumn()), operation.getLine(), operation.getColumn());
+                }else{
+                    operation = new Operation(new Value("boolean","false", value.getLine(), value.getColumn()), operation.getLine(), operation.getColumn());
+                }
+            }
+            return operation;
         }
-        
         return null;
     }
 

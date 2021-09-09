@@ -54,6 +54,10 @@ public class TableOfValue {
     }
     
     public static boolean checkContainer(Symbol symbol){
+        if(symbol.isGlobal()){
+            return true;
+        }
+        
         if(workingParameter){
             return true;
         }

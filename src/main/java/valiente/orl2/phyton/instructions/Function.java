@@ -85,8 +85,12 @@ public class Function extends Instruction{
             Symbol symbol = new Symbol(type, indentation,mode , line, column);
                 boolean flag=false;
                 for(int index=0; index<instructions.size(); index++){
-                    if(instructions.get(index) instanceof Return && index==instructions.size()-1){
-                        flag = true;
+                    if(instructions.get(index) instanceof Return && index==instructions.size()-1 ){
+                        if( this.type.equalsIgnoreCase("void")==false){
+                            flag = true;
+                        }else{
+                            throw new Exception("La funcion es void no se puede retornar valores");
+                        }
                     }else if(instructions.get(index) instanceof Return && index!= instructions.size()-1){
                         throw new Exception("Instrucciones despues de retorna");
                     }else if(instructions.get(index) instanceof Continue){
@@ -96,7 +100,7 @@ public class Function extends Instruction{
                     }
                     
                 }
-                if(flag==false && !this.type.equalsIgnoreCase("")){
+                if(flag==false && !this.type.equalsIgnoreCase("") && this.type.equalsIgnoreCase("void") == false){
                     throw new Exception("Se esperaba un return al final");
                 } 
                 System.out.println("Agregado en Function");
@@ -119,11 +123,7 @@ public class Function extends Instruction{
         }
     }
     
-    /**
-     * Get the value after the execute
-     * @return 
-     */
-    public Value getValue() throws SemanticException{
+    public void declararParametros(){
         TableOfValue.setContainer(this);
         for(int index=0; index<parameters.size(); index++){
             parameters.get(index).declarar();
@@ -133,10 +133,27 @@ public class Function extends Instruction{
         //Quitamos las variables y generamos una nueva tablad e simbolos
         
         TableOfValue.setWorkingSymbol(newSymbol);
-        this.execute();
-        Value value = this.value;
-        this.value = null;
-        return value;
+    }
+    
+    /**
+     * Get the value after the execute
+     * @return 
+     */
+    public Value getValue() throws SemanticException{
+        try {
+            if(type.equalsIgnoreCase("void")){
+                throw new SemanticException("La funcion "+this.name.getRawValue()+" es tipo void");
+            }
+            
+            declararParametros();
+            this.execute();
+            Value value = new Value(this.value.getType(), this.value.getValue(), this.value.getLine(), this.value.getColumn());
+            this.value = null;
+            return value;
+        } catch (ValueException ex) {
+            Logger.getLogger(Function.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public void reset(){

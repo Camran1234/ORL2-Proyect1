@@ -25,7 +25,7 @@ public class Condition {
    private String operador="";
    private Condition right;
    /*Unario*/
-   private String unary;
+   private String unary="";
    private Condition comparation;
    
    private Comparation value;
@@ -51,10 +51,20 @@ public class Condition {
 
    public Operation execute(){
        if(left!=null && right!=null){
-           Operation leftOp = left.execute();
-           Operation rightOp = right.execute();
-           RelationalOperator relationalOperator = new RelationalOperator();
-           return relationalOperator.MakeCondition(leftOp, rightOp, operador, line, column);
+           try {
+               Operation leftOp = left.execute();
+               Operation rightOp = right.execute();
+               RelationalOperator relationalOperator = new RelationalOperator();
+               Operation operation = relationalOperator.MakeCondition(leftOp, rightOp, operador, line, column);
+               Value theValor = operation.execute();
+               if(theValor.getType().equalsIgnoreCase("boolean") && unary.equals("!")){
+                   boolean valor = Boolean.parseBoolean(theValor.getValue());
+                   operation = new Operation(new Value("boolean", Boolean.toString(valor), line, column), line, column);
+               }
+               return operation; 
+           } catch (ValueException ex) {
+               Logger.getLogger(Condition.class.getName()).log(Level.SEVERE, null, ex);
+           }
        }else if(comparation !=null){
            try {
                Operation result = comparation.execute();
@@ -63,9 +73,19 @@ public class Condition {
                    boolean valor=false;
                        valor = Boolean.parseBoolean(newValue.getValue());
                    if(valor){
-                       newValue = new Value("boolean","false", line, column);
+                       boolean asignacion = false;
+                       if(unary.equals("!")){
+                           asignacion=true;
+                       }
+                       System.out.println("VALOR ES "+Boolean.toString(asignacion));
+                       newValue = new Value("boolean",Boolean.toString(asignacion), line, column);
                    }else{
-                       newValue = new Value("boolean","true", line, column);
+                       boolean asignacion = true;
+                       if(unary.equals("!")){
+                           asignacion=false;
+                       }
+                       System.out.println("VALOR ES "+Boolean.toString(asignacion));
+                       newValue = new Value("boolean",Boolean.toString(asignacion), line, column);
                    }
                }else{
                    throw new ValueException("El valor no era boolean", "Tipo incompatible en condicion", line, column);
@@ -76,7 +96,21 @@ public class Condition {
            }
        }else if(value !=null){
            try {
-               return this.value.execute();
+               Operation operation = this.value.execute();
+               Value theValor = operation.execute();
+               if(theValor.getType().equalsIgnoreCase("boolean") && unary.equals("!")){
+                   boolean valor = Boolean.parseBoolean(theValor.getValue());
+                   int line = theValor.getLine();
+                   int column = theValor.getColumn();
+                   if(valor){
+                       valor=false;
+                   }else{
+                       valor=true;
+                   }
+                   operation = new Operation(new Value("boolean", Boolean.toString(valor), line, column), line, column);
+               }
+               
+               return operation;
            } catch (ValueException ex) {
                
            }

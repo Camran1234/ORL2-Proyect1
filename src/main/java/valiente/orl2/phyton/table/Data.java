@@ -48,6 +48,10 @@ public class Data {
         try {
             this.type = type;
             this.value = value;
+            if(value.equalsIgnoreCase("")){
+                this.value=null;
+            }
+            
             this.isArray = false;
             this.line = line;
             this.column = column;
@@ -167,6 +171,7 @@ public class Data {
             }
         }        
     }
+    
     
     /**
      * Establece un valor si es variable

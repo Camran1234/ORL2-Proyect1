@@ -272,11 +272,18 @@ public class LogicalOperator {
                 throw new Exception("No se puede comparar un boolean con una cadena");
             }
         }else if(l.equalsIgnoreCase("cadena")){
-            if(l.equals(r)){
-                return new Value("boolean","true",line, column);
+            String leftV = left.getValue();
+            if(r.equalsIgnoreCase("cadena")){
+                String rightV = right.getValue();
+                if(leftV.equals(rightV)){
+                    return new Value("boolean","true",line, column);
+                }else{
+                    return new Value("boolean","false",line, column);
+                }
             }else{
-                return new Value("boolean","false",line, column);
+                throw new Exception("No se puede comparar un "+r+" con una cadena");
             }
+            
         }
         return result;
     }
@@ -446,10 +453,16 @@ public class LogicalOperator {
                 throw new Exception("No se puede comparar un boolean con una cadena");
             }
         }else if(l.equalsIgnoreCase("cadena")){
-            if(!l.equals(r)){
-                return new Value("boolean","true",line, column);
+            String leftV = left.getValue();
+            if(r.equalsIgnoreCase("cadena")){
+                String rightV = right.getValue();
+                if(leftV.equals(rightV)==false){
+                    return new Value("boolean","true",line, column);
+                }else{
+                    return new Value("boolean","false",line, column);
+                }
             }else{
-                return new Value("boolean","false",line, column);
+                throw new Exception("No se puede comparar un "+r+" con una cadena");
             }
         }
         return result;
@@ -616,7 +629,19 @@ public class LogicalOperator {
                 throw new Exception("No se puede comparar un boolean con una cadena");
             }
         }else if(l.equalsIgnoreCase("cadena")){
-            throw new Exception("No se puede aplicar > a cadena");
+            String leftV = left.getValue();
+            if(r.equalsIgnoreCase("cadena")){
+                String rightV = right.getValue();
+                int valoresLeft = leftV.length();
+                int valoresRight = rightV.length();
+                if(valoresLeft>valoresRight){
+                    return new Value("boolean","true",line, column);
+                }else{
+                    return new Value("boolean","false",line, column);
+                }
+            }else{
+                throw new Exception("No se puede comparar un "+r+" con una cadena");
+            }
         }
         return result;
     }
@@ -781,7 +806,19 @@ public class LogicalOperator {
                 throw new Exception("No se puede comparar un con una cadena");
             }
         }else if(l.equalsIgnoreCase("cadena")){
-            throw new Exception("No se puede aplicar >= a cadena");
+            String leftV = left.getValue();
+            if(r.equalsIgnoreCase("cadena")){
+                String rightV = right.getValue();
+                int valoresLeft = leftV.length();
+                int valoresRight = rightV.length();
+                if(valoresLeft>=valoresRight){
+                    return new Value("boolean","true",line, column);
+                }else{
+                    return new Value("boolean","false",line, column);
+                }
+            }else{
+                throw new Exception("No se puede comparar un "+r+" con una cadena");
+            }
         }
         return result;
     }
@@ -947,7 +984,19 @@ public class LogicalOperator {
                 throw new Exception("No se puede comparar con una cadena");
             }
         }else if(l.equalsIgnoreCase("cadena")){
-            throw new Exception("No se puede aplicar < a cadena");
+            String leftV = left.getValue();
+            if(r.equalsIgnoreCase("cadena")){
+                String rightV = right.getValue();
+                int valoresLeft = leftV.length();
+                int valoresRight = rightV.length();
+                if(valoresLeft<valoresRight){
+                    return new Value("boolean","true",line, column);
+                }else{
+                    return new Value("boolean","false",line, column);
+                }
+            }else{
+                throw new Exception("No se puede comparar un "+r+" con una cadena");
+            }
         }
         return result;
     }
@@ -1112,7 +1161,19 @@ public class LogicalOperator {
                 throw new Exception("No se puede comparar con una cadena");
             }
         }else if(l.equalsIgnoreCase("cadena")){
-            throw new Exception("No se puede aplicar <= a cadena");
+            String leftV = left.getValue();
+            if(r.equalsIgnoreCase("cadena")){
+                String rightV = right.getValue();
+                int valoresLeft = leftV.length();
+                int valoresRight = rightV.length();
+                if(valoresLeft<=valoresRight){
+                    return new Value("boolean","true",line, column);
+                }else{
+                    return new Value("boolean","false",line, column);
+                }
+            }else{
+                throw new Exception("No se puede comparar un "+r+" con una cadena");
+            }
         }
         return result;
     }

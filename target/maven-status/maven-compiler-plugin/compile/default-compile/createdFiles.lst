@@ -46,7 +46,6 @@ valiente/orl2/proyecto1/ListasUI$4.class
 valiente/orl2/phyton/specialInstructions/Sumarizar.class
 valiente/orl2/Lista/Manejador/ListaAnalyzer.class
 valiente/orl2/phyton/table/Symbol.class
-.netbeans_automatic_build
 valiente/orl2/proyecto1/PhytonFrame$1.class
 valiente/orl2/phyton/parser/PhytonSyntax$CUP$PhytonSyntax$actions.class
 valiente/orl2/proyecto1/Phyton.class
@@ -111,4 +110,5 @@ valiente/orl2/proyecto1/PhytonFrame$4.class
 valiente/orl2/phyton/values/TypeParser.class
 valiente/orl2/UI/TextLineNumber.class
 valiente/orl2/proyecto1/ListasUI$8.class
+valiente/orl2/UI/LineChart.class
 valiente/orl2/phyton/specialInstructions/Longitud.class

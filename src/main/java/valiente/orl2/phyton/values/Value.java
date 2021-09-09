@@ -14,6 +14,7 @@ import valiente.orl2.phyton.specialInstructions.Longitud;
 import valiente.orl2.phyton.specialInstructions.Ordenar;
 import valiente.orl2.phyton.specialInstructions.Reproducir;
 import valiente.orl2.phyton.specialInstructions.Sumarizar;
+import valiente.orl2.phyton.table.Symbol;
 import valiente.orl2.phyton.table.TableOfValue;
 
 /**
@@ -224,8 +225,9 @@ import valiente.orl2.phyton.table.TableOfValue;
         return this;
     }
 
-    public void setValue(String value) {
+    public void setValue(String value) {    
         this.value = value;
+        
     }
 
     public int getLine() {
