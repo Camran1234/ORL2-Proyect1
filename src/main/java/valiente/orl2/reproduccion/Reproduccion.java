@@ -59,6 +59,8 @@ public class Reproduccion implements Serializable{
             return true;
         }else if(nota.equalsIgnoreCase("si#")){            
             return true;
+        }else if(nota.equalsIgnoreCase("Rest")){
+            return true;
         }
         return false;
     }

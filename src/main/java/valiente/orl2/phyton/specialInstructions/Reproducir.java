@@ -61,7 +61,7 @@ public class Reproducir extends Instruction{
             }
             valorTiempo = newTiempo.getValue();
             if(Integer.parseInt(valorTiempo)<0){
-               throw new ValueException("Se esperaba un entero positivo en tiempo", "Entero positivo esperado", newOctava.getLine(), newOctava.getColumn()); 
+               throw new ValueException("Se esperaba un entero positivo en tiempo", "Entero positivo esperado", newTiempo.getLine(), newTiempo.getColumn()); 
             }
         } catch (ValueException e) {
         }
@@ -71,14 +71,14 @@ public class Reproducir extends Instruction{
             }
             valorCanal = newCanal.getValue();
             if(Integer.parseInt(valorCanal)<0){
-               throw new ValueException("Se esperaba un entero positivo en el canal", "Entero positivo esperado", newOctava.getLine(), newOctava.getColumn()); 
+               throw new ValueException("Se esperaba un entero positivo en el canal", "Entero positivo esperado", newCanal.getLine(), newCanal.getColumn()); 
             }
         } catch (ValueException e) {
         }
         
         try {
             TableOfValue table= new TableOfValue();
-            Pista newPista = (Pista)TableOfValue.getWorkingSymbol().getReference().getValue();
+            Pista newPista = (Pista)TableOfValue.getSelectedSymbol().getReference().getValue();
             //Asignamos los valores de reproduccion
             Reproduccion reproduccion = new Reproduccion(valorNota, Integer.parseInt(valorOctava), Integer.parseInt(valorTiempo), Integer.parseInt(valorCanal), 
             getLine(), getColumn());

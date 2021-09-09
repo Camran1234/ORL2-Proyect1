@@ -66,6 +66,7 @@ public class Pista extends Instruction{
     public void execute() throws SemanticException{
         try {
             TableOfValue.setWorkingSymbol(symbol);
+            TableOfValue.setSelectedSymbol(symbol);
             for(int index=0; index<instructions.size(); index++){
                 if(instructions.get(index) instanceof Principal){
                     instructions.get(index).execute();
@@ -86,6 +87,7 @@ public class Pista extends Instruction{
             this.symbol = symbol;
             //Agregamos el simbolo
             TableOfValue.setWorkingSymbol(symbol);
+            TableOfValue.setSelectedSymbol(symbol);
             workingSymbol = symbol;
             int numberPrincipal=0;
             for(int index=0; index<instructions.size(); index++){

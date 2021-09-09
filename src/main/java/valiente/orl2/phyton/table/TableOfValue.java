@@ -26,6 +26,7 @@ public class TableOfValue {
     private static ArrayList<Symbol> symbols = new ArrayList();
     //Pista que estamos trabajando
     private static Symbol workingSymbol = null;
+    private static Symbol selectedSymbol = null;
     //Instruccion contenedora
     private static Instruction container = null;
     private static boolean workingParameter=false;
@@ -47,6 +48,14 @@ public class TableOfValue {
     
     public static Instruction getContainer(){
         return container;
+    }
+    
+    public static Symbol getSelectedSymbol(){
+        return selectedSymbol;
+    }
+    
+    public static void setSelectedSymbol(Symbol symbol){
+        TableOfValue.selectedSymbol = symbol;
     }
     
     public static void setWorkingInParameter(boolean flag){

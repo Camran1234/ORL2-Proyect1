@@ -90,7 +90,13 @@ public final class Nota{
         }
         int intSR = SAMPLE_RATE;
         int frequency = (int) frequency();
-        int intFPW = intSR/frequency;
+        int intFPW;
+        if(frequency==0){
+            intFPW =0;
+        }else{
+            intFPW = intSR/frequency;
+        }
+        
         float sampleRate = (float)intSR;
         // oddly, the sound does not loop well for less than            
         // around 5 or so, wavelengths
