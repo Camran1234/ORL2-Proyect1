@@ -681,6 +681,9 @@
               </Border>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="graphic = new LineChart(jPanel4);"/>
+          </AuxValues>
 
           <Layout>
             <DimensionLayout dim="0">

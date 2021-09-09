@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import valiente.orl2.UI.LineChart;
 import valiente.orl2.central.Central;
 import valiente.orl2.reproduccion.ListaReproduccion;
 import valiente.orl2.reproduccion.PistaReproduccion;
@@ -29,6 +30,7 @@ public class ListasUI extends javax.swing.JFrame {
     private PhytonFrame frame;
     public static String actualPista="";
     public static String actualLista="";
+    public static LineChart graphic;
     //Para pistas
     DefaultListModel lmPistas = new DefaultListModel();
     //Para duracion de pistas
@@ -44,6 +46,7 @@ public class ListasUI extends javax.swing.JFrame {
         initComponents();
         this.frame = frame;
         initAll();
+        
     }
     
     public void initAll(){
@@ -534,6 +537,8 @@ public class ListasUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        graphic = new LineChart(jPanel4);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -632,26 +637,24 @@ public class ListasUI extends javax.swing.JFrame {
                     //Cargamos la nueva cancion y corremos             
                     try {
                         
-                        reproductor.deleteChannels();reproductor.interrupt();
+                        reproductor.deleteChannels();
+                        reproductor = null;
                         reproductor = new Reproductor(actualPista);
-                        Thread.sleep(50);
                     } catch (Exception e) {
                     }
                     PistaReproduccion pista = central.getPistaReproduccion(actualPista);                    
-                    reproductor.deleteChannels();
                     reproductor.generateChannels(pista);                    
                     reproductor.runSong();                                    
                 }else{
                     reproductor.startRe();
                     if(!reproductor.reproduciendo){
                         try {
-                            reproductor.deleteChannels();reproductor.interrupt();
+                            reproductor.deleteChannels();
+                            reproductor = null;
                             reproductor = new Reproductor(actualPista);
-                            Thread.sleep(50);
                         } catch (Exception e) {
                         }
                         PistaReproduccion pista = central.getPistaReproduccion(actualPista);                    
-                        reproductor.deleteChannels();
                         reproductor.generateChannels(pista);                    
                         reproductor.runSong();                                    
                     }
@@ -659,13 +662,12 @@ public class ListasUI extends javax.swing.JFrame {
             }else{            
                 //Cargamos la nueva cancion y corremos                    
                     try {
-                        reproductor.deleteChannels();reproductor.interrupt();
+                        reproductor.deleteChannels();
+                        reproductor = null;
                         reproductor = new Reproductor(actualPista);
-                        Thread.sleep(50);
                     } catch (Exception e) {
                     }
                     PistaReproduccion pista = central.getPistaReproduccion(actualPista);                    
-                    reproductor.deleteChannels();
                     reproductor.generateChannels(pista);                    
                     reproductor.runSong();                    
             }   
@@ -695,7 +697,8 @@ public class ListasUI extends javax.swing.JFrame {
                 if(!reproductor.getCancionActual().equals(actualLista)){                
                     //Cargamos la nueva cancion y corremos             
                     try {
-                        reproductor.deleteChannels();reproductor.interrupt();
+                        reproductor.deleteChannels();
+                        reproductor = null;
                         reproductor = new Reproductor(actualLista);
                         Thread.sleep(50);
                     } catch (Exception e) {
@@ -708,7 +711,8 @@ public class ListasUI extends javax.swing.JFrame {
                     reproductor.startRe();
                     if(!reproductor.reproduciendo){
                         try {
-                        reproductor.deleteChannels();reproductor.interrupt();
+                        reproductor.deleteChannels();
+                        reproductor = null;
                         reproductor = new Reproductor(actualLista);
                         Thread.sleep(50);
                     } catch (Exception e) {
@@ -721,7 +725,8 @@ public class ListasUI extends javax.swing.JFrame {
             }else{            
                 //Cargamos la nueva cancion y corremos                    
                 try {
-                        reproductor.deleteChannels();reproductor.interrupt();
+                        reproductor.deleteChannels();
+                        reproductor = null;
                         reproductor = new Reproductor(actualLista);
                         Thread.sleep(50);
                     } catch (Exception e) {

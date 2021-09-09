@@ -12,6 +12,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JOptionPane;
 import valiente.orl2.central.Central;
+import valiente.orl2.proyecto1.ListasUI;
 import valiente.orl2.reproduccion.ListaReproduccion;
 import valiente.orl2.reproduccion.PistaReproduccion;
 import valiente.orl2.reproduccion.Reproduccion;
@@ -90,8 +91,9 @@ public class Reproductor extends Thread{
     public void deleteChannels(){
         
         try {
+            ListasUI.graphic.limpiar();
             play=false;
-            Thread.sleep(350);
+            Thread.sleep(500);
             for(Channel channel:channels){
                 channel.interrupt();
                 //channel.shutUp();
@@ -154,6 +156,8 @@ public class Reproductor extends Thread{
             int duration = reproduccion.getDuracion();
             Clip clip = note.generateClip();
             Sound sound = new Sound(clip, duration);
+            sound.setFrecuencia((float)note.frequency());
+            sound.setCanal(channel.getCanal());
             channel.addSound(sound);
         } catch (LineUnavailableException ex) {
             Logger.getLogger(Reproductor.class.getName()).log(Level.SEVERE, null, ex);

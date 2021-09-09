@@ -26,6 +26,14 @@ public class Sound extends Thread{
         this.clock= new Clock(clip, duration);
     }
     
+    public void setFrecuencia(float frecuencia){
+        clock.setFrecuencia(frecuencia);
+    }
+    
+    public void setCanal(int canal){
+        clock.setCanal(canal);
+    }
+    
     
     @Override
     public void run(){         

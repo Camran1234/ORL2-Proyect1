@@ -132,7 +132,7 @@ public final class Nota{
             byteValue();
     }
     
-    private double frequency(){
+    public double frequency(){
         switch(selectedItem){
             case 1:
                 return 16.3516*Math.pow(2,octava);

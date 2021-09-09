@@ -4,6 +4,7 @@ package valiente.orl2.reproductor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.Clip;
+import valiente.orl2.proyecto1.ListasUI;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -21,7 +22,8 @@ public class Clock extends Thread{
     private Clip clip;
     private boolean finished=false;
     private boolean apagado=false;
-    
+    private float frecuencia=0;
+    private int canal=0;
     public Clock(Clip clip, int time){
         maxTime=time;
         this.clip=clip;
@@ -32,6 +34,9 @@ public class Clock extends Thread{
         while(Reproductor.play){
             try {
                 if(Sound.reproducir){
+                    if(timeLapsed%500==0){
+                        ListasUI.graphic.addDataSet("Canal "+Integer.toString(canal), frecuencia, timeLapsed);
+                    }
                     if(timeLapsed>=maxTime){                
                         break;                    
                     }                
@@ -69,6 +74,14 @@ public class Clock extends Thread{
         this.clip.stop();
         this.clip.close();
         clip=null;
+    }
+
+    void setFrecuencia(float frecuencia) {
+        this.frecuencia = frecuencia;
+    }
+    
+    void setCanal(int canal){
+        this.canal = canal;
     }
     
 }

@@ -33,10 +33,16 @@ public class Channel extends Thread{
     public void run(){
         try {
             for(int index=0; index<sounds.size(); index++){
+                if(!Reproductor.play){
+                    break;
+                }
                 //Empezamos una cancion por cancion
                 Sound sound = sounds.get(index);
+                System.out.println("Empezando a reproducir en canal: "+noChannel);
                 sound.start();
                 sound.join();
+                System.out.println("Terminando sound en canal: "+noChannel);
+                
             }
             closed=true;
         } catch (InterruptedException ex) {  
