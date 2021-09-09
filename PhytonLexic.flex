@@ -78,6 +78,22 @@ Char = [\'][^\']*[\']
     [rR]"e#" {System.out.println(yytext());if(error==null){ return new Symbol(RER, yyline+1, yycolumn+1, yytext());}else{
             error.setLexema(yytext());
         }}
+        [mM]"i#" {System.out.println(yytext());if(error==null){ return new Symbol(MIR, yyline+1, yycolumn+1, yytext());}else{
+            error.setLexema(yytext());
+        }}
+        [fF]"a#" {System.out.println(yytext());if(error==null){ return new Symbol(FAR, yyline+1, yycolumn+1, yytext());}else{
+            error.setLexema(yytext());
+        }}
+        [sS]"ol#" {System.out.println(yytext());if(error==null){ return new Symbol(SOLR, yyline+1, yycolumn+1, yytext());}else{
+            error.setLexema(yytext());
+        }}
+        [lL]"a#" {System.out.println(yytext());if(error==null){ return new Symbol(LAR, yyline+1, yycolumn+1, yytext());}else{
+            error.setLexema(yytext());
+        }}
+        [sS]"i#" {System.out.println(yytext());if(error==null){ return new Symbol(SIR, yyline+1, yycolumn+1, yytext());}else{
+            error.setLexema(yytext());
+        }}
+        
     [dD]"o"    {System.out.println(yytext());if(error==null){ return new Symbol(DO, yyline+1, yycolumn+1, yytext());}else{
             error.setLexema(yytext());
         }}

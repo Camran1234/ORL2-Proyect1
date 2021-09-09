@@ -1,10 +1,269 @@
+package valiente.orl2.Lista.parser;
+import java.util.ArrayList;
 import java_cup.runtime.XMLElement;
 import java_cup.runtime.Symbol;
+import java_cup.runtime.XMLElement;
+import java_cup.runtime.XMLElement;
+import valiente.orl2.phyton.error.SyntaxError;
+import valiente.orl2.reproduccion.ListaReproduccion;
+import valiente.orl2.reproduccion.PlayList;
 
 parser code {:
+    PlayList lista = null;
+    int errors=0;
+    String tokenError="";
+    int lineError, columnError =0;
+    String expectedTokens="";
+    ArrayList<SyntaxError> list = new ArrayList();
+        
+        public PlayList getLista(){
+            return lista;
+        }
+
+        public ArrayList<SyntaxError> getList(){
+                return list;
+        }
+
+        public void report_error(String message, Object info) { 
+                if (info instanceof String){
+                        Symbol s = cur_token;
+                        //System.err.println("  "+ errors + "==> " + info + " en "+tokenError+": "+ message + " [linea: "+lineError+" columna: "+columnError+"]");
+                        SyntaxError error = new SyntaxError(info.toString(), tokenError, lineError, columnError);;
+                        error.setExpectedTokens(expectedTokens);
+                        error.setDescription(message);
+                        list.add(error);
+                        System.err.println(error.getDescription());
+                }
+        }
+
+        public void report_error_final(String message, Object info){
+                if (info instanceof String){
+                        Symbol s = cur_token;
+                        errors++;       
+                        //System.err.println("  "+ errors + "==> " + info + ": "+ message);
+                        SyntaxError error = new SyntaxError(info.toString(), tokenError, lineError, columnError);
+                        error.setExpectedTokens(expectedTokens);
+                        error.setDescription(message);
+                        list.add(error);
+                        System.err.println(error.getDescription());
+                }
+                
+        }
+
+    @Override
+        public void syntax_error(Symbol symbol){
+            int line = symbol.left;
+            int column = symbol.right;
+            String token = (String) cur_token.value;
+            //We get the production
+                tokenError = token;
+                lineError = line;
+                columnError = column;
+                expectedTokens = "";
+                for(int index=0; index<expected_token_ids().size() ; index++){
+                    //We traduce the token to a form that the user might understand
+                    expectedTokens += symbl_name_from_id(expected_token_ids().get(index));
+                    expectedTokens += ",";
+                }
+        }
+
+    @Override
+        public void unrecovered_syntax_error(Symbol symbol){
+                tokenError = (String) cur_token.value;
+                lineError = symbol.left;
+                columnError = symbol.right;
+                expectedTokens = "";
+                for(int index=0; index<expected_token_ids().size() ; index++){
+                    //We traduce the token to a form that the user might understand
+                    expectedTokens += symbl_name_from_id(expected_token_ids().get(index));
+                    expectedTokens += ", ";
+                }
+                report_error_final("Estado Ilegal de Expresion", "Sintaxis incorrecta");
+        }
+
 :}
 
 terminal LISTA, NOMBRE, RANDOM, CIRCULAR, PISTA, TRUE, FALSE, STRING, SIMBOLO, OPEN_BRACKET, CLOSE_BRACKET,
 PIPE, OPEN_CURLY, CLOSE_CURLY, SEMI_COLON, COMA; 
 
-non terminal ;
+non terminal node;
+non terminal Boolean options, circular, random;
+non terminal ArrayList<String> look_pista, pistas, pistas_re, pista;
+non terminal ListaReproduccion status, new_status, parameters;
+non terminal ArrayList<ListaReproduccion> productions, productions_re, main_body;
+
+start with node;
+
+node ::= main_body:m {:
+            lista = new PlayList();
+            lista.setLista(m);
+        :}
+        ;
+
+main_body ::= OPEN_CURLY productions:p CLOSE_CURLY{:RESULT=p;:}
+            |error productions CLOSE_CURLY {:parser.report_error("Se esperaba \"{\" ","Inicio ilegal de la expresion");:}
+            |OPEN_CURLY productions error {:parser.report_error("Se esperaba \"}\" ","Inicio ilegal de la expresion");:}
+            |OPEN_CURLY error CLOSE_CURLY {:parser.report_error("Lista mal declarada","Incapacidad de lectura");:}
+        ;
+
+productions ::= LISTA SEMI_COLON parameters:p productions_re:pr{:
+                    if(p!=null){
+                        if(pr!=null){
+                            pr.add(p); 
+                        }  
+                    }
+                    RESULT = pr;
+            :}
+            |error SEMI_COLON parameters:p productions_re:pr {:parser.report_error("Se esperaba la palabra Lista ","Inicio ilegal de la expresion");
+                 if(p!=null){
+                        if(pr!=null){
+                            pr.add(p); 
+                        }  
+                    }
+                    RESULT = pr;
+            :}
+            |LISTA error parameters:p productions_re:pr {:parser.report_error("Se esperaba \":\" ","Inicio ilegal de la expresion");
+                 if(p!=null){
+                        if(pr!=null){
+                            pr.add(p); 
+                        }  
+                    }
+                    RESULT = pr;
+            :}
+            ;
+
+//An arrayList of playlist
+productions_re ::= COMA LISTA SEMI_COLON parameters:p productions_re:pr{:
+                    if(p!=null){
+                        if(pr!=null){
+                            pr.add(p);
+                        }
+                    }
+                    RESULT = pr;
+                :}
+                |COMA error SEMI_COLON parameters productions_re {:parser.report_error("Se esperaba la palabra Lista ","Inicio ilegal de la expresion");:}
+                |COMA LISTA error parameters productions_re {:parser.report_error("Se esperaba \":\" ","Inicio ilegal de la expresion");:}
+                |/*empty*/ {: RESULT = new ArrayList<ListaReproduccion>(); :}
+                ;
+
+//Parameters should end with a }
+parameters ::= OPEN_CURLY status:s{:
+                RESULT = s;
+            :} 
+            |error status:s {:parser.report_error("Se esperaba \"{\" ","Inicio ilegal de la expresion"); RESULT=s;:}
+            |OPEN_CURLY error {:parser.report_error("Parametros mal declarados ","Instruccion no leible");:}
+            ;
+
+//Name of the playlist
+status ::= NOMBRE SEMI_COLON STRING:str new_status:n{:
+                if(str!=null){
+                    if(n!=null){
+                        String newString = str.toString();
+                        newString = newString.substring(1, newString.length()-1);
+                        n.setNombre(newString,cur_token.left, cur_token.right);
+                    }
+                }
+                RESULT = n;
+        :}
+        |error SEMI_COLON STRING:str new_status:n {:parser.report_error("Se esperaba la palabra: nombre ","Inicio ilegal de la expresion");
+            if(str!=null){
+                    if(n!=null){
+                        String newString = str.toString();
+                        newString = newString.substring(1, newString.length()-1);
+                        n.setNombre(newString,cur_token.left, cur_token.right);
+                    }
+                }
+                RESULT = n;
+        :}
+        |NOMBRE error STRING:str new_status:n {:parser.report_error("Se esperaba \":\" ","Inicio ilegal de la expresion");
+            if(str!=null){
+                    if(n!=null){
+                        String newString = str.toString();
+                        newString = newString.substring(1, newString.length()-1);
+                        n.setNombre(newString,cur_token.left, cur_token.right);
+                    }
+                }
+                RESULT = n;
+        :}
+        |NOMBRE SEMI_COLON error new_status:n {:parser.report_error("Se esperaba el nombre de la pista en comillas dobles","String esperado"); RESULT=n;:}
+        ;
+
+//Throw an object that goes filling this parameters
+new_status ::= COMA random:rand new_status:n {:
+                if(rand!=null){
+                    if(n!=null){
+                        n.setRandom(rand,cur_token.left, cur_token.right);
+                    }
+                }
+                RESULT = n;
+            :}
+            |COMA circular:cir new_status:n{:
+                if(cir!=null){
+                    if(n!=null){
+                        n.setCircular(cir,cur_token.left, cur_token.right);
+                    }
+                }
+                RESULT = n;
+            :}
+            |COMA pista:pis new_status:n {:
+                if(pis!=null){
+                    if(n!=null){
+                        n.setPistas(pis,cur_token.left, cur_token.right);
+                    }
+                }
+                RESULT = n;
+            :}
+            |COMA error new_status:n {:parser.report_error("No se menciono el parametro de la lista","Parametros mal declarados"); RESULT=n;:}
+            |error {:parser.report_error("Parametros mal declarados","Inicio ilegal de la expresion");:}
+            |CLOSE_CURLY {:
+                ListaReproduccion lista = new ListaReproduccion(cur_token.left, cur_token.right);
+                RESULT = lista;
+            :}
+            ;
+
+pista ::= PISTA SEMI_COLON look_pista:e {:RESULT = e;:}
+        |PISTA error look_pista:e {:parser.report_error("Se esperaba \":\" ","Inicio ilegal de la expresion"); RESULT =e;:}
+        |PISTA SEMI_COLON error {:parser.report_error("Se esperaba pistas adentro de los corchetes ","Inicio ilegal de la expresion");:}
+        ;
+
+circular ::= CIRCULAR SEMI_COLON options:op {:RESULT=op;:}
+            |CIRCULAR error options:op {:parser.report_error("Se esperaba \":\" ","Inicio ilegal de la expresion"); RESULT=op;:}
+            |CIRCULAR SEMI_COLON error {:parser.report_error("Se esperaba la palbra: \"true\" o \"false\" ","Opciones invalidas");:}
+            ;
+
+random ::= RANDOM SEMI_COLON options:op {:RESULT=op;:}
+        |RANDOM error options:op {:parser.report_error("Se esperaba \":\" ","Inicio ilegal de la expresion"); RESULT=op;:}
+        |RANDOM SEMI_COLON error {:parser.report_error("Se esperaba la palbra: \"true\" o \"false\" ","Opciones invalidas");:}
+        ;
+
+//ArrayList<String>            
+look_pista ::= OPEN_BRACKET pistas:e CLOSE_BRACKET {:RESULT =e;:}
+            |OPEN_BRACKET pistas:e error {:parser.report_error("Se esperaba \"]\" ","Inicio ilegal de la expresion"); RESULT =e;:}
+            ;
+//Strings
+pistas ::= SIMBOLO:e pistas_re:pi {:
+        if(e!=null && pi!=null){
+            pi.add(e.toString());
+            RESULT = pi;
+        }
+        :}
+        |error pistas_re:pi {:parser.report_error("Se esperaba un identificador ","Nombre esperado");
+            RESULT = pi;
+        :}
+        ;
+//Strings
+pistas_re ::= COMA SIMBOLO:e pistas_re:pi {:
+            if(e!=null && pi!=null){
+                pi.add(e.toString());
+                RESULT = pi;
+            }
+
+        :}
+        |COMA error pistas_re:pi {:parser.report_error("Se esperaba un identificador ","Nombre esperado"); RESULT = pi;:}
+        |/*empty*/ {:RESULT = new ArrayList<String>();:}
+        ;
+
+//boolean
+options ::= TRUE {:RESULT=true;:}
+        |FALSE {:RESULT=false;:}
+        ;

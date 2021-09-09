@@ -71,7 +71,7 @@ parser code {:
                 for(int index=0; index<expected_token_ids().size() ; index++){
                     //We traduce the token to a form that the user might understand
                     expectedTokens += symbl_name_from_id(expected_token_ids().get(index));
-                    expectedTokens += ", ";
+                    expectedTokens += ",";
                 }
         }
 
@@ -96,7 +96,7 @@ PRIMOS, SUMARIZAR, LONGITUD, MENSAJE, PRINCIPAL, KEEP, VAR, ENTERO, DOBLE, BOOLE
 STRING, CHAR, ELSE, SWITCH, CASE, EXIT, DEFAULT, FOR, WHILE, HACER, CONTINUE, DOR, RER, DO, RE, MI, FA, SOL, LA, SI,
 EQUAL, EQUALIZATION, DIFFERENTIATION, GREATER_THAN, LESSER_THAN, NULL_, GREATER, LESSER, EQUAL_MORE, INCREASE, DECREASE,
 ADD, MINUS, MULTIPLY, DIV, MODULE, POW, OPEN_BRACKET, CLOSE_BRACKET, OPEN_PARENTHESIS, CLOSE_PARENTHESIS, COLON, COMA,
-NAND, AND, NOR, OR, XOR, NOT, TAB, SPACE, OPEN_CURLY, CLOSE_CURLY, RETORNA , TRUE, FALSE; 
+NAND, AND, NOR, OR, XOR, NOT, TAB, SPACE, OPEN_CURLY, CLOSE_CURLY, RETORNA , TRUE, FALSE, MIR, FAR, SOLR, LAR, SIR; 
 
 non terminal kar;
 non terminal Dimension array_assign;
@@ -126,7 +126,7 @@ non terminal If block_if;
 non terminal ElseIf block_elseif;
 non terminal Else block_else;
 /*precedences*/
-
+precedence left CLOSE_CURLY;
 precedence left ADD, MINUS;
 precedence left DIV, MULTIPLY, MODULE;
 precedence left POW;
@@ -136,7 +136,7 @@ precedence left OR, NOR, XOR;
 precedence left AND, NAND;
 precedence left NOT;
 precedence left OPEN_PARENTHESIS, CLOSE_PARENTHESIS;
-precedence left OPEN_CURLY, CLOSE_CURLY, COMA;
+
 
 
 start with main_body;
@@ -169,7 +169,7 @@ main_body ::= instruction:ins {:
                         settingInstructions(ins);
                 }
          :}
-        |error instruction:ins {: parser.report_error("Error en la sintaxis","Inicio ilegal de la expresion"); :}
+        |error main_body:ins {: parser.report_error("Simbolo no esperado","Inicio ilegal de la expresion"); :}
         ;
 
 instruction ::= tab:numTab principal:prin instruction:ins {: 
@@ -285,6 +285,7 @@ instruction ::= tab:numTab principal:prin instruction:ins {:
                 |tab:num EXIT tab_re SPACE instruction:ins{:
                         if(ins!=null){
                                 Exit newExit = new Exit(num, cur_token.left, cur_token.right);
+                                newExit.setIndentation(num);
                                 ins.add(newExit);
                                 RESULT = ins;
                         }
@@ -301,17 +302,18 @@ instruction ::= tab:numTab principal:prin instruction:ins {:
                         if(ins!=null){
                                 ArrayList<Instruction> lista = ins;
                                 Continue newContinue = new Continue(numTab, cur_token.left, cur_token.right);
+                                newContinue.setIndentation(numTab);
                                 lista.add(newContinue);
                                 RESULT=lista;
                         }
                 :}
-                |default:e1 tab_re SPACE instruction:ins {:
+                |default:e1 instruction:ins {:
                         if(ins!=null && e1!=null){
                                 ins.add(e1);
                                 RESULT = ins;
                         }
                 :}
-                |cases:e1 tab_re SPACE instruction:ins {:
+                |cases:e1 instruction:ins {:
                         if(ins!=null && e1 !=null){
                                 ins.add(e1);
                                 RESULT = ins;
@@ -370,33 +372,58 @@ notas ::= DO:r {:
                 Operation operation = new Operation(value, cur_token.left, cur_token.right);
                 RESULT=operation;
         :}
+        |MIR:r {:
+                Value value = new Value("nota", r.toString(), cur_token.left, cur_token.right); 
+                Operation operation = new Operation(value, cur_token.left, cur_token.right);
+                RESULT=operation;
+        :}
+        |FAR:r {:
+                Value value = new Value("nota", r.toString(), cur_token.left, cur_token.right); 
+                Operation operation = new Operation(value, cur_token.left, cur_token.right);
+                RESULT=operation;
+        :}
+        |SOLR:r {:
+                Value value = new Value("nota", r.toString(), cur_token.left, cur_token.right); 
+                Operation operation = new Operation(value, cur_token.left, cur_token.right);
+                RESULT=operation;
+        :}
+        |LAR:r {:
+                Value value = new Value("nota", r.toString(), cur_token.left, cur_token.right); 
+                Operation operation = new Operation(value, cur_token.left, cur_token.right);
+                RESULT=operation;
+        :}
+        |SIR:r {:
+                Value value = new Value("nota", r.toString(), cur_token.left, cur_token.right); 
+                Operation operation = new Operation(value, cur_token.left, cur_token.right);
+                RESULT=operation;
+        :}
         |error:e {:parser.report_error("Valor incorrecto en, se esperaba una nota musical","Valor inesperado"); :}
         ;
 
 /*FUNCIONES ESPECIALES*/
 
 ordenar_options ::= ASCENDENTE{:
-                        Value value = new Value("string", "ascendente", cur_token.left, cur_token.right);
+                        Value value = new Value("cadena", "ascendente", cur_token.left, cur_token.right);
                         Operation operation = new Operation(value, cur_token.left, cur_token.right);
                         RESULT = operation;
                 :}
                 |DESCENDENTE{:
-                        Value value = new Value("string", "descendente", cur_token.left, cur_token.right);
+                        Value value = new Value("cadena", "descendente", cur_token.left, cur_token.right);
                         Operation operation = new Operation(value, cur_token.left, cur_token.right);
                         RESULT = operation;
                 :}
                 |PARES{:
-                        Value value = new Value("string", "pares", cur_token.left, cur_token.right);
+                        Value value = new Value("cadena", "pares", cur_token.left, cur_token.right);
                         Operation operation = new Operation(value, cur_token.left, cur_token.right);
                         RESULT = operation;
                 :}
                 |IMPARES{:
-                        Value value = new Value("string", "impares", cur_token.left, cur_token.right);
+                        Value value = new Value("cadena", "impares", cur_token.left, cur_token.right);
                         Operation operation = new Operation(value, cur_token.left, cur_token.right);
                         RESULT = operation;
                 :}
                 |PRIMOS{:
-                        Value value = new Value("string", "primos", cur_token.left, cur_token.right);
+                        Value value = new Value("cadena", "primos", cur_token.left, cur_token.right);
                         Operation operation = new Operation(value, cur_token.left, cur_token.right);
                         RESULT = operation;
                 :}
@@ -411,11 +438,10 @@ reproducir_syntax ::= notas:e1 COMA value:e2 COMA value:e3 COMA value:e4 CLOSE_P
                         reproducir.setCanal(e4);
                         RESULT = reproducir;
                 :}
-                |notas error:e value COMA value COMA value CLOSE_PARENTHESIS SPACE {: parser.report_error("Se esperaba una coma ","Sintaxis incorrecta"); :}
-                |notas COMA value error:e value COMA value CLOSE_PARENTHESIS SPACE {: parser.report_error("Se esperaba una coma ","Sintaxis incorrecta"); :}
-                |notas COMA value COMA value error:e value CLOSE_PARENTHESIS SPACE {: parser.report_error("Se esperaba una coma ","Sintaxis incorrecta"); :}
-                |notas COMA value COMA value COMA value error:e  SPACE {: parser.report_error("Se esperaba una coma ","Sintaxis incorrecta"); :}
-                |notas:e1 COMA value:e2 COMA value:e3 COMA value:e4 CLOSE_PARENTHESIS error {: parser.report_error("Se esperaba un salto delinea ","Sintaxis incorrecta"); :}
+                |notas error:e value COMA value COMA value CLOSE_PARENTHESIS  {: parser.report_error("Se esperaba una coma ","Sintaxis incorrecta"); :}
+                |notas COMA value error:e value COMA value CLOSE_PARENTHESIS  {: parser.report_error("Se esperaba una coma ","Sintaxis incorrecta"); :}
+                |notas COMA value COMA value error:e value CLOSE_PARENTHESIS  {: parser.report_error("Se esperaba una coma ","Sintaxis incorrecta"); :}
+                |notas COMA value COMA value COMA value error:e   {: parser.report_error("Se esperaba una coma ","Sintaxis incorrecta"); :}
                     ;
 
 esperar_syntax ::= value:milisegundos COMA value:canal CLOSE_PARENTHESIS  {:
@@ -430,9 +456,8 @@ esperar_syntax ::= value:milisegundos COMA value:canal CLOSE_PARENTHESIS  {:
                         esperar.setCanal(canalOp);
                         RESULT =esperar;
                 :}
-                |value error:e value CLOSE_PARENTHESIS SPACE {: parser.report_error("Se esperaba una coma ","Sintaxis incorrecta"); :}
-                |value COMA value error:e SPACE {: parser.report_error("Se esperaba \")\" ","Sintaxis incorrecta"); :}
-                |value:milisegundos COMA value:canal CLOSE_PARENTHESIS error {: parser.report_error("Se esperaba un salto de linea ","Sintaxis incorrecta"); :}
+                |value error:e value CLOSE_PARENTHESIS  {: parser.report_error("Se esperaba una coma ","Sintaxis incorrecta"); :}
+                |value COMA value error:e  {: parser.report_error("Se esperaba \")\" ","Sintaxis incorrecta"); :}
                 ;
 
 sumarizar_syntax ::= value:e1 CLOSE_PARENTHESIS  {:
@@ -440,8 +465,17 @@ sumarizar_syntax ::= value:e1 CLOSE_PARENTHESIS  {:
                         sumarizar.setArreglo(e1);
                         RESULT = sumarizar;
                 :}
-                |value error:e SPACE{: parser.report_error("Se esperaba en \")\" ","Sintaxis incorrecta"); :}
-                |value CLOSE_PARENTHESIS error {: parser.report_error("Se esperaba salto de linea ","Sintaxis incorrecta"); :}
+                |array_assign:f CLOSE_PARENTHESIS{:
+                        if(f !=null){
+                                Value value = new Value(f, cur_token.left, cur_token.right);
+                                Operation operation = new Operation(value, cur_token.left, cur_token.right);
+                                Sumarizar sumarizar = new Sumarizar(cur_token.left, cur_token.right);
+                                sumarizar.setArreglo(operation);
+                                RESULT = sumarizar;
+                        }
+                :}
+                |value error:e {: parser.report_error("Se esperaba en \")\" ","Sintaxis incorrecta"); :}
+                |array_assign error {: parser.report_error("Se esperaba en \")\" ","Sintaxis incorrecta"); :}
                     ;
 
 longitud_syntax ::= value:e1 CLOSE_PARENTHESIS  {:
@@ -449,8 +483,17 @@ longitud_syntax ::= value:e1 CLOSE_PARENTHESIS  {:
                         longitud.setArray(e1);
                         RESULT = longitud;
                 :}
-                |value error:e SPACE {: parser.report_error("Se esperaba \")\" ","Sintaxis incorrecta"); :}
-                |value error error {: parser.report_error("Se esperaba salto de linea ","Sintaxis incorrecta"); :}
+                |array_assign:f CLOSE_PARENTHESIS{:
+                        if(f !=null){
+                                Value value = new Value(f, cur_token.left, cur_token.right);
+                                Operation operation = new Operation(value, cur_token.left, cur_token.right);
+                                Longitud sumarizar = new Longitud(cur_token.left, cur_token.right);
+                                sumarizar.setArray(operation);
+                                RESULT = sumarizar;
+                        }
+                :}
+                |value error:e  {: parser.report_error("Se esperaba \")\" ","Sintaxis incorrecta"); :}
+                |array_assign error {: parser.report_error("Se esperaba en \")\" ","Sintaxis incorrecta"); :}
                     ;
 
 mensaje_syntax ::= value:e1 CLOSE_PARENTHESIS  {:
@@ -458,8 +501,7 @@ mensaje_syntax ::= value:e1 CLOSE_PARENTHESIS  {:
                         mensaje.setMensaje(e1);
                         RESULT = mensaje;
                 :}
-                |value error:e SPACE {: parser.report_error("Se esperaba \")\" ","Sintaxis incorrecta"); :}
-                |value CLOSE_PARENTHESIS error {: parser.report_error("Se esperaba salto de linea ","Sintaxis incorrecta"); :}
+                |value error:e {: parser.report_error("Se esperaba \")\" ","Sintaxis incorrecta"); :}
                     ;
 
 ordenar_syntax ::= value:sim COMA ordenar_options:ord CLOSE_PARENTHESIS  {:
@@ -469,9 +511,19 @@ ordenar_syntax ::= value:sim COMA ordenar_options:ord CLOSE_PARENTHESIS  {:
                         ordenar.setForma(ord);
                         RESULT = ordenar;
                 :}
-                |value error:e ordenar_options CLOSE_PARENTHESIS SPACE {: parser.report_error("Se esperaba una coma ","Sintaxis incorrecta"); :}
-                |value COMA ordenar_options error:e SPACE {: parser.report_error("Se esperaba \")\" ","Sintaxis incorrecta"); :}
-                |value COMA ordenar_options CLOSE_PARENTHESIS error {: parser.report_error("Se esperaba salto de linea ","Sintaxis incorrecta"); :}
+                |array_assign:sim COMA ordenar_options:ord CLOSE_PARENTHESIS  
+                {:
+                        Ordenar ordenar = new Ordenar(cur_token.left, cur_token.right);
+                        Value value = new Value(sim, cur_token.left, cur_token.right);
+                        Operation operation = new Operation(value, cur_token.left, cur_token.right);
+                        ordenar.setArray(operation);
+                        ordenar.setForma(ord);
+                        RESULT = ordenar;
+                :}
+                |value error:e ordenar_options CLOSE_PARENTHESIS  {: parser.report_error("Se esperaba una coma ","Sintaxis incorrecta"); :}
+                |value COMA ordenar_options error:e  {: parser.report_error("Se esperaba \")\" ","Sintaxis incorrecta"); :}
+                |array_assign error:e ordenar_options CLOSE_PARENTHESIS  {: parser.report_error("Se esperaba una coma ","Sintaxis incorrecta"); :}
+                |array_assign COMA ordenar_options error:e  {: parser.report_error("Se esperaba \")\" ","Sintaxis incorrecta"); :}
                 ;
 
 func_especiales ::= REPRODUCIR OPEN_PARENTHESIS reproducir_syntax:e1  {:
@@ -533,6 +585,7 @@ function_mode ::= OPEN_BRACKET CLOSE_BRACKET function_mode:m{:
                 |/*empty*/{:
                         RESULT = 0;
                 :}
+                |OPEN_BRACKET error function_mode {:parser.report_error("Se esperaba \"]\" ","Sintaxis incorrecta");:}
                 ;
 
 function ::= kf:variableIndicator word_functions:sim OPEN_PARENTHESIS  multiple_v:mv tab_re  SPACE {:
@@ -551,6 +604,7 @@ function ::= kf:variableIndicator word_functions:sim OPEN_PARENTHESIS  multiple_
                 |kf error:e OPEN_PARENTHESIS multiple_v SPACE {: parser.report_error("Error, se esperaba un nombre","Nombre no encontrado"); :}
                 |kf word_functions error:e multiple_v SPACE {: parser.report_error("Se esperaba \"(\" ","Sintaxis incorrecta"); :}
                 |kf word_functions OPEN_PARENTHESIS multiple_v error:e {: parser.report_error("Se esperaba un salto de linea ","Sintaxis incorrecta"); :}
+                |kf:variableIndicator word_functions:sim OPEN_PARENTHESIS  error:mv tab_re  SPACE {: parser.report_error("Inicio ilegal de expresion declarando parametros ","Sintaxis incorrecta"); :}
             ;
 
 type_function ::= data_type:data 
@@ -602,13 +656,16 @@ function_variables ::= data_type:data SIMBOLO:sim
                                 Operation operation = new Operation(value, cur_token.left, cur_token.right);
                                 RESULT = operation;
                         :}
-                        |data_type:data ARREGLO SIMBOLO:sim dimension:dim 
+                        |data_type:data ARREGLO SIMBOLO:sim function_mode:dim 
                         {:
                                 Value value = new Value(data, sim.toString(), dim, cur_token.left, cur_token.right);
                                 Operation operation = new Operation(value, cur_token.left, cur_token.right);
                                 RESULT = operation;
                         :}
                         |data_type error:e {: parser.report_error("Error, se esperaba un nombre","Nombre no encontrado"); :}
+                        |data_type error SIMBOLO function_mode {: parser.report_error("Error, se esperaba la palabra arreglo","Mal declarado"); :}
+                        |data_type ARREGLO error function_mode {: parser.report_error("Error, se esperaba el identificador","Mal declarado"); :}
+                        |error {:parser.report_error("Error, se esperaba un nombre","Nombre no encontrado");:}
                     ;
 /*LLAMAR FUNCIONES*/
 method_value ::= condition_re:condition method_value_re:re{:
@@ -625,6 +682,18 @@ method_value ::= condition_re:condition method_value_re:re{:
                         ArrayList<Operation> lista = new ArrayList();
                         RESULT = lista;
                 :}
+                |array_assign:f method_value_re:re{:
+                        if(f !=null && re !=null){
+                                ArrayList<Operation> aux = new ArrayList();
+                                Value value = new Value(f, cur_token.left, cur_token.right);
+                                Operation operation = new Operation(value, cur_token.left, cur_token.right);
+                                re.add(operation);
+                                for(int index=re.size()-1; index>=0; index--){
+                                        aux.add(re.get(index));
+                                }
+                                RESULT = aux;
+                        }
+                :}
                 ;
 
 method_value_re ::= COMA condition_re:condition method_value_re:re{:
@@ -634,6 +703,15 @@ method_value_re ::= COMA condition_re:condition method_value_re:re{:
                                 RESULT = re;
                         }
                 :}
+                |COMA array_assign:f method_value_re:re{:
+                        if(f !=null && re !=null){
+                                Value value = new Value(f, cur_token.left, cur_token.right);
+                                Operation operation = new Operation(value, cur_token.left, cur_token.right);
+                                re.add(operation);
+                                RESULT = re;
+                        }
+                :}
+                |error:e condition_re method_value_re {: parser.report_error("Se esperaba una coma o \")\" ","Sintaxis incorrecta"); :}
                 |CLOSE_PARENTHESIS{:
                         ArrayList<Operation> lista = new ArrayList();
                         RESULT = lista;
@@ -714,11 +792,14 @@ increm_variables ::= SIMBOLO:sim increm:in {:
                         variable.setValue(assignment);
                         RESULT = variable;
                 :}
+                |SIMBOLO:sim assign_for:assign
+                |error increm {: parser.report_error("Se esperaba ++ o -- ","Valor inesperado"); :}
+                |error assign_for {: parser.report_error("Se esperaba ++ o -- ","Valor inesperado"); :}
                     ;
 
 increm ::= INCREASE {:RESULT = "++";:}
             |DECREASE {:RESULT = "--";:}
-            |error:e {: parser.report_error("Se esperaba ++ o -- ","Valor inesperado"); :}
+            |error:e {: parser.report_error("Se esperaba ++ o -- o alguna asignacion","Valor inesperado"); :}
             ;
 
 /*Variables for*/
@@ -738,6 +819,7 @@ v_for ::= type:typ SIMBOLO:sym assign_for:assignfor {:
                 variable.setValue(assignment);
                 RESULT = variable;
         :}
+        |error {:parser.report_error("Se esperaba la declaracion de una variable","Sintaxis incorrecta");:} 
         ;
 
 assign_for ::= equal:e1 condition_re:op {:
@@ -762,9 +844,9 @@ v ::= type:typ variables:var assign_special:assign /*Declaracion*/{:
                 RESULT = chunk;
         }    
     :}
-    |variables:var assign:assign /*Solo asignacion*/{:
+    |variables:var assign:assig /*Solo asignacion*/{:
         if(var!=null){
-                Assignment assignment = assign;
+                Assignment assignment = assig;
                 ArrayList<Variable> list = var;
                 VariableChunk chunk = new VariableChunk(list,assignment);
                 RESULT = chunk;
@@ -799,7 +881,6 @@ variables ::= SIMBOLO:sim variables_re:arr {:
                                 auxiliar.add(lista.get(index));
                         }
                 }
-                
                 RESULT = lista;
                 :}
                 |ARREGLO SIMBOLO:sim variables_re:re dimension:dim {:
@@ -811,6 +892,16 @@ variables ::= SIMBOLO:sim variables_re:arr {:
                                         re.get(index).setDimension(dim);
                                 }
                                 RESULT = re;
+                        }
+                :}
+                |SIMBOLO:sim dimension:dim{:
+                        if(dim!=null){
+                                Variable variable = new Variable(cur_token.left, cur_token.right);
+                                variable.setName(sim.toString());
+                                variable.setDimension(dim);
+                                ArrayList<Variable> list = new ArrayList();
+                                list.add(variable);
+                                RESULT = list;
                         }
                 :}
             ;
@@ -874,7 +965,13 @@ assign_special ::= assign:assi {:RESULT = assi;:}
 assign ::= equal:e1 condition_re:re assign_special:f{:
                 if(e1!=null && re!=null){
                         if(f!=null){
-
+                                String mode = e1.toString();
+                                Operation value = new Operation(re,cur_token.left, cur_token.right);
+                                Assignment asignacion = new Assignment(cur_token.left, cur_token.right);
+                                asignacion.setMetodo(mode);
+                                asignacion.setValue(value);
+                                asignacion.setAssignment(f);
+                                RESULT=asignacion;
                         }else{
                                 String mode = e1.toString();
                                 Operation value = new Operation(re,cur_token.left, cur_token.right);
@@ -885,11 +982,19 @@ assign ::= equal:e1 condition_re:re assign_special:f{:
                         }
                 }
     :}
+        |EQUAL:e1 array_assign:f tab_re SPACE{:
+                if(f!=null){
+                        Assignment asignacion = new Assignment(cur_token.left, cur_token.right);
+                        Value value = new Value(f, cur_token.left, cur_token.right);
+                        Operation operation = new Operation(value, cur_token.left, cur_token.right);
+                        asignacion.setValue(operation);
+                        RESULT = asignacion;
+                }
+        :}
     ;
 
 equal ::= EQUAL {:RESULT = "=";:}
         |EQUAL_MORE {:RESULT = "+=";:}
-        |error:e {: parser.report_error("No se pudo declarar correctamente la variable","Igualacion esperada"); :}
         ;
 
 //Depricated
@@ -905,22 +1010,28 @@ array ::= ARREGLO dimension:dim {:
         |/*empty*/ {: ArrayList<Operation> list = new ArrayList(); RESULT=list; :}
         ;
 
-dimension ::= dimension_re:dim OPEN_BRACKET value:v CLOSE_BRACKET  {: 
+dimension ::=  OPEN_BRACKET value:v CLOSE_BRACKET  dimension_re:dim{: 
                 if(dim!=null){
                         ArrayList<Operation> list = dim;
+                        ArrayList<Operation> aux = new ArrayList();
                         list.add(v);
-                        RESULT = list;
+                        for(int index=list.size()-1; index>=0; index--){
+                                aux.add(list.get(index));
+                        }
+                        RESULT = aux;
                 }
                 :}
+                |OPEN_BRACKET value error dimension_re {:parser.report_error("Se esperaba \"]\"","Sintaxis incorrecta");:}
         ;
 
-dimension_re ::= dimension_re:dim OPEN_BRACKET value:v CLOSE_BRACKET {: 
+dimension_re ::=  OPEN_BRACKET value:v CLOSE_BRACKET dimension_re:dim {: 
                 if(dim!=null){
                         ArrayList<Operation> list = dim;
                         list.add(v);
                         RESULT = list;
                 }
                 :}
+                |OPEN_BRACKET value error dimension_re {:parser.report_error("Se esperaba \"]\"","Sintaxis incorrecta");:}
                 |/*empty*/{:ArrayList<Operation> lista = new ArrayList(); 
                 RESULT = lista;:}
                 ;
@@ -929,7 +1040,7 @@ dimension_re ::= dimension_re:dim OPEN_BRACKET value:v CLOSE_BRACKET {:
 /*{{5,10,15},{1,3,8},{20,25,30}}*/
                         
 
-array_assign ::= OPEN_CURLY assign_arr:arr   // nD
+array_assign ::=  OPEN_CURLY assign_arr:arr CLOSE_CURLY// nD
                 {:
                         if(arr!=null){
                                 Dimension dimension = new Dimension(cur_token.left,cur_token.right);
@@ -938,19 +1049,25 @@ array_assign ::= OPEN_CURLY assign_arr:arr   // nD
                                 RESULT = dimension;
                         }
                 :}
-                |OPEN_CURLY mult_values:m CLOSE_CURLY //1D
+                |OPEN_CURLY mult_values:mult CLOSE_CURLY //1D
                 {:
-                        if(m!=null){
-                                Dimension dimension = new Dimension(cur_token.left,cur_token.right);
+                        if(mult!=null){
+                                ArrayList<Dimension> dimensiones = new ArrayList();
+                                 Dimension dimension = new Dimension(cur_token.left,cur_token.right);
                                 dimension.setDimension(1);
-                                dimension.setData(m);
-                                RESULT = dimension;
+                                dimension.setData(mult);
+                                dimensiones.add(dimension);
+                                Dimension ar = new Dimension(cur_token.left,cur_token.right);
+                                ar.setDimensions(dimensiones);
+                                ar.setDimension(0);
+                                RESULT = ar;
                         }
                 :}
+                
                 ;
 
 //Genera una lista de Dimensiones de grado 1
-new_assign ::= COMA OPEN_CURLY mult_values:m CLOSE_CURLY new_assign:n
+new_assign ::=  CLOSE_CURLY COMA OPEN_CURLY mult_values:m  new_assign:n
                 {:
                         if(m!=null && n!=null){
                                 Dimension dimension = new Dimension(cur_token.left,cur_token.right);
@@ -960,14 +1077,14 @@ new_assign ::= COMA OPEN_CURLY mult_values:m CLOSE_CURLY new_assign:n
                                 RESULT = n;
                         }
                 :}
-                |/*empty*/
+                |CLOSE_CURLY
                 {:
                         ArrayList<Dimension> dimension = new ArrayList();
                         RESULT = dimension;
                 :}
                 ;
 
-assign_arr ::= OPEN_CURLY assign_arr:arr CLOSE_CURLY assign_arr_re:re{: //Como es la parte final le damos vuelta a los arreglos siempre
+assign_arr ::= OPEN_CURLY assign_arr:arr assign_arr_re:re {: //Como es la parte final le damos vuelta a los arreglos siempre
                 if(arr!=null && re!=null){
                         Dimension dimension = new Dimension(cur_token.left,cur_token.right);
                         dimension.setDimensions(arr);
@@ -994,7 +1111,7 @@ assign_arr ::= OPEN_CURLY assign_arr:arr CLOSE_CURLY assign_arr_re:re{: //Como e
                 :}
                 ;
 
-assign_arr_re ::= COMA OPEN_CURLY assign_arr:arr CLOSE_CURLY assign_arr_re:re{:
+assign_arr_re ::= CLOSE_CURLY COMA OPEN_CURLY assign_arr:arr assign_arr_re:re{:
                         if(arr!=null && re!=null){
                                 Dimension dimension = new Dimension(cur_token.left,cur_token.right);
                                 dimension.setDimensions(arr);
@@ -1002,7 +1119,7 @@ assign_arr_re ::= COMA OPEN_CURLY assign_arr:arr CLOSE_CURLY assign_arr_re:re{:
                                 RESULT = re;
                         }
                 :}
-                |/*empty*/{:
+                |CLOSE_CURLY{:
                         ArrayList<Dimension> dimension = new ArrayList();
                         RESULT = dimension;
                 :}
@@ -1025,7 +1142,7 @@ mult_values_re ::= COMA value:v mult_values_re:re{:
                                 RESULT = re;
                         }
                 :}
-                |CLOSE_CURLY {:ArrayList<Operation> list = new ArrayList(); RESULT = list;:}
+                |/*empty*/ {:ArrayList<Operation> list = new ArrayList(); RESULT = list;:}
                 ;
 
 
@@ -1059,13 +1176,6 @@ value ::= NUMBER:num {: Value value = new Value("entero",num.toString(), cur_tok
                         Value value = new Value("caracter", text, cur_token.left, cur_token.right); 
                         Operation operation = new Operation(value,cur_token.left,cur_token.right);
                         RESULT =operation;
-                        :}
-        |array_assign:e {:
-                        if(e!=null){
-                                Value value = new Value(e, cur_token.left, cur_token.right);
-                                Operation operation = new Operation(value,cur_token.left, cur_token.right);
-                                RESULT=operation;
-                        }
                         :}
         |throw_function:num {:
                         Operation operation = new Operation(num, cur_token.left, cur_token.right);
@@ -1184,6 +1294,7 @@ condition ::= condition_re:con CLOSE_PARENTHESIS{:
                                 RESULT = con;
                         }
                 :}
+                |condition_re error {: parser.report_error("Se esperaba \")\"","Sintaxis incorrecta");:}
             ;
 
 condition_re ::= condition_re:e1 AND:f condition_re:e2 {:
@@ -1310,6 +1421,7 @@ default ::= tab:ind DEFAULT tab_re SPACE
                 Default lastCase = new Default(ind, cur_token.left, cur_token.right);
                 RESULT = lastCase;
         :}
+        |tab DEFAULT tab_re error {: parser.report_error("Se esperaba un salto de linea","Sintaxis incorrecta"); :}
         ;
 
 cases ::= tab:ind CASE value:val tab_re SPACE {:
@@ -1319,7 +1431,7 @@ cases ::= tab:ind CASE value:val tab_re SPACE {:
                         RESULT = newCase;
                 }
         :}
-        | tab error:e value tab_re SPACE  {: parser.report_error("Se esperaba la palabra \"case\" o \"default\" ","Sintaxis incorrecta"); :}
+        | tab error:e value tab_re SPACE  {: parser.report_error("Se esperaba la palabra una declaracion ","Sintaxis incorrecta"); :}
         | tab CASE value tab_re error:e {: parser.report_error("Se esperaba un salto de linea","Sintaxis incorrecta"); :}
         ;
 
@@ -1359,7 +1471,7 @@ for_increm ::= increm_variables:incv  CLOSE_PARENTHESIS tab_re {:
                         newFor.setPaso(incv);
                         RESULT = newFor;
                 :}      
-                |increm_variables error:e {: parser.report_error("Se esperaba \")\"","Sintaxis incorrecta"); :}
+                |increm_variables error:e tab_re{: parser.report_error("Se esperaba \")\"","Sintaxis incorrecta"); :}
                 ;
 
 /*WHILE*/
@@ -1371,8 +1483,8 @@ while ::= WHILE OPEN_PARENTHESIS condition:con tab_re SPACE{:
                         RESULT = newWhile;
                 }
         :} 
-        |WHILE error:e condition SPACE {: parser.report_error("Se esperaba \"(\"","Sintaxis incorrecta"); :}
-        |WHILE OPEN_PARENTHESIS condition error:e {: parser.report_error("Se esperaba un salto de linea","Sintaxis incorrecta"); :}
+        |WHILE error:e condition  tab_re SPACE {: parser.report_error("Se esperaba \"(\"","Sintaxis incorrecta"); :}
+        |WHILE OPEN_PARENTHESIS condition tab_re error:e {: parser.report_error("Se esperaba un salto de linea","Sintaxis incorrecta"); :}
         ;
 
 /*DO WHILE*/
@@ -1381,7 +1493,7 @@ do_while ::= HACER tab_re SPACE {:
                 DoWhile doWhile = new DoWhile(cur_token.left, cur_token.right);
                 RESULT = doWhile;
         :}
-        |HACER error {: parser.report_error("Se esperaba un salto de linea","Sintaxis incorrecta"); :}
+        |HACER tab_re error {: parser.report_error("Se esperaba un salto de linea","Sintaxis incorrecta"); :}
         ;
 
 
