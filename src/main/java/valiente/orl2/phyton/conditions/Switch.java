@@ -75,6 +75,16 @@ public class Switch extends Instruction{
         return cases;
     }
 
+    public boolean comprobacionCasos(Case newCase){
+        for(Case caso:cases){
+            if(newCase.comprobarValores(caso.getValue())){
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
     public void addCase(Case newCase){
         if(newCase!=null){
             if(finalCase!=null){
@@ -84,8 +94,17 @@ public class Switch extends Instruction{
                 TableOfValue.syntaxErrors.add(newError);
                 System.err.println(newError);
             }else{
+                if(comprobacionCasos(newCase)){
+                    
+                }else{
+                    SemanticError newError = new SemanticError("Caso repetido",newCase.getLine(), newCase.getColumn());
+                    newError.setDescription("El caso ya existe en el switch");
+                    TableOfValue.semanticErrors.add(newError);
+                    
+                }
                 this.cases.add(newCase);
-                newCase.setFather(this);
+                    newCase.setFather(this);
+                
             }
         }
     }

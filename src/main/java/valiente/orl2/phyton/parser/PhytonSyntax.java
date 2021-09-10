@@ -3620,7 +3620,13 @@ class CUP$PhytonSyntax$actions {
 		int assignleft = ((java_cup.runtime.Symbol)CUP$PhytonSyntax$stack.peek()).left;
 		int assignright = ((java_cup.runtime.Symbol)CUP$PhytonSyntax$stack.peek()).right;
 		Assignment assign = (Assignment)((java_cup.runtime.Symbol) CUP$PhytonSyntax$stack.peek()).value;
-
+		
+                        Assignment assignment = assign;
+                        Variable variable = new Variable(cur_token.left, cur_token.right);
+                        variable.setName(sim.toString());
+                        variable.setValue(assignment);
+                        RESULT = variable;
+                
               CUP$PhytonSyntax$result = parser.getSymbolFactory().newSymbol("increm_variables",32, ((java_cup.runtime.Symbol)CUP$PhytonSyntax$stack.elementAt(CUP$PhytonSyntax$top-1)), ((java_cup.runtime.Symbol)CUP$PhytonSyntax$stack.peek()), RESULT);
             }
           return CUP$PhytonSyntax$result;

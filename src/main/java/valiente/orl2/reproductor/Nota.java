@@ -140,7 +140,7 @@ public final class Nota{
     
     public double frequency(){
         switch(selectedItem){
-            case 1:
+           /* case 1:
                 return 16.3516*Math.pow(2,octava);
                     
             case 2:
@@ -174,6 +174,101 @@ public final class Nota{
                 return 29.1353*Math.pow(2,octava);
                 
             case 12:
+                return 30.8677*Math.pow(2,octava);*/
+            case 1:
+                if(octava==0){
+                    return 0;
+                }
+                return 16.3516*Math.pow(2,octava);
+                    
+            case 2:
+                if(octava==0){
+                    return 0;
+                }
+                if(octava==8){
+                    return 0;
+                }
+                return 17.3239*Math.pow(2,octava);
+                                
+            case 3:
+                if(octava==0){
+                    return 0;
+                }
+                if(octava==8){
+                    return 0;
+                }
+                return 18.3541*Math.pow(2,octava);
+                
+            case 4:
+                if(octava==0){
+                    return 0;
+                }
+                if(octava==8){
+                    return 0;
+                }
+                return 19.4454*Math.pow(2,octava);
+                
+            case 5:
+                if(octava==0){
+                    return 0;
+                }
+                if(octava==8){
+                    return 0;
+                }
+                return 20.6017*Math.pow(2,octava);
+                
+            case 6:
+                if(octava==0){
+                    return 0;
+                }
+                if(octava==8){
+                    return 0;
+                }
+                return 21.8268*Math.pow(2,octava);
+                
+            case 7:
+                if(octava==0){
+                    return 0;
+                }
+                if(octava==8){
+                    return 0;
+                }
+                return 23.1247*Math.pow(2,octava);
+                
+            case 8:
+                if(octava==0){
+                    return 0;
+                }
+                if(octava==8){
+                    return 0;
+                }
+                return 24.4997*Math.pow(2,octava);
+                
+            case 9:
+                if(octava==0){
+                    return 0;
+                }
+                if(octava==8){
+                    return 0;
+                }
+                return 25.9565*Math.pow(2,octava);
+                
+            case 10:
+                if(octava==8){
+                    return 0;
+                }
+                return 27.5000*Math.pow(2,octava);
+                
+            case 11:
+                if(octava==8){
+                    return 0;
+                }
+                return 29.1353*Math.pow(2,octava);
+                
+            case 12:
+                if(octava==8){
+                    return 0;
+                }
                 return 30.8677*Math.pow(2,octava);
         }
         return 0;

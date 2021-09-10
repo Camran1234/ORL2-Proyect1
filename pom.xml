@@ -39,7 +39,7 @@
     </dependencies>
     
     <build>
-        <finalName>Arbol_Actividad</finalName>
+        <finalName>ORL2_Proyecto1</finalName>
         <plugins>
 
     <!-- other Maven plugins ... -->
@@ -54,7 +54,7 @@
                         <manifest>
                           <addClasspath>true</addClasspath>
                           <classpathPrefix>lib/</classpathPrefix>
-                          <mainClass>com.mycompanyeans.UI</mainClass>
+                          <mainClass>valiente.orl2.proyecto1.PhytonFrame</mainClass>
                         </manifest>
                   </archive>
                     <descriptorRefs>

@@ -49,9 +49,9 @@ public class PlaySyntax extends java_cup.runtime.lr_parser {
     "\013\003\000\002\011\005\000\002\011\005\000\002\011" +
     "\005\000\002\004\005\000\002\004\005\000\002\004\005" +
     "\000\002\005\005\000\002\005\005\000\002\005\005\000" +
-    "\002\006\005\000\002\006\005\000\002\007\004\000\002" +
+    "\002\006\004\000\002\007\004\000\002\007\003\000\002" +
     "\007\004\000\002\010\005\000\002\010\005\000\002\010" +
-    "\002\000\002\003\003\000\002\003\003" });
+    "\003\000\002\003\003\000\002\003\003" });
 
   /** Access to production table. */
   public short[][] production_table() {return _production_table;}
@@ -89,42 +89,43 @@ public class PlaySyntax extends java_cup.runtime.lr_parser {
     "\010\003\045\021\047\023\044\001\002\000\006\003\060" +
     "\022\057\001\002\000\006\003\100\015\062\001\002\000" +
     "\004\015\062\001\002\000\010\003\uffe6\021\uffe6\023\uffe6" +
-    "\001\002\000\006\003\063\014\064\001\002\000\010\003" +
-    "\uffd8\016\uffd8\023\070\001\002\000\010\003\uffd8\016\uffd8" +
-    "\023\070\001\002\000\006\003\066\016\067\001\002\000" +
-    "\010\003\uffdd\021\uffdd\023\uffdd\001\002\000\010\003\uffde" +
-    "\021\uffde\023\uffde\001\002\000\006\003\072\014\073\001" +
-    "\002\000\006\003\uffdc\016\uffdc\001\002\000\010\003\uffd8" +
-    "\016\uffd8\023\070\001\002\000\010\003\uffd8\016\uffd8\023" +
-    "\070\001\002\000\006\003\uffda\016\uffda\001\002\000\006" +
-    "\003\uffd9\016\uffd9\001\002\000\006\003\uffdb\016\uffdb\001" +
-    "\002\000\010\003\uffe7\021\uffe7\023\uffe7\001\002\000\010" +
-    "\003\uffe5\021\uffe5\023\uffe5\001\002\000\010\003\uffeb\021" +
-    "\uffeb\023\uffeb\001\002\000\010\003\uffed\021\uffed\023\uffed" +
-    "\001\002\000\010\003\110\011\106\012\107\001\002\000" +
-    "\006\011\106\012\107\001\002\000\010\003\uffe0\021\uffe0" +
-    "\023\uffe0\001\002\000\010\003\uffd7\021\uffd7\023\uffd7\001" +
-    "\002\000\010\003\uffd6\021\uffd6\023\uffd6\001\002\000\010" +
-    "\003\uffdf\021\uffdf\023\uffdf\001\002\000\010\003\uffe1\021" +
-    "\uffe1\023\uffe1\001\002\000\010\003\uffec\021\uffec\023\uffec" +
-    "\001\002\000\010\003\uffea\021\uffea\023\uffea\001\002\000" +
-    "\010\003\117\011\106\012\107\001\002\000\006\011\106" +
-    "\012\107\001\002\000\010\003\uffe3\021\uffe3\023\uffe3\001" +
-    "\002\000\010\003\uffe2\021\uffe2\023\uffe2\001\002\000\010" +
-    "\003\uffe4\021\uffe4\023\uffe4\001\002\000\010\003\045\021" +
-    "\047\023\044\001\002\000\010\003\045\021\047\023\044" +
-    "\001\002\000\010\003\uffee\021\uffee\023\uffee\001\002\000" +
-    "\010\003\ufff1\021\ufff1\023\ufff1\001\002\000\004\013\126" +
-    "\001\002\000\010\003\045\021\047\023\044\001\002\000" +
-    "\010\003\ufff0\021\ufff0\023\ufff0\001\002\000\010\003\ufff4" +
-    "\021\ufff4\023\ufff4\001\002\000\012\003\ufff2\021\ufff2\022" +
-    "\125\023\ufff2\001\002\000\010\003\ufff5\021\ufff5\023\022" +
-    "\001\002\000\006\003\ufffb\021\ufffb\001\002\000\006\003" +
-    "\017\020\016\001\002\000\010\003\ufff5\021\ufff5\023\022" +
-    "\001\002\000\006\003\ufffa\021\ufffa\001\002\000\004\002" +
-    "\ufffe\001\002\000\006\003\143\021\144\001\002\000\006" +
-    "\021\142\022\134\001\002\000\004\002\ufffc\001\002\000" +
-    "\004\002\ufffd\001\002\000\004\002\uffff\001\002" });
+    "\001\002\000\010\003\063\014\065\016\064\001\002\000" +
+    "\006\016\071\023\067\001\002\000\010\003\uffdc\021\uffdc" +
+    "\023\uffdc\001\002\000\006\016\071\023\067\001\002\000" +
+    "\010\003\uffde\021\uffde\023\uffde\001\002\000\006\003\072" +
+    "\014\073\001\002\000\010\003\uffdd\021\uffdd\023\uffdd\001" +
+    "\002\000\010\003\uffd8\021\uffd8\023\uffd8\001\002\000\006" +
+    "\016\071\023\067\001\002\000\006\016\071\023\067\001" +
+    "\002\000\010\003\uffda\021\uffda\023\uffda\001\002\000\010" +
+    "\003\uffd9\021\uffd9\023\uffd9\001\002\000\010\003\uffdb\021" +
+    "\uffdb\023\uffdb\001\002\000\010\003\uffe7\021\uffe7\023\uffe7" +
+    "\001\002\000\010\003\uffe5\021\uffe5\023\uffe5\001\002\000" +
+    "\010\003\uffeb\021\uffeb\023\uffeb\001\002\000\010\003\uffed" +
+    "\021\uffed\023\uffed\001\002\000\010\003\110\011\106\012" +
+    "\107\001\002\000\006\011\106\012\107\001\002\000\010" +
+    "\003\uffe0\021\uffe0\023\uffe0\001\002\000\010\003\uffd7\021" +
+    "\uffd7\023\uffd7\001\002\000\010\003\uffd6\021\uffd6\023\uffd6" +
+    "\001\002\000\010\003\uffdf\021\uffdf\023\uffdf\001\002\000" +
+    "\010\003\uffe1\021\uffe1\023\uffe1\001\002\000\010\003\uffec" +
+    "\021\uffec\023\uffec\001\002\000\010\003\uffea\021\uffea\023" +
+    "\uffea\001\002\000\010\003\117\011\106\012\107\001\002" +
+    "\000\006\011\106\012\107\001\002\000\010\003\uffe3\021" +
+    "\uffe3\023\uffe3\001\002\000\010\003\uffe2\021\uffe2\023\uffe2" +
+    "\001\002\000\010\003\uffe4\021\uffe4\023\uffe4\001\002\000" +
+    "\010\003\045\021\047\023\044\001\002\000\010\003\045" +
+    "\021\047\023\044\001\002\000\010\003\uffee\021\uffee\023" +
+    "\uffee\001\002\000\010\003\ufff1\021\ufff1\023\ufff1\001\002" +
+    "\000\004\013\126\001\002\000\010\003\045\021\047\023" +
+    "\044\001\002\000\010\003\ufff0\021\ufff0\023\ufff0\001\002" +
+    "\000\010\003\ufff4\021\ufff4\023\ufff4\001\002\000\012\003" +
+    "\ufff2\021\ufff2\022\125\023\ufff2\001\002\000\010\003\ufff5" +
+    "\021\ufff5\023\022\001\002\000\006\003\ufffb\021\ufffb\001" +
+    "\002\000\006\003\017\020\016\001\002\000\010\003\ufff5" +
+    "\021\ufff5\023\022\001\002\000\006\003\ufffa\021\ufffa\001" +
+    "\002\000\004\002\ufffe\001\002\000\006\003\143\021\144" +
+    "\001\002\000\006\021\142\022\134\001\002\000\004\002" +
+    "\ufffc\001\002\000\004\002\ufffd\001\002\000\004\002\uffff" +
+    "\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -150,8 +151,8 @@ public class PlaySyntax extends java_cup.runtime.lr_parser {
     "\112\001\001\000\004\013\111\001\001\000\002\001\001" +
     "\000\004\013\101\001\001\000\004\013\100\001\001\000" +
     "\002\001\001\000\004\006\076\001\001\000\004\006\060" +
-    "\001\001\000\002\001\001\000\004\007\064\001\001\000" +
-    "\004\010\075\001\001\000\004\010\070\001\001\000\002" +
+    "\001\001\000\002\001\001\000\004\007\065\001\001\000" +
+    "\004\010\075\001\001\000\002\001\001\000\004\010\067" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\004\010\074\001\001\000\004" +
     "\010\073\001\001\000\002\001\001\000\002\001\001\000" +
@@ -806,31 +807,19 @@ class CUP$PlaySyntax$actions {
           return CUP$PlaySyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 35: // look_pista ::= OPEN_BRACKET pistas CLOSE_BRACKET 
+          case 35: // look_pista ::= OPEN_BRACKET pistas 
             {
               ArrayList<String> RESULT =null;
-		int eleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).left;
-		int eright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).right;
-		ArrayList<String> e = (ArrayList<String>)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).value;
+		int eleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()).right;
+		ArrayList<String> e = (ArrayList<String>)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.peek()).value;
 		RESULT =e;
-              CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("look_pista",4, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-2)), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
+              CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("look_pista",4, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
             }
           return CUP$PlaySyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 36: // look_pista ::= OPEN_BRACKET pistas error 
-            {
-              ArrayList<String> RESULT =null;
-		int eleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).left;
-		int eright = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).right;
-		ArrayList<String> e = (ArrayList<String>)((java_cup.runtime.Symbol) CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).value;
-		parser.report_error("Se esperaba \"]\" ","Inicio ilegal de la expresion"); RESULT =e;
-              CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("look_pista",4, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-2)), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
-            }
-          return CUP$PlaySyntax$result;
-
-          /*. . . . . . . . . . . . . . . . . . . .*/
-          case 37: // pistas ::= SIMBOLO pistas_re 
+          case 36: // pistas ::= SIMBOLO pistas_re 
             {
               ArrayList<String> RESULT =null;
 		int eleft = ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)).left;
@@ -846,6 +835,15 @@ class CUP$PlaySyntax$actions {
         }
         
               CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("pistas",5, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.elementAt(CUP$PlaySyntax$top-1)), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
+            }
+          return CUP$PlaySyntax$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 37: // pistas ::= CLOSE_BRACKET 
+            {
+              ArrayList<String> RESULT =null;
+		RESULT = new ArrayList<String>();
+              CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("pistas",5, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
             }
           return CUP$PlaySyntax$result;
 
@@ -897,11 +895,11 @@ class CUP$PlaySyntax$actions {
           return CUP$PlaySyntax$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 41: // pistas_re ::= 
+          case 41: // pistas_re ::= CLOSE_BRACKET 
             {
               ArrayList<String> RESULT =null;
 		RESULT = new ArrayList<String>();
-              CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("pistas_re",6, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
+              CUP$PlaySyntax$result = parser.getSymbolFactory().newSymbol("pistas_re",6, ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), ((java_cup.runtime.Symbol)CUP$PlaySyntax$stack.peek()), RESULT);
             }
           return CUP$PlaySyntax$result;
 

@@ -7,6 +7,7 @@ package valiente.orl2.reproduccion;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import valiente.orl2.Lista.Manejador.ListaAnalyzer;
 import valiente.orl2.phyton.error.SemanticError;
 import valiente.orl2.phyton.error.SyntaxError;
 
@@ -55,8 +56,7 @@ public class ListaReproduccion implements Serializable{
     private void addError(String description, int line, int column){
         SemanticError error = new SemanticError("Valor repetido", line, column);
         error.setDescription(description);
-        //PENDIENTE
-        //Ruta donde lo agregaremos
+        ListaAnalyzer.semanticErrors.add(error);
         
     }
     

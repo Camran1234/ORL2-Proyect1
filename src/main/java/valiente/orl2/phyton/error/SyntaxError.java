@@ -50,6 +50,12 @@ public class SyntaxError extends Error{
             string.append(type+": "+description+", POSIBLES SOLUCIONES: "+expectedTokens);
             return string.toString();
     }
+    
+    public String getDescriptionWithoutTokens(){
+        StringBuilder string = new StringBuilder();
+            string.append(type+": "+description+"\n");
+            return string.toString();
+    }
 
     public void setExpectedTokens(String tokens){
         this.expectedTokens = tokens;

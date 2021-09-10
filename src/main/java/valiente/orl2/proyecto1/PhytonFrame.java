@@ -5,6 +5,7 @@
  */
 package valiente.orl2.proyecto1;
 
+import valiente.orl2.webconnection.WebConnection;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -79,8 +80,10 @@ public class PhytonFrame extends javax.swing.JFrame {
         tableModel = model;
         newTable.setRowSelectionAllowed(false);
         listasUI = new ListasUI(this);
+        initWebConnection();
+        
         textPaneReferenced.addKeyListener(new KeyListener() {
-
+            
         @Override
         public void keyTyped(KeyEvent arg0) {
             guardado = false;
@@ -98,6 +101,10 @@ public class PhytonFrame extends javax.swing.JFrame {
 
         }
 });
+    }
+    
+    private void initWebConnection(){
+        WebConnection.startServer(8080);
     }
 
     public void modificarValorPista(String text, String pista){

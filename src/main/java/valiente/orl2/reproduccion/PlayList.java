@@ -12,7 +12,7 @@ import valiente.orl2.phyton.error.ListaException;
 import valiente.orl2.phyton.instructions.Pista;
 
 /**
- *
+    *Clase contenedora de las listas de reproduccion y su nombre
  * @author camran1234
  */
 public class PlayList implements Serializable{

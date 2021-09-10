@@ -14,6 +14,7 @@ import valiente.orl2.phyton.specialInstructions.Exit;
 import valiente.orl2.phyton.specialInstructions.Return;
 import valiente.orl2.phyton.table.TableOfValue;
 import valiente.orl2.phyton.values.Operation;
+import valiente.orl2.phyton.values.Value;
 
 
 /**
@@ -36,6 +37,22 @@ public class Case extends Instruction{
         this.value = value;
     }
     
+    /**
+     * Devuelve verdadero si son iguales o no es valido el valor
+     * @param value
+     * @return 
+     */
+    public boolean comprobarValores(Operation value){
+        Value localValue = this.value.execute();
+        if(localValue.getRawType().equalsIgnoreCase("variable")){
+            return true;
+        }
+        if(localValue.getRawValue().equals(value.execute().getRawValue())){
+            return true;
+        }else{
+            return false;
+        }
+    }
     
     
     public void execute() throws SemanticException{

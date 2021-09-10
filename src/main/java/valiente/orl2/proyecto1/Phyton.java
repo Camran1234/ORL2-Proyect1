@@ -108,10 +108,25 @@ public class Phyton {
             }else{
                 
                 if(function ==null){
-                    if(lista.get(index) instanceof VariableChunk){
-                        if(lista.get(index).getIndentation() == pistaFunction.getIndentation() +1){
-                            pistaFunction.addInstruction(lista.get(index));
-                            lista.get(index).setFather(pistaFunction);
+                    if(pistaFunction==null){
+                        SyntaxError newError = new SyntaxError(lista.get(index).getLine(), lista.get(index).getColumn());
+                            newError.setType("Inicio ilegal de la expresion");
+                            newError.setDescription("Se esperaba una pista de primero");
+                            erroresLista.add(newError);
+                            System.err.println(newError.getDescription());
+                    }else{
+                        if(lista.get(index) instanceof VariableChunk){
+                            if(lista.get(index).getIndentation() == pistaFunction.getIndentation() +1){
+                                pistaFunction.addInstruction(lista.get(index));
+                                lista.get(index).setFather(pistaFunction);
+                            }else{
+                                SyntaxError newError = new SyntaxError(lista.get(index).getLine(), lista.get(index).getColumn());
+                                newError.setType("Inicio ilegal de la expresion");
+                                newError.setDescription("Se esperaba una funcion");
+                                erroresLista.add(newError);
+                                System.err.println(newError.getDescription());
+                            }
+
                         }else{
                             SyntaxError newError = new SyntaxError(lista.get(index).getLine(), lista.get(index).getColumn());
                             newError.setType("Inicio ilegal de la expresion");
@@ -119,13 +134,6 @@ public class Phyton {
                             erroresLista.add(newError);
                             System.err.println(newError.getDescription());
                         }
-                        
-                    }else{
-                        SyntaxError newError = new SyntaxError(lista.get(index).getLine(), lista.get(index).getColumn());
-                        newError.setType("Inicio ilegal de la expresion");
-                        newError.setDescription("Se esperaba una funcion");
-                        erroresLista.add(newError);
-                        System.err.println(newError.getDescription());
                     }
                 }else{
                     Instruction actual = lista.get(index);
