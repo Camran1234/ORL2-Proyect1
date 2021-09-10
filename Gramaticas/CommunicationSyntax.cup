@@ -1,0 +1,550 @@
+package com.example.orl.parser;
+
+import java.util.ArrayList;
+import java_cup.runtime.XMLElement;
+import java_cup.runtime.Symbol;
+import java_cup.runtime.XMLElement;
+import com.example.orl.errors.*;
+import com.example.orl.pistas.Central;
+import com.example.orl.pistas.ListaReproduccion;
+import com.example.orl.pistas.PistaReproduccion;
+import com.example.orl.pistas.Reproduccion;
+
+parser code {:
+        int errors=0;
+        String tokenError="";
+        int lineError, columnError =0;
+        String expectedTokens="";
+        ArrayList<SyntaxError> list = new ArrayList();
+        Solicitud solicitud = new Solicitud();
+
+        public void startListaListas(ArrayList<ListaReproduccion> listaBuilder){
+                Central.addListas(listaBuilder);
+        }
+
+        public void startListaEstructura(ListaReproduccion lista){
+                Central.addListaReproduccion(lista);
+        }
+
+        public void startListaPistas(ArrayList<PistaReproduccion> pistas){
+                Central.addListaPistas(pistas);
+        }
+
+        public void startPistaReproduccion(PistaReproduccion pista){
+                Central.addPistaReproduccion(pista);
+        }
+
+        public Solicitud getSolicitud(){
+                return solicitud;
+        }
+
+        public void setSolicitud(Solicitud solicitud){
+                this.solicitud = solicitud;
+        }
+
+        public ArrayList<SyntaxError> getList(){
+                return list;
+        }
+
+        public void report_error(String message, Object info) { 
+                if (info instanceof String){
+                        Symbol s = cur_token;
+                        //System.err.println("  "+ errors + "==> " + info + " en "+tokenError+": "+ message + " [linea: "+lineError+" columna: "+columnError+"]");
+                        SyntaxError error = new SyntaxError(info.toString(), tokenError, lineError, columnError);;
+                        error.setExpectedTokens(expectedTokens);
+                        error.setDescription(message);
+                        list.add(error);
+                        System.err.println(error.getDescription());
+                }
+        }
+
+        public void report_error_final(String message, Object info){
+                if (info instanceof String){
+                        Symbol s = cur_token;
+                        errors++;       
+                        //System.err.println("  "+ errors + "==> " + info + ": "+ message);
+                        SyntaxError error = new SyntaxError(info.toString(), tokenError, lineError, columnError);
+                        error.setExpectedTokens(expectedTokens);
+                        error.setDescription(message);
+                        list.add(error);
+                        System.err.println(error.getDescription());
+                }
+                
+        }
+
+    @Override
+        public void syntax_error(Symbol symbol){
+            int line = symbol.left;
+            int column = symbol.right;
+            String token = (String) cur_token.value;
+            //We get the production
+                tokenError = token;
+                lineError = line;
+                columnError = column;
+                expectedTokens = "";
+                for(int index=0; index<expected_token_ids().size() ; index++){
+                    //We traduce the token to a form that the user might understand
+                    expectedTokens += symbl_name_from_id(expected_token_ids().get(index));
+                    expectedTokens += ",";
+                }
+        }
+
+    @Override
+        public void unrecovered_syntax_error(Symbol symbol){
+                tokenError = (String) cur_token.value;
+                lineError = symbol.left;
+                columnError = symbol.right;
+                expectedTokens = "";
+                for(int index=0; index<expected_token_ids().size() ; index++){
+                    //We traduce the token to a form that the user might understand
+                    expectedTokens += symbl_name_from_id(expected_token_ids().get(index));
+                    expectedTokens += ", ";
+                }
+                report_error_final("Estado Ilegal de Expresion", "Sintaxis incorrecta");
+        }
+:}
+
+terminal STRING, DECIMAL, NUMBER, SOLICITUD, TIPO, NOMBRE, LISTAS, LISTA, PISTAS, ALEATORIA, DURACION,
+CANAL, NUMERO, NOTA, FRECUENCIA, DATOS, OCTAVA, LESS, GREATER, DIV, EQUAL, SIMBOLO, NOTE, CIRCULAR, PISTA;
+
+non terminal main_body,body, etiqueta_pista,etiqueta_pista_cl,close_pista , 
+etiqueta_lista,etiqueta_lista_cl,etiqueta_listas_cl,
+big_data,big_data_re,container_data, container_big_data,etiqueta_datos,
+etiqueta_datos_cl,throw_duracion,etiqueta_duracion,etiqueta_duracion_cl,
+throw_octava,etiqueta_octava,etiqueta_octava_cl,throw_nota,etiqueta_nota,etiqueta_nota_cl,throw_canal,
+etiqueta_canal,etiqueta_canal_cl, throw_tipo,etiqueta_tipo,etiqueta_tipo_cl,etiqueta_solicitud,
+etiqueta_solicitud_cl, etiqueta_nombre,etiqueta_nombre_cl,
+crear_solicitud, close_canal;
+
+non terminal Solicitud nombre, lista, solicitud, solicitudes;
+non terminal String tipo, tipos, solicitud_nombre, param_nombre, open_lista;
+non terminal Integer param_pistas, param_duracion, open_canal;
+non terminal ListaReproduccion throw_lista, fact_lista, params_lista, lista_estructura;
+non terminal ArrayList<ListaReproduccion> listas_re, lista_listas;
+non terminal Boolean param_circular, param_random;
+non terminal PistaReproduccion params_pista_lista, pista_estructura;
+non terminal ArrayList<PistaReproduccion> pista_lista, pista_lista_, lista_pistas;
+non terminal Reproduccion nota;
+non terminal ArrayList<Reproduccion> notas, canal, canales;
+non terminal Double valor;
+
+start with main_body;
+
+main_body ::= solicitudes:s {:
+                setSolicitud(s);
+                :}
+            |body
+            |error {:parser.report_error("Solicitud mal realizada","Inicio ilegal de la expresion");:}
+            ;
+
+body ::=    lista_listas:li {:
+                startListaListas(li);
+                :}
+            |lista_estructura:li  {:
+                startListaEstructura(li);
+            :}
+            |lista_pistas:li  {:
+                startListaPistas(li);
+            :}
+            |pista_estructura:li {:
+                startPistaReproduccion(li);
+            :}
+            |crear_solicitud 
+            ;
+
+//Para realizar lista de pistas
+
+lista_pistas ::= etiqueta_pista pista_lista_:e {:
+                        RESULT = e;
+                :}
+            ;
+
+pista_lista_ ::= LESS PISTA params_pista_lista:pr pista_lista_:e{:
+                        e.add(pr);
+                        RESULT=e;
+                :}
+                |etiqueta_pista_cl{:
+                        RESULT = new ArrayList<PistaReproduccion>();
+                :}
+                ;
+
+etiqueta_pista ::= LESS PISTAS GREATER
+                ;
+
+etiqueta_pista_cl ::= LESS DIV PISTAS GREATER
+                ;
+
+//Para realizar estructura de pista
+
+open_lista ::= LESS PISTA NOMBRE EQUAL STRING:e GREATER {:
+                        String text = e.toString();
+                        text = text.substring(1, text.length() - 1);
+                        RESULT = text;
+                :}
+                ;
+
+close_pista ::= LESS DIV PISTA GREATER
+                ;
+
+pista_estructura ::=  open_lista:o canales:e  {:
+                        PistaReproduccion pista = new PistaReproduccion();
+                        pista.setName(o);
+                        pista.setSonidos(e);
+                        RESULT = pista;
+                :}
+                    ;
+
+canales ::= canal:c canales:d{:
+                for(int index=0; index<c.size(); index++){
+                        d.add(c.get(index));
+                }
+                RESULT = d;
+        :}
+        |close_pista{:
+                RESULT = new ArrayList<Reproduccion>();
+        :}
+        ;
+open_canal ::= LESS CANAL NUMERO EQUAL NUMBER:e GREATER{:
+                        RESULT = Integer.parseInt(e.toString());
+                :}
+            ;
+close_canal ::= LESS DIV CANAL GREATER
+                ;
+
+canal ::= open_canal:e notas:n {:
+
+        for(int index=0; index<n.size(); index++){
+                n.get(index).setCanal(e);
+        }
+        RESULT = n;
+        :}
+            ;
+
+notas ::= nota:n notas:e {:
+                e.add(n);
+                RESULT = e;
+        :}
+        |close_canal{:
+                RESULT = new ArrayList<Reproduccion>();
+        :}
+        ;
+
+nota ::= LESS NOTA DURACION EQUAL NUMBER:a FRECUENCIA EQUAL valor:e GREATER{:
+                        Reproduccion reproduccion = new Reproduccion();
+                        reproduccion.setFrecuencia(e);
+                        reproduccion.setDuracion(Integer.parseInt(a.toString()));
+                        RESULT = reproduccion;
+                :}
+            ;
+
+valor ::= DECIMAL:e {:
+                double x = Double.parseDouble(e.toString());
+                RESULT =x;
+        :}
+        |NUMBER:e {:
+                double x = Double.parseDouble(e.toString());
+                RESULT =x;
+        :}
+        ;
+
+//Para realizar estructura de listas
+
+lista_estructura ::= fact_lista:list pista_lista:arr {:
+                        list.addPistas(arr);
+                        RESULT = list;
+                :} 
+        ;
+
+fact_lista ::=  LESS LISTA params_lista:e {:
+                        RESULT=e;
+                :}
+                ;
+
+pista_lista ::= LESS PISTA params_pista_lista:pis pista_lista:e{:
+                        e.add(pis);
+                        RESULT=e;
+                :}
+                |etiqueta_lista_cl{:
+                        RESULT = new ArrayList<PistaReproduccion>();
+                :}
+                ;
+
+params_pista_lista ::= param_nombre:n params_pista_lista:p{:
+                        p.setName(n);
+                        RESULT = p;
+                :}
+                |param_duracion:e params_pista_lista:p {:
+                        p.setDuracion(e); 
+                        RESULT = p;
+                :}
+                |GREATER{:
+                        RESULT = new PistaReproduccion();
+                :}
+                ;
+    
+
+params_lista ::= param_nombre:f params_lista:e{:
+                e.setNombre(f);
+                RESULT =e;
+                :}
+                |param_random:f params_lista:e{:
+                e.setRandom(f);
+                RESULT=e;
+                :}
+                |param_circular:f params_lista:e{:
+                e.setCircular(f);
+                RESULT=e;
+                :}
+                |GREATER{: RESULT = new ListaReproduccion();:}
+                ;
+
+etiqueta_lista_cl ::= LESS DIV LISTA GREATER
+                    ;
+
+
+
+//Fin Listas
+
+    //Etiquetas
+
+    //para realizar lista_listas
+    lista_listas ::= etiqueta_lista listas_re:re
+                        {:
+                        RESULT = re;
+                        :}
+                    ;
+
+    listas_re ::= throw_lista:tr listas_re:re{:
+                        re.add(tr);
+                        RESULT = re;
+                :}
+                |etiqueta_listas_cl {:
+                        RESULT = new ArrayList<ListaReproduccion>();
+                :}
+                ;
+
+    etiqueta_lista ::=  LESS LISTAS GREATER
+                    ;
+
+    etiqueta_listas_cl ::= LESS DIV LISTAS GREATER
+                    ;
+
+    throw_lista ::= LESS LISTA param_nombre:nom param_pistas:pis GREATER {:
+                        ListaReproduccion listaBuilder = new ListaReproduccion();
+                        listaBuilder.setNombre(nom);
+                        listaBuilder.setNoPistas(pis);
+                        RESULT = listaBuilder;
+                        :}
+                    ;
+
+    param_nombre ::= NOMBRE EQUAL STRING:num {:
+                        String text = num.toString();
+                        text = text.substring(1, text.length() - 1);
+                        RESULT = text;
+                :}
+                ;
+
+    param_pistas ::= PISTAS EQUAL NUMBER:e {:
+                        RESULT = Integer.parseInt(e.toString());
+                :}
+                ;
+
+    param_random ::= ALEATORIA EQUAL STRING:num {:
+                        String text = num.toString();
+                        text = text.substring(1, text.length() - 1);
+                        if(text.equalsIgnoreCase("Si")){
+                                RESULT = true;
+                        }
+                        RESULT = false;
+                :}
+                ;
+
+    param_duracion ::= DURACION EQUAL NUMBER:e{:
+                RESULT = Integer.parseInt(e.toString());
+                :}
+                ;
+        
+    param_circular ::= CIRCULAR EQUAL STRING:num {:
+                        String text = num.toString();
+                        text = text.substring(1, text.length() - 1);
+                        if(text.equalsIgnoreCase("Si")){
+                                RESULT = true;
+                        }
+                        RESULT = false;
+                :}
+                ;
+
+    //FIN etiquetas
+
+//Para realizar peticiones
+
+    solicitudes ::= solicitud:sol {:
+                        RESULT = sol;
+                :}
+            ;
+
+    solicitud ::= etiqueta_solicitud lista:l
+                {:
+                        RESULT =l;
+                :}
+                    ;
+
+    lista ::= tipo:t nombre:n{:
+                if(n!=null){
+                        n.setTipo(t, cur_token.left, cur_token.right);
+                }
+                RESULT = n;
+    :}
+            ;
+
+    tipo ::= etiqueta_tipo tipos:e etiqueta_tipo_cl{:RESULT=e;:}
+                |etiqueta_tipo error etiqueta_tipo_cl {:parser.report_error("Se esperaba Lista o Pista","Etiqueta mal declarada");:}
+                |error {:parser.report_error("Se esperaba una solicitud","Inicio ilegal de la expresion");:}
+            ;
+
+    tipos ::= LISTA:e {:RESULT=e.toString();:}
+            |PISTA:e {:RESULT=e.toString();:}
+            ;
+
+    nombre ::= solicitud_nombre:sn nombre:e {:
+                        if(e!=null){
+                                if(sn!=null){
+                                        e.setNombre(sn, cur_token.left, cur_token.right);
+                                }
+                        }
+                        RESULT = e;
+                :}
+            |etiqueta_solicitud_cl {:
+                Solicitud solicitud = new Solicitud(list);
+                solicitud.setSolicitud(true);
+                RESULT = solicitud;
+            :}
+            |error {: parser.report_error("Se esperaba una etiqueta nombre o cierre de solicitud", "Estructura mal realizada");:}
+            ;
+    solicitud_nombre ::= etiqueta_nombre STRING:e etiqueta_nombre_cl {:
+                        String string = e.toString();
+                        string = string.substring(1, string.length() - 1);
+                        RESULT = string;
+                :}
+                |etiqueta_nombre error etiqueta_nombre_cl {:parser.report_error("Se necesita una cadena en etiqueta nombre", "Etiqueta nombre mal realizada");:}
+                ;
+
+//Creacion de pistas
+
+crear_solicitud ::= etiqueta_solicitud big_data 
+                    ;
+
+big_data ::= throw_tipo big_data_re
+            ;
+
+big_data_re ::= container_data big_data_re
+            |etiqueta_solicitud_cl
+            ;
+
+container_data ::=  etiqueta_datos container_big_data etiqueta_datos_cl
+                ;
+
+container_big_data ::= throw_canal throw_nota throw_octava throw_duracion
+                ;
+
+etiqueta_datos ::= LESS DATOS GREATER
+                ;
+
+etiqueta_datos_cl ::= LESS DIV DATOS GREATER
+                ;
+
+throw_duracion ::= etiqueta_duracion NUMBER etiqueta_duracion_cl
+                ;
+
+etiqueta_duracion ::= LESS DURACION GREATER
+                ;
+
+etiqueta_duracion_cl ::= LESS DIV DURACION GREATER
+                ;
+
+throw_octava ::= etiqueta_octava NUMBER etiqueta_octava_cl
+                ;
+
+etiqueta_octava ::= LESS OCTAVA GREATER  
+                ;
+        
+etiqueta_octava_cl ::= LESS DIV OCTAVA GREATER
+                ;
+
+
+throw_nota ::= etiqueta_nota NOTE etiqueta_nota_cl   
+                ;
+
+etiqueta_nota ::= LESS NOTA GREATER
+                ;
+
+etiqueta_nota_cl ::= LESS DIV NOTA GREATER
+                ;
+
+throw_canal ::= etiqueta_canal NUMBER etiqueta_canal_cl
+                ;
+
+etiqueta_canal ::= LESS CANAL GREATER
+                ;
+
+etiqueta_canal_cl ::= LESS DIV CANAL GREATER
+                    ;
+
+throw_tipo ::= etiqueta_tipo SIMBOLO etiqueta_tipo_cl
+                ;
+
+
+
+
+
+
+
+
+
+//Fin solicitudes
+
+                
+
+etiqueta_solicitud ::= LESS SOLICITUD GREATER
+                |LESS error GREATER {:parser.report_error("Se esperaba \"solicitud\" en etiqueta solicitud", "Etiqueta solicitud mal declarada");:}
+                |LESS SOLICITUD error {:parser.report_error("Se esperaba \">\" en ciere de etiqueta solicitud", "Etiqueta solicitud mal declarada");:}
+                ;
+
+etiqueta_solicitud_cl ::= LESS DIV SOLICITUD GREATER
+                |error DIV SOLICITUD GREATER {:parser.report_error("Se esperaba \"<\" para iniciar cierre de etiqueta","Etiqueta mal declarada");:}
+                |LESS error SOLICITUD GREATER {:parser.report_error("Se esperaba \"/\" en cierre de etiqueta solicitud","Etiqueta mal declarada");:}
+                |LESS DIV error GREATER {:parser.report_error("Se esperaba \"solciitud\" en cierre de etiqueta solicitud","Etiqueta mal declarada");:}
+                |LESS DIV SOLICITUD error {:parser.report_error("Se esperaba \">\" para cerrar la etiqueta solicitud","Etiqueta mal declarada");:}
+                ;
+
+etiqueta_tipo ::= LESS TIPO GREATER
+                |LESS error GREATER {:parser.report_error("Se esperaba \"tipo\" en etiqueta tipo","Etiqueta mal declarada");:}
+                |LESS TIPO error {:parser.report_error("Se esperaba \">\" en etiqueta tipo","Etiqueta mal declarada");:}
+            ;
+
+
+
+etiqueta_tipo_cl ::= LESS DIV TIPO GREATER
+                |error DIV TIPO GREATER {:parser.report_error("Se esperaba \"<\" para inicio de cierre de etiqueta tipo","Etiqueta mal declarada");:}
+                |LESS error TIPO GREATER {:parser.report_error("Se esperaba \"/\" en cierre de etiqueta tipo","Etiqueta mal declarada");:}
+                |LESS DIV error GREATER {:parser.report_error("Se esperaba \"tipo\" en cierre de etiqueta tipo","Etiqueta mal declarada");:}
+                |LESS DIV TIPO error {:parser.report_error("Se esperaba \">\" para cerrar la etiqueta tipo","Etiqueta mal declarada");:}
+            ;            
+
+etiqueta_nombre ::= LESS NOMBRE GREATER
+        |LESS error GREATER {:parser.report_error("Se esperaba \"nombre\" para iniciar etiqueta nombre","Etiqueta mal declarada");:}
+        |LESS NOMBRE error {:parser.report_error("Se esperaba \">\" para cerrar etiqueta nombre","Etiqueta mal declarada");:}
+            ;
+
+etiqueta_nombre_cl ::= LESS DIV NOMBRE GREATER
+                |error DIV NOMBRE GREATER {:parser.report_error("Se esperaba \"<\" para iniciar cierre de etiqueta nombre","Etiqueta mal declarada");:}
+                |LESS error NOMBRE GREATER {:parser.report_error("Se esperaba \"/\" en cierre de etiqueta nombre","Etiqueta mal declarada");:}
+                |LESS DIV error GREATER {:parser.report_error("Se esperaba \"nombre\" en cierre de etiqueta nombre","Etiqueta mal declarada");:}
+                |LESS DIV NOMBRE error {:parser.report_error("Se esperaba \">\" para cerrar etiqueta nombre","Etiqueta mal declarada");:}
+            ;            
+
+
+
+
+
+

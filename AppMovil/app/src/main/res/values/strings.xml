@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Reproductor</string>
+    <string name="tab_text_1">Editor</string>
+    <string name="tab_text_2">Lista</string>
+    <string name="tab_text_3">Creacion</string>
+    <string name="inicio_editor">Insertar Solicitud</string>
+    <string name="respuesta">Respuesta Servidor</string>
+    <string name="datos_lista">Datos lista seleccionada</string>
+
+    <string-array name="state">
+        <item>[Espacio Listas]</item>
+    </string-array>
+</resources>
